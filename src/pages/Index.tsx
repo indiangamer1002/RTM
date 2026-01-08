@@ -6,7 +6,7 @@ import { RTMTable } from '@/components/rtm/RTMTable';
 import { DetailPanel } from '@/components/rtm/DetailPanel';
 import { navigationData, requirementsData } from '@/data/mockData';
 import { NavigationNode, Requirement } from '@/types/rtm';
-import { ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutGrid, Link, List, BarChart3, GitBranch, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -17,7 +17,14 @@ const Index = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const [currentView, setCurrentView] = useState('admin');
 
-  const breadcrumb = ['MOLP FY25', 'RTM', 'Plan to Produce', 'Production', 'Material Planning'];
+  const breadcrumb = ['MDLP FY25', 'RTM', 'Home'];
+  const mockPath = ["MDLP FY25", "Order to cash", "Sales Order Management"];
+  const viewOptions = [
+    { id: 'list', label: 'List View', icon: List },
+    { id: 'grid', label: 'Grid View', icon: LayoutGrid },
+    { id: 'analytics', label: 'Analytics View', icon: BarChart3 },
+    { id: 'trace', label: 'Trace View', icon: GitBranch }
+  ];
 
   const handleNodeSelect = (node: NavigationNode) => {
     setSelectedNode(node);
@@ -82,8 +89,27 @@ const Index = () => {
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold text-foreground">Requirement Traceability Matrix</h1>
-                  <p className="text-sm text-muted-foreground">Trace View - {requirementsData.length} requirements</p>
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Link className="h-3 w-3" />
+                    <span>{mockPath.join(' > ')}</span>
+                  </div>
                 </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {viewOptions.map((view) => {
+                  const IconComponent = view.icon;
+                  return (
+                    <Button
+                      key={view.id}
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8 rounded-full border-border hover:bg-muted"
+                      title={view.label}
+                    >
+                      <IconComponent className="h-4 w-4" />
+                    </Button>
+                  );
+                })}
               </div>
             </div>
           </div>

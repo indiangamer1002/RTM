@@ -111,22 +111,9 @@ export function NavigationTree({ data, selectedId, onSelect }: NavigationTreePro
 
   return (
     <div className="h-full bg-nav-background border-r border-nav-border overflow-hidden flex flex-col">
-      {/* Header with Project Selector */}
-      <div className="p-4 border-b border-nav-border min-h-[60px] flex items-center">
-        <Select value={currentProject} onValueChange={setCurrentProject}>
-          <SelectTrigger className="w-full bg-background border-input">
-            <SelectValue placeholder="Select Project" />
-          </SelectTrigger>
-          <SelectContent>
-            {data.map((project) => (
-              <SelectItem key={project.id} value={project.id}>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">{project.name}</span>
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* Header */}
+      <div className="p-4 border-b border-nav-border">
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Process Hierarchy</h2>
       </div>
 
       {/* Tree */}

@@ -3,7 +3,7 @@ import { NavigationNode, Requirement, Stakeholder } from '@/types/rtm';
 export const navigationData: NavigationNode[] = [
   {
     id: 'proj-1',
-    name: 'MOLP FY25',
+    name: 'MDLP FY25',
     type: 'project',
     children: [
       {
