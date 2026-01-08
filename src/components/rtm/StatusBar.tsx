@@ -1,9 +1,10 @@
 import { ReactNode, useState } from 'react';
+import { Maximize2 } from 'lucide-react';
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card';
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 
@@ -33,6 +34,7 @@ const colorClasses: Record<string, { bg: string; text: string }> = {
 
 export function StatusBar({ segments, total, title, emptyText = '-', onViewDetails, reqId, reqTitle }: StatusBarProps) {
   const [activeTab, setActiveTab] = useState<string>(segments[0]?.label || '');
+  const [isOpen, setIsOpen] = useState(false);
 
   if (total === 0) {
     return (
@@ -46,8 +48,8 @@ export function StatusBar({ segments, total, title, emptyText = '-', onViewDetai
   const activeSegments = segments.filter(s => s.count > 0);
 
   return (
-    <HoverCard openDelay={200} closeDelay={150}>
-      <HoverCardTrigger asChild>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
         <div className="flex items-center h-6 w-full max-w-[180px] cursor-pointer rounded overflow-hidden">
           {activeSegments.map((segment, idx) => {
             const widthPercent = (segment.count / total) * 100;
@@ -56,7 +58,12 @@ export function StatusBar({ segments, total, title, emptyText = '-', onViewDetai
             return (
               <div
                 key={segment.label}
-                onMouseEnter={() => setActiveTab(segment.label)}
+                title={segment.label}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveTab(segment.label);
+                  setIsOpen(true);
+                }}
                 className={cn(
                   'h-full flex items-center justify-center text-xs font-medium transition-all',
                   colors.bg,
@@ -71,19 +78,34 @@ export function StatusBar({ segments, total, title, emptyText = '-', onViewDetai
             );
           })}
         </div>
-      </HoverCardTrigger>
-      <HoverCardContent
-        className="w-[650px] p-0 shadow-2xl border-2 z-50 !fixed !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2 !m-0 bg-popover data-[state=open]:!animate-none data-[state=closed]:!animate-none"
-        avoidCollisions={false}
+      </PopoverTrigger>
+      <PopoverContent
+        className="w-[380px] p-0 shadow-2xl border-2 bg-popover"
+        collisionPadding={16}
       >
         <div className="p-4 border-b border-border bg-muted/10">
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-xs font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded">{reqId}</span>
-              <span className="font-medium text-sm text-foreground">{title}</span>
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-col gap-3 flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-xs font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded whitespace-nowrap">{reqId}</span>
+                <h4 className="font-semibold text-sm text-foreground truncate">{reqTitle}</h4>
+              </div>
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">{title}</span>
             </div>
+            {onViewDetails && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onViewDetails();
+                  setIsOpen(false);
+                }}
+                className="text-muted-foreground hover:text-primary transition-colors p-1 hover:bg-muted rounded-full"
+                title="View Full Traceability"
+              >
+                <Maximize2 className="h-4 w-4" />
+              </button>
+            )}
           </div>
-          <h4 className="font-medium text-base text-foreground line-clamp-1">{reqTitle}</h4>
         </div>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="w-full justify-start rounded-none border-b bg-transparent h-auto p-0">
@@ -113,8 +135,12 @@ export function StatusBar({ segments, total, title, emptyText = '-', onViewDetai
             })}
           </TabsList>
           {segments.map((segment) => (
-            <TabsContent key={segment.label} value={segment.label} className="p-0 m-0">
-              <div className="h-[400px] overflow-y-auto">
+            <TabsContent
+              key={segment.label}
+              value={segment.label}
+              className="p-0 m-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 mt-0"
+            >
+              <div className="h-[200px] overflow-y-auto">
                 {segment.items && segment.items.length > 0 ? (
                   <div className="divide-y divide-border">
                     {segment.items.map((item) => (
@@ -133,21 +159,7 @@ export function StatusBar({ segments, total, title, emptyText = '-', onViewDetai
             </TabsContent>
           ))}
         </Tabs>
-        <div
-          className={cn(
-            "px-3 py-2 border-t border-border bg-muted/30",
-            onViewDetails && "cursor-pointer hover:bg-muted/50 transition-colors"
-          )}
-          onClick={onViewDetails}
-        >
-          <p className={cn(
-            "text-xs text-muted-foreground",
-            onViewDetails && "hover:text-primary hover:underline"
-          )}>
-            Click to view full traceability
-          </p>
-        </div>
-      </HoverCardContent>
-    </HoverCard>
+      </PopoverContent>
+    </Popover>
   );
 }

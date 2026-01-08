@@ -160,7 +160,7 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
             {renderHeader("Priority", 4, "text-center whitespace-nowrap")}
             {renderHeader("Status", 5, "text-center whitespace-nowrap")}
             {renderHeader("Task", 6, "text-center whitespace-nowrap")}
-            {renderHeader("Testcase", 7, "text-center min-w-[140px]")}
+            {renderHeader("TESTCASES", 7, "text-center min-w-[140px]")}
             {renderHeader("Issues", 8, "text-center min-w-[100px]")}
             {renderHeader("Sign-offs", 9, "text-center min-w-[100px]")}
           </tr>
@@ -261,7 +261,7 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                     <StatusBar
                       segments={executionSegments}
                       total={req.testCases.length}
-                      title="Testcase"
+                      title="TESTCASES"
                       onViewDetails={() => onRequirementClick(req)}
                       reqId={req.reqId}
                       reqTitle={req.title}
