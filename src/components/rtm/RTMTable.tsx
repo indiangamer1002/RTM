@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 interface RTMTableProps {
   requirements: Requirement[];
-  onRequirementClick: (req: Requirement) => void;
+  onRequirementClick: (req: Requirement, tab?: string) => void;
 }
 
 const priorityMap: Record<Priority, 'error' | 'warning' | 'success'> = {
@@ -248,7 +248,7 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                       segments={taskSegments}
                       total={req.tasks.length}
                       title="Tasks"
-                      onViewDetails={() => onRequirementClick(req)}
+                      onViewDetails={() => onRequirementClick(req, 'tasks')}
                       reqId={req.reqId}
                       reqTitle={req.title}
                     />
@@ -262,7 +262,7 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                       segments={executionSegments}
                       total={req.testCases.length}
                       title="TESTCASES"
-                      onViewDetails={() => onRequirementClick(req)}
+                      onViewDetails={() => onRequirementClick(req, 'test-cases')}
                       reqId={req.reqId}
                       reqTitle={req.title}
                     />
@@ -276,7 +276,7 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                       segments={issueSegments}
                       total={req.issues.length}
                       title="Issues"
-                      onViewDetails={() => onRequirementClick(req)}
+                      onViewDetails={() => onRequirementClick(req, 'issues')}
                       reqId={req.reqId}
                       reqTitle={req.title}
                     />
@@ -290,7 +290,7 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                       segments={signOffSegments}
                       total={req.signOffs.length}
                       title="Sign-offs"
-                      onViewDetails={() => onRequirementClick(req)}
+                      onViewDetails={() => onRequirementClick(req, 'signoffs')}
                       reqId={req.reqId}
                       reqTitle={req.title}
                     />
