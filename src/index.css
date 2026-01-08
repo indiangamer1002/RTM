@@ -1,11 +1,11 @@
+@import url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css');
+@import url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-mono/style.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* KTERN Enterprise Design System - SAP Cloud ALM Inspired */
-
-@import url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css');
-@import url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-mono/style.css');
 
 @layer base {
   :root {

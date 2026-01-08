@@ -15,6 +15,7 @@ const Index = () => {
   const [selectedNode, setSelectedNode] = useState<NavigationNode | null>(null);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const [currentView, setCurrentView] = useState('admin');
+  const [isDetailPanelOpen, setIsDetailPanelOpen] = useState(false);
 
   const breadcrumb = ['MDLP FY25', 'RTM', 'Home'];
   const mockPath = ["MDLP FY25", "Order to cash", "Sales Order Management"];
