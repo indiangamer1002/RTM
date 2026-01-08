@@ -1,6 +1,7 @@
-import { Download, Upload, Plus, Save, Eye, Search } from 'lucide-react';
+import { Download, Upload, Plus, Save, Eye, Search, ChevronDown, Pin, Maximize, RefreshCw, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -14,137 +15,274 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
 interface FilterBarProps {
   onViewChange: (view: string) => void;
 }
 
+interface FilterOption {
+  id: string;
+  label: string;
+  options: { value: string; label: string }[];
+  isPinned: boolean;
+  width?: string;
+}
+
 export function FilterBar({ onViewChange }: FilterBarProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showPinMode, setShowPinMode] = useState(false);
+  const [filters, setFilters] = useState<FilterOption[]>([
+    {
+      id: 'release',
+      label: 'Release',
+      options: [
+        { value: 'all', label: 'All Releases' },
+        { value: 'r1', label: 'Release 1.0' },
+        { value: 'r2', label: 'Release 2.0' },
+        { value: 'r3', label: 'Release 3.0' }
+      ],
+      isPinned: true,
+      width: '140px'
+    },
+    {
+      id: 'businessGroup',
+      label: 'Business Group',
+      options: [
+        { value: 'all', label: 'All Groups' },
+        { value: 'sales', label: 'Sales' },
+        { value: 'finance', label: 'Finance' },
+        { value: 'hr', label: 'Human Resources' },
+        { value: 'ops', label: 'Operations' }
+      ],
+      isPinned: true,
+      width: '160px'
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      options: [
+        { value: 'all', label: 'All Status' },
+        { value: 'new', label: 'New' },
+        { value: 'active', label: 'Active' },
+        { value: 'completed', label: 'Completed' },
+        { value: 'approved', label: 'Approved' }
+      ],
+      isPinned: true,
+      width: '140px'
+    },
+    {
+      id: 'owner',
+      label: 'Owner',
+      options: [
+        { value: 'all', label: 'All Owners' },
+        { value: 'john', label: 'John Smith' },
+        { value: 'sarah', label: 'Sarah Johnson' },
+        { value: 'emily', label: 'Emily Davis' },
+        { value: 'alex', label: 'Alex Kumar' }
+      ],
+      isPinned: true,
+      width: '140px'
+    },
+    {
+      id: 'priority',
+      label: 'Priority',
+      options: [
+        { value: 'all', label: 'All Priorities' },
+        { value: 'high', label: 'High' },
+        { value: 'medium', label: 'Medium' },
+        { value: 'low', label: 'Low' }
+      ],
+      isPinned: false,
+      width: '140px'
+    },
+    {
+      id: 'category',
+      label: 'Category',
+      options: [
+        { value: 'all', label: 'All Categories' },
+        { value: 'functional', label: 'Functional' },
+        { value: 'technical', label: 'Technical' },
+        { value: 'business', label: 'Business' }
+      ],
+      isPinned: false,
+      width: '140px'
+    }
+  ]);
+
+  const pinnedFilters = filters.filter(f => f.isPinned);
+  const displayedFilters = isExpanded ? filters : pinnedFilters;
+
+  const togglePin = (filterId: string) => {
+    setFilters(prev => prev.map(f => 
+      f.id === filterId ? { ...f, isPinned: !f.isPinned } : f
+    ));
+  };
+
+  const renderFilter = (filter: FilterOption) => (
+    <div key={filter.id} className="flex items-center gap-1">
+      <Select defaultValue="all">
+        <SelectTrigger 
+          className={cn(
+            "h-8 text-sm border-muted-foreground/20 bg-background hover:border-muted-foreground/40 transition-colors",
+            `w-[${filter.width}]`
+          )}
+          style={{ width: filter.width }}
+        >
+          <SelectValue placeholder={filter.label} />
+        </SelectTrigger>
+        <SelectContent>
+          {filter.options.map(option => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {showPinMode && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "h-6 w-6 rounded transition-colors",
+            filter.isPinned ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
+          )}
+          onClick={() => togglePin(filter.id)}
+        >
+          <Pin className="h-3 w-3" />
+        </Button>
+      )}
+    </div>
+  );
+
   return (
-    <div className="border-b border-border bg-background px-4 py-3">
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        {/* Left: Filters */}
-        <div className="flex items-center gap-3 flex-wrap">
-          <Select defaultValue="all">
-            <SelectTrigger className="h-9 w-[140px] text-sm">
-              <SelectValue placeholder="Release" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Releases</SelectItem>
-              <SelectItem value="r1">Release 1.0</SelectItem>
-              <SelectItem value="r2">Release 2.0</SelectItem>
-              <SelectItem value="r3">Release 3.0</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select defaultValue="all">
-            <SelectTrigger className="h-9 w-[160px] text-sm">
-              <SelectValue placeholder="Business Group" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Groups</SelectItem>
-              <SelectItem value="sales">Sales</SelectItem>
-              <SelectItem value="finance">Finance</SelectItem>
-              <SelectItem value="hr">Human Resources</SelectItem>
-              <SelectItem value="ops">Operations</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select defaultValue="all">
-            <SelectTrigger className="h-9 w-[140px] text-sm">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="new">New</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="approved">Approved</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select defaultValue="all">
-            <SelectTrigger className="h-9 w-[140px] text-sm">
-              <SelectValue placeholder="Owner" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Owners</SelectItem>
-              <SelectItem value="john">John Smith</SelectItem>
-              <SelectItem value="sarah">Sarah Johnson</SelectItem>
-              <SelectItem value="emily">Emily Davis</SelectItem>
-              <SelectItem value="alex">Alex Kumar</SelectItem>
-            </SelectContent>
-          </Select>
+    <div className="border-b border-border bg-muted/20 px-4 pt-2 pb-2">
+      <div className="flex flex-col gap-2">
+        {/* First Row: Filters and Icon Group */}
+        <div className="flex items-center justify-between gap-4">
+          {/* Left: Filters */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-3 flex-wrap p-1 bg-background rounded-md">
+              {displayedFilters.map(filter => renderFilter(filter))}
+            </div>
+          </div>
+          
+          {/* Divider between filters and icon group */}
+          <div className="h-8 w-px bg-border" />
+            
+          {/* Right: Icon Group - Fixed Position */}
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 rounded bg-muted/50 border border-border hover:bg-muted"
+              onClick={() => setIsExpanded(!isExpanded)}
+              title={isExpanded ? 'Show less filters' : 'Show more filters'}
+            >
+              <ChevronDown className={cn("h-4 w-4 transition-transform", isExpanded && "rotate-180")} />
+            </Button>
+            
+            <Button
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "h-8 w-8 rounded bg-muted/50 border border-border hover:bg-muted transition-colors",
+                showPinMode && "bg-primary/10 border-primary/20"
+              )}
+              onClick={() => setShowPinMode(!showPinMode)}
+              title="Toggle pin mode"
+            >
+              <Pin className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
-        {/* Right: Actions */}
-        <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-9 gap-2">
-                <Eye className="h-4 w-4" />
-                Admin View
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onViewChange('admin')}>Admin View</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onViewChange('tester')}>Tester View</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onViewChange('business')}>Business View</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        {/* Divider between first and second row */}
+        <div className="w-full h-px bg-border" />
 
-          <div className="h-6 w-px bg-border mx-1" />
+        {/* Second Row: Views and Action Buttons */}
+        <div className="flex items-center justify-between gap-4">
+          {/* Left: Saved Views and Export/Import */}
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-8 gap-2 border border-muted-foreground/20 hover:border-muted-foreground/40">
+                  <Eye className="h-4 w-4" />
+                  Admin View
+                  <ChevronDown className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                <DropdownMenuItem onClick={() => onViewChange('admin')}>Admin View</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onViewChange('tester')}>Tester View</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onViewChange('business')}>Business View</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onViewChange('filtered')}>Filtered View</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onViewChange('sorted')}>Sorted View</DropdownMenuItem>
+                <div className="border-t border-border mt-1 pt-1">
+                  <div className="flex items-center gap-1">
+                    <DropdownMenuItem className="text-primary flex-1">
+                      <Plus className="h-3 w-3 mr-2" />
+                      Add View
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="text-primary flex-1">
+                      <Save className="h-3 w-3 mr-2" />
+                      Save As
+                    </DropdownMenuItem>
+                  </div>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-          <Button variant="outline" size="sm" className="h-9 gap-2">
-            <Save className="h-4 w-4" />
-            Save View
-          </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-8 gap-2 border border-muted-foreground/20 hover:border-muted-foreground/40">
+                  <Download className="h-4 w-4" />
+                  Export
+                  <ChevronDown className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem>
+                  <Download className="h-3 w-3 mr-2" />
+                  Export to Excel
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Download className="h-3 w-3 mr-2" />
+                  Export to CSV
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Download className="h-3 w-3 mr-2" />
+                  Export to PDF
+                </DropdownMenuItem>
+                <div className="border-t border-border mt-1 pt-1">
+                  <DropdownMenuItem>
+                    <Upload className="h-3 w-3 mr-2" />
+                    Import Data
+                  </DropdownMenuItem>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-9 gap-2">
-                <Download className="h-4 w-4" />
-                Export
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>Export to Excel</DropdownMenuItem>
-              <DropdownMenuItem>Export to CSV</DropdownMenuItem>
-              <DropdownMenuItem>Export to PDF</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* Center: Item Count */}
+          <div className="flex items-center">
+            <span className="text-sm text-muted-foreground">Showing 20 of 435 Items</span>
+          </div>
 
-          <Button variant="outline" size="sm" className="h-9 gap-2">
-            <Upload className="h-4 w-4" />
-            Import
-          </Button>
+          {/* Right: Action Buttons */}
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Fullscreen">
+              <Maximize className="h-4 w-4" />
+            </Button>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="sm" className="h-9 gap-2 bg-primary hover:bg-primary/90">
-                <Plus className="h-4 w-4" />
-                Add Work Item
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>Add Requirement</DropdownMenuItem>
-              <DropdownMenuItem>Add Task</DropdownMenuItem>
-              <DropdownMenuItem>Add Test Case</DropdownMenuItem>
-              <DropdownMenuItem>Add Issue</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
+            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Refresh">
+              <RefreshCw className="h-4 w-4" />
+            </Button>
 
-      {/* Search Bar Row */}
-      <div className="mt-3">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search scopes, processes, requirements, tasks..."
-            className="pl-10 h-9 bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/30 w-full md:w-1/3"
-          />
+            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Advanced Filters">
+              <Filter className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
