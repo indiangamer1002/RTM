@@ -1,9 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GlobalHeader } from '@/components/rtm/GlobalHeader';
 import { NavigationTree } from '@/components/rtm/NavigationTree';
 import { FilterBar } from '@/components/rtm/FilterBar';
 import { RTMTable } from '@/components/rtm/RTMTable';
-import { DetailPanel } from '@/components/rtm/DetailPanel';
 import { navigationData, requirementsData } from '@/data/mockData';
 import { NavigationNode, Requirement } from '@/types/rtm';
 import { ChevronLeft, ChevronRight, LayoutGrid, Link, List, BarChart3, GitBranch, MoreHorizontal } from 'lucide-react';
@@ -11,9 +11,8 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const Index = () => {
+  const navigate = useNavigate();
   const [selectedNode, setSelectedNode] = useState<NavigationNode | null>(null);
-  const [selectedRequirement, setSelectedRequirement] = useState<Requirement | null>(null);
-  const [isDetailPanelOpen, setIsDetailPanelOpen] = useState(false);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const [currentView, setCurrentView] = useState('admin');
 
@@ -31,12 +30,7 @@ const Index = () => {
   };
 
   const handleRequirementClick = (req: Requirement) => {
-    setSelectedRequirement(req);
-    setIsDetailPanelOpen(true);
-  };
-
-  const handleCloseDetailPanel = () => {
-    setIsDetailPanelOpen(false);
+    navigate(`/requirement/${req.reqId}`);
   };
 
   return (
@@ -126,13 +120,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-
-      {/* Detail Panel */}
-      <DetailPanel
-        requirement={selectedRequirement}
-        isOpen={isDetailPanelOpen}
-        onClose={handleCloseDetailPanel}
-      />
     </div>
   );
 };
