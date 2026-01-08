@@ -92,7 +92,7 @@ const Index = () => {
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           {/* View Title */}
-          <div className="px-6 py-4 border-b border-border bg-background">
+          <div className="px-4 py-4 border-b border-border bg-background">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary/10 rounded-lg">
@@ -129,7 +129,7 @@ const Index = () => {
           <FilterBar onViewChange={setCurrentView} />
 
           {/* RTM Table */}
-          <div className={cn("flex-1 bg-background", isDetailPanelOpen ? "overflow-hidden" : "overflow-auto")}>
+          <div className={cn("flex-1 bg-background p-4", isDetailPanelOpen ? "overflow-hidden" : "overflow-auto")}>
             <RTMTable
               requirements={requirementsData}
               onRequirementClick={handleRequirementClick}

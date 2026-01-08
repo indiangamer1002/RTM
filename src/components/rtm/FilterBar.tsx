@@ -114,7 +114,7 @@ export function FilterBar({ onViewChange }: FilterBarProps) {
   const displayedFilters = isExpanded ? filters : pinnedFilters;
 
   const togglePin = (filterId: string) => {
-    setFilters(prev => prev.map(f => 
+    setFilters(prev => prev.map(f =>
       f.id === filterId ? { ...f, isPinned: !f.isPinned } : f
     ));
   };
@@ -122,7 +122,7 @@ export function FilterBar({ onViewChange }: FilterBarProps) {
   const renderFilter = (filter: FilterOption) => (
     <div key={filter.id} className="flex items-center gap-1">
       <Select defaultValue="all">
-        <SelectTrigger 
+        <SelectTrigger
           className={cn(
             "h-8 text-sm border-muted-foreground/20 bg-background hover:border-muted-foreground/40 transition-colors",
             `w-[${filter.width}]`
@@ -162,14 +162,14 @@ export function FilterBar({ onViewChange }: FilterBarProps) {
         <div className="flex items-center justify-between gap-4">
           {/* Left: Filters */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 flex-wrap p-1 bg-background rounded-md">
+            <div className="flex items-center gap-3 flex-wrap">
               {displayedFilters.map(filter => renderFilter(filter))}
             </div>
           </div>
-          
+
           {/* Divider between filters and icon group */}
           <div className="h-8 w-px bg-border" />
-            
+
           {/* Right: Icon Group - Fixed Position */}
           <div className="flex items-center gap-1 flex-shrink-0">
             <Button
@@ -181,7 +181,7 @@ export function FilterBar({ onViewChange }: FilterBarProps) {
             >
               <ChevronDown className={cn("h-4 w-4 transition-transform", isExpanded && "rotate-180")} />
             </Button>
-            
+
             <Button
               variant="ghost"
               size="icon"
