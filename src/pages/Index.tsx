@@ -6,7 +6,7 @@ import { RTMTable } from '@/components/rtm/RTMTable';
 import { DetailPanel } from '@/components/rtm/DetailPanel';
 import { navigationData, requirementsData } from '@/data/mockData';
 import { NavigationNode, Requirement } from '@/types/rtm';
-import { ChevronLeft, ChevronRight, LayoutGrid, Link, List, BarChart3, GitBranch, MoreHorizontal } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutGrid, Link, List, BarChart3, GitBranch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -40,7 +40,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
       {/* Global Header */}
       <GlobalHeader breadcrumb={breadcrumb} />
 
@@ -49,31 +49,35 @@ const Index = () => {
         {/* Left Navigation */}
         <div
           className={cn(
-            'transition-all duration-300 ease-in-out flex-shrink-0',
-            isNavCollapsed ? 'w-0' : 'w-64'
+            'transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] flex-shrink-0 border-r border-border overflow-hidden',
+            isNavCollapsed ? 'w-0 opacity-0' : 'w-72 opacity-100'
           )}
         >
-          {!isNavCollapsed && (
-            <NavigationTree
-              data={navigationData}
-              selectedId={selectedNode?.id || null}
-              onSelect={handleNodeSelect}
-            />
-          )}
+          <NavigationTree
+            data={navigationData}
+            selectedId={selectedNode?.id || null}
+            onSelect={handleNodeSelect}
+          />
         </div>
 
-        {/* Collapse Toggle */}
-        <div className="relative flex-shrink-0">
+        {/* Collapse Toggle - Tactical placement to avoid header icon overlap */}
+        <div className="relative flex-shrink-0 w-0 z-40">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsNavCollapsed(!isNavCollapsed)}
-            className="absolute top-4 -left-3 z-20 h-6 w-6 rounded-full border border-border bg-background shadow-sm hover:bg-muted"
+            className={cn(
+              "absolute top-[22.5px] h-8 w-4 rounded-r border border-l-0 border-border bg-background/90 backdrop-blur-sm shadow-sm hover:bg-muted hover:w-5 transition-all duration-300 group flex items-center justify-center",
+              isNavCollapsed 
+                ? "left-0" 
+                : "-left-px"
+            )}
+            title={isNavCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
           >
             {isNavCollapsed ? (
-              <ChevronRight className="h-3 w-3" />
+              <ChevronRight className="h-3 w-3 text-muted-foreground/80 group-hover:text-primary transition-colors" />
             ) : (
-              <ChevronLeft className="h-3 w-3" />
+              <ChevronLeft className="h-3 w-3 text-muted-foreground/80 group-hover:text-primary transition-colors" />
             )}
           </Button>
         </div>

@@ -15,7 +15,7 @@ export function GlobalHeader({ breadcrumb }: GlobalHeaderProps) {
       <header className="h-14 bg-background border-b border-border flex items-center justify-between px-4">
         {/* Left: Logo */}
         <div className="flex items-center gap-6">
-          <img src={kternLogo} alt="KTERN" className="h-6 w-auto object-contain" />
+          <img src={kternLogo} alt="KTERN" className="h-5 w-auto object-contain" />
 
           {/* Breadcrumb */}
           <nav className="hidden md:flex items-center text-sm">
