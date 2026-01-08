@@ -1,5 +1,5 @@
-@import url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css');
-@import url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-mono/style.css');
+@import url("https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css");
+@import url("https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-mono/style.css");
 
 @tailwind base;
 @tailwind components;
@@ -152,7 +152,8 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Geist Sans', 'Geist Mono', system-ui, -apple-system, sans-serif;
+    font-family: "Geist Sans", "Geist Mono", system-ui, -apple-system,
+      sans-serif;
   }
 
   /* Enterprise scrollbar styling */
@@ -175,6 +176,27 @@
 }
 
 @layer components {
+  /* Custom scrollbar for navigation */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
 
   /* Enterprise Table Styles */
   .rtm-table {
@@ -234,14 +256,23 @@
     @apply h-full rounded-full transition-all duration-300;
   }
 
-  /* Navigation tree */
+  /* Navigation tree enhancements */
   .nav-tree-item {
-    @apply flex items-center gap-2 px-3 py-2 text-sm rounded-md cursor-pointer;
-    @apply text-foreground/80 hover:bg-nav-hover transition-colors;
+    @apply flex items-center gap-2 px-3 py-2 text-sm cursor-pointer;
+    @apply text-foreground/80 hover:bg-muted/50 transition-colors;
   }
 
   .nav-tree-item.active {
-    @apply bg-nav-active text-primary font-medium;
+    @apply bg-muted/30 text-foreground font-medium;
+  }
+
+  /* Minimalistic threading */
+  .thread-line {
+    @apply absolute left-0 top-0 bottom-0 w-px bg-border/60;
+  }
+
+  .thread-connector {
+    @apply absolute top-6 w-3 border-t border-border/60;
   }
 
   /* Panel animations */
@@ -376,5 +407,14 @@
 
   .rich-text-editor [contenteditable] em {
     @apply italic;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
   }
 }
