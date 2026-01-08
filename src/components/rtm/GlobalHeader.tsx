@@ -15,7 +15,7 @@ export function GlobalHeader({ breadcrumb }: GlobalHeaderProps) {
       <header className="h-14 bg-background border-b border-border flex items-center justify-between px-4">
         {/* Left: Logo */}
         <div className="flex items-center gap-6">
-          <img src={kternLogo} alt="KTERN" className="h-8 w-auto object-contain" />
+          <img src={kternLogo} alt="KTERN" className="h-6 w-auto object-contain" />
 
           {/* Breadcrumb */}
           <nav className="hidden md:flex items-center text-sm">
@@ -30,17 +30,8 @@ export function GlobalHeader({ breadcrumb }: GlobalHeaderProps) {
           </nav>
         </div>
 
-        {/* Center: Search */}
-        <div className="flex-1 max-w-lg mx-8 hidden lg:block">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search scopes, processes, requirements, tasks..."
-              className="pl-10 h-9 bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/30"
-            />
-          </div>
-        </div>
+        {/* Center: Search Removed */}
+        <div className="flex-1 max-w-lg mx-8 hidden lg:block" />
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">

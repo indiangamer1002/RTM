@@ -139,22 +139,22 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
             const signOffSegments = getSignOffSegments(req);
 
             return (
-              <tr 
-                key={req.id} 
+              <tr
+                key={req.id}
                 className="cursor-pointer hover:bg-muted/30 transition-colors"
                 onClick={() => onRequirementClick(req)}
               >
                 {/* Req ID */}
                 <td className="px-4 py-3 border-b border-r border-border">
-                  <span className="text-primary font-medium text-sm hover:underline">{req.reqId}</span>
+                  <span className="text-foreground font-medium text-sm hover:underline">{req.reqId}</span>
                 </td>
-                
+
                 {/* Req Title with sub-info */}
                 <td className="px-4 py-3 border-b border-r border-border">
                   <RTMHoverCard
                     trigger={
                       <div className="flex flex-col">
-                        <span className="text-primary hover:underline cursor-pointer font-medium text-sm line-clamp-1">
+                        <span className="text-foreground hover:underline cursor-pointer font-medium text-sm line-clamp-1">
                           {req.title}
                         </span>
                         <span className="text-xs text-muted-foreground">{req.sourceOwner}</span>
@@ -171,68 +171,68 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                     footer={`Last updated by ${req.lastUpdatedBy} on ${req.updatedAt}`}
                   />
                 </td>
-                
+
                 {/* Type */}
                 <td className="px-4 py-3 border-b border-r border-border">
                   <StatusBadge label={req.type} type={typeMap[req.type]} />
                 </td>
-                
+
                 {/* Source Owner */}
                 <td className="px-4 py-3 border-b border-r border-border text-sm">
                   {req.sourceOwner}
                 </td>
-                
+
                 {/* Priority */}
                 <td className="px-4 py-3 border-b border-r border-border text-center">
                   <StatusBadge label={req.priority} type={priorityMap[req.priority]} />
                 </td>
-                
+
                 {/* Status */}
                 <td className="px-4 py-3 border-b border-r border-border text-center">
                   <StatusBadge label={req.status} type={statusMap[req.status]} />
                 </td>
-                
+
                 {/* Task - Status Bar */}
                 <td className="px-3 py-3 border-b border-r border-border">
-                  <StatusBar 
-                    segments={taskSegments} 
-                    total={req.tasks.length} 
+                  <StatusBar
+                    segments={taskSegments}
+                    total={req.tasks.length}
                     title="Tasks"
                   />
                 </td>
-                
+
                 {/* Testcase - Status Bar */}
                 <td className="px-3 py-3 border-b border-r border-border">
-                  <StatusBar 
-                    segments={executionSegments} 
-                    total={req.testCases.length} 
+                  <StatusBar
+                    segments={executionSegments}
+                    total={req.testCases.length}
                     title="Testcase"
                   />
                 </td>
-                
+
                 {/* Issues - Status Bar */}
                 <td className="px-3 py-3 border-b border-r border-border">
-                  <StatusBar 
-                    segments={issueSegments} 
-                    total={req.issues.length} 
+                  <StatusBar
+                    segments={issueSegments}
+                    total={req.issues.length}
                     title="Issues"
                   />
                 </td>
-                
+
                 {/* Sign-offs - Status Bar */}
                 <td className="px-3 py-3 border-b border-r border-border">
-                  <StatusBar 
-                    segments={signOffSegments} 
-                    total={req.signOffs.length} 
+                  <StatusBar
+                    segments={signOffSegments}
+                    total={req.signOffs.length}
                     title="Sign-offs"
                   />
                 </td>
-                
+
                 {/* Requirement Approval Status */}
                 <td className="px-4 py-3 border-b border-border text-center">
-                  <StatusBadge 
-                    label={req.signOffs.every(s => s.status === 'Approved') ? 'Approved' : req.signOffs.some(s => s.status === 'Rejected') ? 'Rejected' : 'Pending'} 
-                    type={req.signOffs.every(s => s.status === 'Approved') ? 'success' : req.signOffs.some(s => s.status === 'Rejected') ? 'error' : 'info'} 
+                  <StatusBadge
+                    label={req.signOffs.every(s => s.status === 'Approved') ? 'Approved' : req.signOffs.some(s => s.status === 'Rejected') ? 'Rejected' : 'Pending'}
+                    type={req.signOffs.every(s => s.status === 'Approved') ? 'success' : req.signOffs.some(s => s.status === 'Rejected') ? 'error' : 'info'}
                   />
                 </td>
               </tr>

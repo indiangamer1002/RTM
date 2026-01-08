@@ -22,7 +22,7 @@ function OverviewTab({ requirement }: { requirement: Requirement }) {
         <h3 className="text-sm font-medium text-muted-foreground mb-2">Description</h3>
         <p className="text-sm text-foreground leading-relaxed">{requirement.description}</p>
       </div>
-      
+
       <div className="grid grid-cols-2 gap-4">
         <div>
           <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Type</h4>
@@ -92,9 +92,9 @@ function TasksTab({ tasks }: { tasks: Task[] }) {
                 <span>Due: {task.dueDate}</span>
               </div>
             </div>
-            <StatusBadge 
-              label={task.status} 
-              type={task.status === 'Completed' ? 'success' : task.status === 'In Progress' ? 'info' : 'neutral'} 
+            <StatusBadge
+              label={task.status}
+              type={task.status === 'Completed' ? 'success' : task.status === 'In Progress' ? 'info' : 'neutral'}
             />
           </div>
         </div>
@@ -138,9 +138,9 @@ function TestPrepTab({ testCases }: { testCases: TestCase[] }) {
                   <p className="text-xs text-muted-foreground mt-1">Tester: {tc.tester}</p>
                 )}
               </div>
-              <StatusBadge 
-                label={tc.status} 
-                type={tc.status === 'Ready' ? 'success' : tc.status === 'In Progress' ? 'warning' : 'neutral'} 
+              <StatusBadge
+                label={tc.status}
+                type={tc.status === 'Ready' ? 'success' : tc.status === 'In Progress' ? 'warning' : 'neutral'}
               />
             </div>
           </div>
@@ -193,9 +193,9 @@ function TestExecutionTab({ testCases }: { testCases: TestCase[] }) {
                   Last run: {tc.lastRun} by {tc.tester}
                 </p>
               </div>
-              <StatusBadge 
-                label={tc.executionResult!} 
-                type={tc.executionResult === 'Pass' ? 'success' : tc.executionResult === 'Fail' ? 'error' : 'warning'} 
+              <StatusBadge
+                label={tc.executionResult!}
+                type={tc.executionResult === 'Pass' ? 'success' : tc.executionResult === 'Fail' ? 'error' : 'warning'}
               />
             </div>
           </div>
@@ -223,17 +223,17 @@ function IssuesTab({ issues }: { issues: Issue[] }) {
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <StatusBadge 
-                  label={issue.severity} 
-                  type={issue.severity === 'Critical' || issue.severity === 'High' ? 'error' : issue.severity === 'Medium' ? 'warning' : 'neutral'} 
+                <StatusBadge
+                  label={issue.severity}
+                  type={issue.severity === 'Critical' || issue.severity === 'High' ? 'error' : issue.severity === 'Medium' ? 'warning' : 'neutral'}
                 />
                 <h4 className="text-sm font-medium text-foreground truncate">{issue.title}</h4>
               </div>
               <p className="text-xs text-muted-foreground mt-2">Assignee: {issue.assignee}</p>
             </div>
-            <StatusBadge 
-              label={issue.status} 
-              type={issue.status === 'Resolved' || issue.status === 'Closed' ? 'success' : issue.status === 'In Progress' ? 'info' : 'warning'} 
+            <StatusBadge
+              label={issue.status}
+              type={issue.status === 'Resolved' || issue.status === 'Closed' ? 'success' : issue.status === 'In Progress' ? 'info' : 'warning'}
             />
           </div>
         </div>
@@ -263,9 +263,9 @@ function SignOffsTab({ signOffs }: { signOffs: SignOff[] }) {
               <p className="text-xs text-muted-foreground mt-1">{signOff.stakeholder}</p>
               {signOff.date && <p className="text-xs text-muted-foreground">Signed: {signOff.date}</p>}
             </div>
-            <StatusBadge 
-              label={signOff.status} 
-              type={signOff.status === 'Approved' ? 'success' : signOff.status === 'Pending' ? 'warning' : 'error'} 
+            <StatusBadge
+              label={signOff.status}
+              type={signOff.status === 'Approved' ? 'success' : signOff.status === 'Pending' ? 'warning' : 'error'}
             />
           </div>
         </div>
@@ -318,7 +318,7 @@ export function DetailPanel({ requirement, isOpen, onClose }: DetailPanelProps) 
   return (
     <>
       {/* Backdrop */}
-      <div 
+      <div
         className={cn(
           'fixed inset-0 bg-foreground/20 z-40 transition-opacity duration-300',
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -327,7 +327,7 @@ export function DetailPanel({ requirement, isOpen, onClose }: DetailPanelProps) 
       />
 
       {/* Panel */}
-      <div 
+      <div
         className={cn(
           'fixed right-0 top-0 h-full w-[500px] max-w-[90vw] bg-background z-50 shadow-panel',
           'transform transition-transform duration-300 ease-out',
@@ -337,7 +337,7 @@ export function DetailPanel({ requirement, isOpen, onClose }: DetailPanelProps) 
         {/* Header */}
         <div className="h-14 border-b border-border flex items-center justify-between px-4">
           <div className="flex items-center gap-3 min-w-0">
-            <span className="text-sm font-mono text-primary">{requirement.reqId}</span>
+            <span className="text-sm font-mono text-foreground">{requirement.reqId}</span>
             <h2 className="text-sm font-medium text-foreground truncate">{requirement.title}</h2>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 flex-shrink-0">
@@ -352,50 +352,50 @@ export function DetailPanel({ requirement, isOpen, onClose }: DetailPanelProps) 
         <ScrollArea className="h-[calc(100%-60px)]">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
             <TabsList className="w-full justify-start rounded-none border-b border-border bg-transparent h-auto p-0 overflow-x-auto flex-nowrap">
-              <TabsTrigger 
-                value="overview" 
+              <TabsTrigger
+                value="overview"
                 className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs"
               >
                 <FileText className="h-3.5 w-3.5 mr-1.5" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger 
-                value="tasks" 
+              <TabsTrigger
+                value="tasks"
                 className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs"
               >
                 <ClipboardList className="h-3.5 w-3.5 mr-1.5" />
                 Tasks ({requirement.tasks.length})
               </TabsTrigger>
-              <TabsTrigger 
-                value="test-prep" 
+              <TabsTrigger
+                value="test-prep"
                 className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs"
               >
                 <TestTube className="h-3.5 w-3.5 mr-1.5" />
                 Test Prep
               </TabsTrigger>
-              <TabsTrigger 
-                value="test-exec" 
+              <TabsTrigger
+                value="test-exec"
                 className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs"
               >
                 <TestTube className="h-3.5 w-3.5 mr-1.5" />
                 Execution
               </TabsTrigger>
-              <TabsTrigger 
-                value="issues" 
+              <TabsTrigger
+                value="issues"
                 className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs"
               >
                 <Bug className="h-3.5 w-3.5 mr-1.5" />
                 Issues ({requirement.issues.length})
               </TabsTrigger>
-              <TabsTrigger 
-                value="signoffs" 
+              <TabsTrigger
+                value="signoffs"
                 className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs"
               >
                 <CheckSquare className="h-3.5 w-3.5 mr-1.5" />
                 Sign-offs
               </TabsTrigger>
-              <TabsTrigger 
-                value="audit" 
+              <TabsTrigger
+                value="audit"
                 className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs"
               >
                 <History className="h-3.5 w-3.5 mr-1.5" />
