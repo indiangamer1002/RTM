@@ -10,12 +10,16 @@ import { ChevronLeft, ChevronRight, LayoutGrid, Link, List, BarChart3, GitBranch
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+import { DetailPanel } from '@/components/rtm/DetailPanel';
+
 const Index = () => {
   const navigate = useNavigate();
   const [selectedNode, setSelectedNode] = useState<NavigationNode | null>(null);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const [currentView, setCurrentView] = useState('admin');
   const [isDetailPanelOpen, setIsDetailPanelOpen] = useState(false);
+  const [selectedRequirement, setSelectedRequirement] = useState<Requirement | null>(null);
+  const [detailPanelTab, setDetailPanelTab] = useState('overview');
 
   const breadcrumb = ['MDLP FY25', 'RTM', 'Home'];
   const mockPath = ["MDLP FY25", "Order to cash", "Sales Order Management"];
@@ -30,12 +34,24 @@ const Index = () => {
     setSelectedNode(node);
   };
 
-  const handleRequirementClick = (req: Requirement) => {
-    navigate(`/requirement/${req.reqId}`);
+  const handleRequirementClick = (req: Requirement, tab?: string) => {
+    if (tab) {
+      setSelectedRequirement(req);
+      setDetailPanelTab(tab);
+      setIsDetailPanelOpen(true);
+    } else {
+      navigate(`/requirement/${req.reqId}`);
+    }
   };
 
   return (
     <div className="h-screen w-screen bg-background flex flex-col overflow-hidden">
+      <DetailPanel
+        requirement={selectedRequirement}
+        isOpen={isDetailPanelOpen}
+        onClose={() => setIsDetailPanelOpen(false)}
+        initialTab={detailPanelTab}
+      />
       {/* Global Header */}
       <GlobalHeader breadcrumb={breadcrumb} />
 

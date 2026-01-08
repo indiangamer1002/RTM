@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, FileText, ClipboardList, TestTube, Bug, CheckSquare, History, Users } from 'lucide-react';
 import { Requirement, Task, TestCase, Issue, SignOff, AuditEntry, Stakeholder } from '@/types/rtm';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ interface DetailPanelProps {
   requirement: Requirement | null;
   isOpen: boolean;
   onClose: () => void;
+  initialTab?: string;
 }
 
 function OverviewTab({ requirement }: { requirement: Requirement }) {
@@ -330,8 +331,14 @@ function AuditHistoryTab({ auditHistory }: { auditHistory: AuditEntry[] }) {
   );
 }
 
-export function DetailPanel({ requirement, isOpen, onClose }: DetailPanelProps) {
-  const [activeTab, setActiveTab] = useState('overview');
+export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overview' }: DetailPanelProps) {
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  useEffect(() => {
+    if (isOpen) {
+      setActiveTab(initialTab || 'overview');
+    }
+  }, [isOpen, initialTab, requirement?.id]);
 
   if (!requirement) return null;
 
