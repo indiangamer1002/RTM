@@ -19,6 +19,9 @@ interface StatusBarProps {
   total: number;
   title: string;
   emptyText?: string;
+  onViewDetails?: () => void;
+  reqId?: string;
+  reqTitle?: string;
 }
 
 const colorClasses: Record<string, { bg: string; text: string }> = {
@@ -28,7 +31,7 @@ const colorClasses: Record<string, { bg: string; text: string }> = {
   gray: { bg: 'bg-[#9E9E9E]', text: 'text-white' },
 };
 
-export function StatusBar({ segments, total, title, emptyText = '-' }: StatusBarProps) {
+export function StatusBar({ segments, total, title, emptyText = '-', onViewDetails, reqId, reqTitle }: StatusBarProps) {
   const [activeTab, setActiveTab] = useState<string>(segments[0]?.label || '');
 
   if (total === 0) {
@@ -49,10 +52,11 @@ export function StatusBar({ segments, total, title, emptyText = '-' }: StatusBar
           {activeSegments.map((segment, idx) => {
             const widthPercent = (segment.count / total) * 100;
             const colors = colorClasses[segment.color];
-            
+
             return (
               <div
                 key={segment.label}
+                onMouseEnter={() => setActiveTab(segment.label)}
                 className={cn(
                   'h-full flex items-center justify-center text-xs font-medium transition-all',
                   colors.bg,
@@ -68,16 +72,25 @@ export function StatusBar({ segments, total, title, emptyText = '-' }: StatusBar
           })}
         </div>
       </HoverCardTrigger>
-      <HoverCardContent className="w-80 p-0" align="start">
-        <div className="p-3 border-b border-border">
-          <h4 className="font-medium text-sm text-foreground">{title}</h4>
+      <HoverCardContent
+        className="w-[650px] p-0 shadow-2xl border-2 z-50 !fixed !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2 !m-0 bg-popover data-[state=open]:!animate-none data-[state=closed]:!animate-none"
+        avoidCollisions={false}
+      >
+        <div className="p-4 border-b border-border bg-muted/10">
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded">{reqId}</span>
+              <span className="font-medium text-sm text-foreground">{title}</span>
+            </div>
+          </div>
+          <h4 className="font-medium text-base text-foreground line-clamp-1">{reqTitle}</h4>
         </div>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="w-full justify-start rounded-none border-b bg-transparent h-auto p-0">
             {segments.map((segment) => {
               const colors = colorClasses[segment.color];
               const isActive = activeTab === segment.label;
-              
+
               return (
                 <TabsTrigger
                   key={segment.label}
@@ -101,7 +114,7 @@ export function StatusBar({ segments, total, title, emptyText = '-' }: StatusBar
           </TabsList>
           {segments.map((segment) => (
             <TabsContent key={segment.label} value={segment.label} className="p-0 m-0">
-              <div className="max-h-48 overflow-y-auto">
+              <div className="h-[400px] overflow-y-auto">
                 {segment.items && segment.items.length > 0 ? (
                   <div className="divide-y divide-border">
                     {segment.items.map((item) => (
@@ -120,8 +133,19 @@ export function StatusBar({ segments, total, title, emptyText = '-' }: StatusBar
             </TabsContent>
           ))}
         </Tabs>
-        <div className="px-3 py-2 border-t border-border bg-muted/30">
-          <p className="text-xs text-muted-foreground">Click to view full traceability</p>
+        <div
+          className={cn(
+            "px-3 py-2 border-t border-border bg-muted/30",
+            onViewDetails && "cursor-pointer hover:bg-muted/50 transition-colors"
+          )}
+          onClick={onViewDetails}
+        >
+          <p className={cn(
+            "text-xs text-muted-foreground",
+            onViewDetails && "hover:text-primary hover:underline"
+          )}>
+            Click to view full traceability
+          </p>
         </div>
       </HoverCardContent>
     </HoverCard>

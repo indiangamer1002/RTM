@@ -141,12 +141,16 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
             return (
               <tr
                 key={req.id}
-                className="cursor-pointer hover:bg-muted/30 transition-colors"
-                onClick={() => onRequirementClick(req)}
+                className="hover:bg-muted/30 transition-colors"
               >
                 {/* Req ID */}
                 <td className="px-4 py-3 border-b border-r border-border">
-                  <span className="text-foreground font-medium text-sm hover:underline">{req.reqId}</span>
+                  <span
+                    className="text-foreground font-medium text-sm hover:underline cursor-pointer"
+                    onClick={() => onRequirementClick(req)}
+                  >
+                    {req.reqId}
+                  </span>
                 </td>
 
                 {/* Req Title with sub-info */}
@@ -154,7 +158,10 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                   <RTMHoverCard
                     trigger={
                       <div className="flex flex-col">
-                        <span className="text-foreground hover:underline cursor-pointer font-medium text-sm line-clamp-1">
+                        <span
+                          className="text-foreground hover:underline cursor-pointer font-medium text-sm line-clamp-1"
+                          onClick={() => onRequirementClick(req)}
+                        >
                           {req.title}
                         </span>
                         <span className="text-xs text-muted-foreground">{req.sourceOwner}</span>
@@ -198,6 +205,9 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                     segments={taskSegments}
                     total={req.tasks.length}
                     title="Tasks"
+                    onViewDetails={() => onRequirementClick(req)}
+                    reqId={req.reqId}
+                    reqTitle={req.title}
                   />
                 </td>
 
@@ -207,6 +217,9 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                     segments={executionSegments}
                     total={req.testCases.length}
                     title="Testcase"
+                    onViewDetails={() => onRequirementClick(req)}
+                    reqId={req.reqId}
+                    reqTitle={req.title}
                   />
                 </td>
 
@@ -216,6 +229,9 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                     segments={issueSegments}
                     total={req.issues.length}
                     title="Issues"
+                    onViewDetails={() => onRequirementClick(req)}
+                    reqId={req.reqId}
+                    reqTitle={req.title}
                   />
                 </td>
 
@@ -225,6 +241,9 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                     segments={signOffSegments}
                     total={req.signOffs.length}
                     title="Sign-offs"
+                    onViewDetails={() => onRequirementClick(req)}
+                    reqId={req.reqId}
+                    reqTitle={req.title}
                   />
                 </td>
 
