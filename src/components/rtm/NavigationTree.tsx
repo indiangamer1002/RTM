@@ -1,7 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronRight, ChevronDown, Folder, FolderOpen, FileText, Layers, Target, CheckCircle, XCircle } from 'lucide-react';
 import { NavigationNode } from '@/types/rtm';
 import { cn } from '@/lib/utils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface NavigationTreeProps {
   data: NavigationNode[];
@@ -9,16 +16,16 @@ interface NavigationTreeProps {
   onSelect: (node: NavigationNode) => void;
 }
 
-function TreeNode({ 
-  node, 
-  level = 0, 
-  selectedId, 
+function TreeNode({
+  node,
+  level = 0,
+  selectedId,
   onSelect,
   expandedIds,
   toggleExpand
-}: { 
-  node: NavigationNode; 
-  level?: number; 
+}: {
+  node: NavigationNode;
+  level?: number;
   selectedId: string | null;
   onSelect: (node: NavigationNode) => void;
   expandedIds: Set<string>;
@@ -37,7 +44,7 @@ function TreeNode({
       case 'process':
         return <Target className="h-4 w-4 text-status-warning" />;
       case 'requirement':
-        return node.status === 'in-scope' 
+        return node.status === 'in-scope'
           ? <CheckCircle className="h-4 w-4 text-status-success" />
           : <XCircle className="h-4 w-4 text-muted-foreground" />;
       default:
@@ -76,7 +83,7 @@ function TreeNode({
         {getIcon()}
         <span className="truncate flex-1">{node.name}</span>
       </div>
-      
+
       {hasChildren && isExpanded && (
         <div className="animate-accordion-down">
           {node.children!.map((child) => (
@@ -98,6 +105,13 @@ function TreeNode({
 
 export function NavigationTree({ data, selectedId, onSelect }: NavigationTreeProps) {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set(['proj-1', 'scope-2', 'proc-3']));
+  const [currentProject, setCurrentProject] = useState<string>('');
+
+  useEffect(() => {
+    if (data.length > 0 && !currentProject) {
+      setCurrentProject(data[0].id);
+    }
+  }, [data, currentProject]);
 
   const toggleExpand = (id: string) => {
     setExpandedIds(prev => {
@@ -111,25 +125,47 @@ export function NavigationTree({ data, selectedId, onSelect }: NavigationTreePro
     });
   };
 
+  const selectedProjectNode = data.find(n => n.id === currentProject);
+
   return (
     <div className="h-full bg-nav-background border-r border-nav-border overflow-hidden flex flex-col">
-      {/* Header */}
-      <div className="p-4 border-b border-nav-border">
-        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Project Hierarchy</h2>
+      {/* Header with Project Selector */}
+      <div className="p-4 border-b border-nav-border min-h-[60px] flex items-center">
+        <Select value={currentProject} onValueChange={setCurrentProject}>
+          <SelectTrigger className="w-full bg-background border-input">
+            <SelectValue placeholder="Select Project" />
+          </SelectTrigger>
+          <SelectContent>
+            {data.map((project) => (
+              <SelectItem key={project.id} value={project.id}>
+                <div className="flex items-center gap-2">
+                  <Folder className="h-4 w-4 text-primary" />
+                  <span className="font-medium">{project.name}</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
-      
+
       {/* Tree */}
       <div className="flex-1 overflow-y-auto py-2">
-        {data.map((node) => (
-          <TreeNode
-            key={node.id}
-            node={node}
-            selectedId={selectedId}
-            onSelect={onSelect}
-            expandedIds={expandedIds}
-            toggleExpand={toggleExpand}
-          />
-        ))}
+        {selectedProjectNode?.children && selectedProjectNode.children.length > 0 ? (
+          selectedProjectNode.children.map((node) => (
+            <TreeNode
+              key={node.id}
+              node={node}
+              selectedId={selectedId}
+              onSelect={onSelect}
+              expandedIds={expandedIds}
+              toggleExpand={toggleExpand}
+            />
+          ))
+        ) : (
+          <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+            No items in this project
+          </div>
+        )}
       </div>
     </div>
   );

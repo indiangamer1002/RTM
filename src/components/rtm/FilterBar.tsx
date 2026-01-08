@@ -1,5 +1,6 @@
-import { Download, Upload, Plus, Save, Eye } from 'lucide-react';
+import { Download, Upload, Plus, Save, Eye, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -132,6 +133,18 @@ export function FilterBar({ onViewChange }: FilterBarProps) {
               <DropdownMenuItem>Add Issue</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+        </div>
+      </div>
+
+      {/* Search Bar Row */}
+      <div className="mt-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search scopes, processes, requirements, tasks..."
+            className="pl-10 h-9 bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/30 w-full md:w-1/3"
+          />
         </div>
       </div>
     </div>
