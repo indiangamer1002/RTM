@@ -414,13 +414,7 @@ export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overvi
                 <CheckSquare className="h-3.5 w-3.5 mr-1.5" />
                 Sign-offs
               </TabsTrigger>
-              <TabsTrigger
-                value="audit"
-                className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
-              >
-                <History className="h-3.5 w-3.5 mr-1.5" />
-                Audit
-              </TabsTrigger>
+
             </TabsList>
 
             <div className="p-4">
@@ -439,9 +433,7 @@ export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overvi
               <TabsContent value="signoffs" className="mt-0">
                 <SignOffsTab signOffs={requirement.signOffs} />
               </TabsContent>
-              <TabsContent value="audit" className="mt-0">
-                <AuditHistoryTab auditHistory={requirement.auditHistory} />
-              </TabsContent>
+
             </div>
           </Tabs>
         </ScrollArea>
