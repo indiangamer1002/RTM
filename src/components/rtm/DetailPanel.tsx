@@ -7,6 +7,7 @@ import { StatusBadge } from './StatusBadge';
 import { ProgressBar } from './ProgressBar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { OverviewTab } from './OverviewTab';
 import { cn } from '@/lib/utils';
 
 interface DetailPanelProps {
@@ -14,60 +15,6 @@ interface DetailPanelProps {
   isOpen: boolean;
   onClose: () => void;
   initialTab?: string;
-}
-
-function OverviewTab({ requirement }: { requirement: Requirement }) {
-  return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-sm font-medium text-muted-foreground mb-2">Description</h3>
-        <p className="text-sm text-foreground leading-relaxed">{requirement.description}</p>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Type</h4>
-          <StatusBadge label={requirement.type} type={requirement.type === 'Business' ? 'info' : requirement.type === 'Functional' ? 'warning' : 'neutral'} />
-        </div>
-        <div>
-          <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Priority</h4>
-          <StatusBadge label={requirement.priority} type={requirement.priority === 'High' ? 'error' : requirement.priority === 'Medium' ? 'warning' : 'success'} />
-        </div>
-        <div>
-          <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Status</h4>
-          <StatusBadge label={requirement.status} type={requirement.status === 'Completed' || requirement.status === 'Approved' ? 'success' : requirement.status === 'Active' ? 'info' : 'neutral'} />
-        </div>
-        <div>
-          <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Owner</h4>
-          <span className="text-sm text-foreground">{requirement.sourceOwner}</span>
-        </div>
-      </div>
-
-      <div>
-        <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Stakeholders</h4>
-        <div className="flex flex-wrap gap-2">
-          {requirement.stakeholders.map((s) => (
-            <div key={s.id} className="flex items-center gap-2 bg-muted/50 rounded-full px-3 py-1.5">
-              <Avatar className="h-5 w-5">
-                <AvatarFallback className="text-[8px] bg-primary text-primary-foreground">
-                  {s.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-xs font-medium">{s.name}</span>
-              <span className="text-[10px] text-muted-foreground">({s.role})</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="pt-4 border-t border-border">
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>Created: {requirement.createdAt}</span>
-          <span>Last updated: {requirement.updatedAt} by {requirement.lastUpdatedBy}</span>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 function TasksTab({ tasks }: { tasks: Task[] }) {
@@ -419,7 +366,7 @@ export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overvi
 
             <div className="p-4">
               <TabsContent value="overview" className="mt-0">
-                <OverviewTab requirement={requirement} />
+                <OverviewTab requirementId={requirement.reqId} />
               </TabsContent>
               <TabsContent value="tasks" className="mt-0">
                 <TasksTab tasks={requirement.tasks} />
