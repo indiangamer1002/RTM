@@ -8,8 +8,6 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { OverviewTab } from '@/components/rtm/OverviewTab';
 import { DiscussionsPanel } from '@/components/rtm/DiscussionsPanel';
-import { OverviewTab } from '@/components/rtm/OverviewTab';
-import { DiscussionsPanel } from '@/components/rtm/DiscussionsPanel';
 
 const RequirementDetail = () => {
   const navigate = useNavigate();
