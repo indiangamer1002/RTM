@@ -20,7 +20,8 @@ import 'reactflow/dist/style.css';
 import {
     Undo, Redo, ZoomIn, ZoomOut, Maximize, Save,
     FileText, CheckSquare, TestTube, CheckCircle, Diamond, StickyNote,
-    X, Briefcase, Target, Square, AlertCircle, Trash2
+    X, Briefcase, Target, Square, AlertCircle, Trash2,
+    ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -194,6 +195,8 @@ const CustomNode = ({ id, data, selected }: NodeProps<TraceNodeData>) => {
 // --- Components ---
 
 const Sidebar = () => {
+    const [isOpen, setIsOpen] = useState(true);
+
     const onDragStart = (event: React.DragEvent, nodeType: NodeType) => {
         event.dataTransfer.setData('application/reactflow', nodeType);
         event.dataTransfer.effectAllowed = 'move';
@@ -212,8 +215,36 @@ const Sidebar = () => {
         { type: 'empty', label: 'Empty Node', icon: <Square className="w-4 h-4" />, color: 'bg-gray-100 border-gray-300' },
     ];
 
+    if (!isOpen) {
+        return (
+            <div className="h-full border-r border-border bg-background flex flex-col items-center pt-2 w-10 transition-all duration-300 ease-in-out">
+                <TooltipProvider>
+                    <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" onClick={() => setIsOpen(true)}>
+                                <ChevronRight className="h-4 w-4" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="right">Expand Palette</TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            </div>
+        )
+    }
+
     return (
-        <Card className="w-60 h-full border-r border-border rounded-none shadow-none bg-background flex flex-col">
+        <Card className="w-60 h-full border-r border-border rounded-none shadow-none bg-background flex flex-col relative transition-all duration-300 ease-in-out">
+            <div className="absolute right-2 top-2 z-10">
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 text-muted-foreground hover:text-foreground"
+                    onClick={() => setIsOpen(false)}
+                >
+                    <ChevronLeft className="h-4 w-4" />
+                </Button>
+            </div>
+
             <div className="p-4 border-b border-border">
                 <div className="font-medium text-sm text-foreground">Shape Palette</div>
             </div>
