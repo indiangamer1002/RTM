@@ -297,12 +297,9 @@ const PropertiesPanel = ({ node, onClose, onUpdate, takeSnapshot }: PropertiesPa
                     <X className="w-4 h-4" />
                 </Button>
             </div>
-            <ScrollArea className="flex-1 p-4 space-y-6">
+            <ScrollArea className="flex-1 px-4 pb-4 pt-0 space-y-6">
                 <div className="space-y-4">
-                    <div>
-                        <label className="text-xs font-medium text-muted-foreground uppercase">ID</label>
-                        <div className="text-sm font-mono mt-1 text-muted-foreground">{node.data.id || node.id}</div>
-                    </div>
+
                     <div>
                         <label className="text-xs font-medium text-muted-foreground uppercase">Title</label>
                         <Input
@@ -317,19 +314,7 @@ const PropertiesPanel = ({ node, onClose, onUpdate, takeSnapshot }: PropertiesPa
                             <Badge variant="outline" className="capitalize">{node.data.type}</Badge>
                         </div>
                     </div>
-                    <div>
-                        <label className="text-xs font-medium text-muted-foreground uppercase">Status</label>
-                        <Select value={node.data.status} onValueChange={(value) => handleChange('status', value)}>
-                            <SelectTrigger className="mt-1 h-8">
-                                <SelectValue placeholder="Select status" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {statusOptions.map(opt => (
-                                    <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
+
                     <div>
                         <label className="text-xs font-medium text-muted-foreground uppercase">Owner</label>
                         <Input
