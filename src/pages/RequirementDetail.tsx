@@ -107,15 +107,15 @@ const RequirementDetail = () => {
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           {/* Form Content */}
-          <div className="flex-1 overflow-auto bg-background">
-            <div className="px-2 py-4">
+          <div className="flex-1 flex flex-col overflow-hidden bg-background">
+            <div className="px-2 pt-4 pb-0 flex-shrink-0">
               {/* ID and Title Row */}
               <div className="flex items-center gap-3 mb-3">
-                <span className="text-base text-foreground font-semibold">13061</span>
+                <span className="!text-[17px] text-foreground font-normal">13061</span>
                 <Input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="flex-1 h-auto px-3 py-2 text-base border-transparent bg-transparent hover:border-border focus:border-border transition-colors font-semibold"
+                  className="flex-1 h-auto px-3 py-2 !text-[17px] border-transparent bg-transparent hover:border-border focus:border-border transition-colors font-normal"
                   placeholder="Enter requirement title"
                 />
                 <Button
@@ -271,7 +271,7 @@ const RequirementDetail = () => {
                         key={tab}
                         variant="ghost"
                         onClick={() => setActiveTab(tab)}
-                        className={`px-4 py-2 text-sm rounded-none border-b-2 transition-colors ${
+                        className={`px-4 py-2 !text-[14px] rounded-none border-b-2 transition-colors ${
                           activeTab === tab
                             ? 'border-primary text-primary bg-transparent'
                             : 'border-transparent text-muted-foreground hover:text-foreground'
@@ -285,9 +285,9 @@ const RequirementDetail = () => {
               </div>
             </div>
             {/* Tab Content with Discussions Panel */}
-            <div className="flex-1 flex overflow-hidden">
-              {/* Main Tab Content - 65% */}
-              <div className="flex-1 w-[65%] overflow-auto">
+            <div className="flex flex-1 min-h-0 overflow-hidden">
+              {/* Main Tab Content - 75% */}
+              <div className="flex-1 w-[75%] overflow-y-auto">
                 {activeTab === 'Overview' ? (
                   <OverviewTab requirementId="13061" />
                 ) : (
@@ -297,8 +297,8 @@ const RequirementDetail = () => {
                 )}
               </div>
               
-              {/* Discussions Panel - 35% */}
-              <div className="w-[35%] flex-shrink-0">
+              {/* Discussions Panel - 25% */}
+              <div className="w-[25%] flex-shrink-0 h-full">
                 <DiscussionsPanel requirementId="13061" />
               </div>
             </div>
