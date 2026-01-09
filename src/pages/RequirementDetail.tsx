@@ -6,6 +6,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ArrowLeft, Settings, HelpCircle, Bell, Copy, MoreVertical, ChevronDown, X, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { OverviewTab } from '@/components/rtm/OverviewTab';
+import { DiscussionsPanel } from '@/components/rtm/DiscussionsPanel';
 
 const RequirementDetail = () => {
   const navigate = useNavigate();
@@ -282,9 +284,23 @@ const RequirementDetail = () => {
                 </div>
               </div>
             </div>
-            {/* Tab Content */}
-            <div className="flex-1 flex items-center justify-center p-8">
-              <span className="text-lg text-muted-foreground">{activeTab} Content</span>
+            {/* Tab Content with Discussions Panel */}
+            <div className="flex-1 flex overflow-hidden">
+              {/* Main Tab Content - 65% */}
+              <div className="flex-1 w-[65%] overflow-auto">
+                {activeTab === 'Overview' ? (
+                  <OverviewTab requirementId="13061" />
+                ) : (
+                  <div className="flex items-center justify-center p-8">
+                    <span className="text-lg text-muted-foreground">{activeTab} Content</span>
+                  </div>
+                )}
+              </div>
+              
+              {/* Discussions Panel - 35% */}
+              <div className="w-[35%] flex-shrink-0">
+                <DiscussionsPanel requirementId="13061" />
+              </div>
             </div>
           </div>
         </div>

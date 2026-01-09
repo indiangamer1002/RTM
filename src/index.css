@@ -315,4 +315,66 @@
   .shadow-panel {
     box-shadow: -4px 0 20px -4px rgb(0 0 0 / 0.15);
   }
+
+  /* Rich Text Editor Styles */
+  .rich-text-editor [contenteditable]:empty:before {
+    content: attr(data-placeholder);
+    @apply text-muted-foreground;
+    pointer-events: none;
+  }
+
+  .rich-text-editor [contenteditable] {
+    direction: ltr !important;
+    text-align: left !important;
+    unicode-bidi: embed;
+  }
+
+  .rich-text-editor [contenteditable]:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .rich-text-editor .ProseMirror {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .rich-text-editor .ProseMirror:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .rich-text-editor [contenteditable] p {
+    @apply mb-4;
+    direction: ltr !important;
+    text-align: left !important;
+  }
+
+  .rich-text-editor [contenteditable] p:last-child {
+    @apply mb-0;
+  }
+
+  .rich-text-editor [contenteditable] ul {
+    @apply list-disc ml-6 mb-4;
+    direction: ltr !important;
+  }
+
+  .rich-text-editor [contenteditable] ol {
+    @apply list-decimal ml-6 mb-4;
+    direction: ltr !important;
+  }
+
+  .rich-text-editor [contenteditable] li {
+    @apply mb-1;
+    direction: ltr !important;
+    text-align: left !important;
+  }
+
+  .rich-text-editor [contenteditable] strong {
+    @apply font-semibold;
+  }
+
+  .rich-text-editor [contenteditable] em {
+    @apply italic;
+  }
 }
