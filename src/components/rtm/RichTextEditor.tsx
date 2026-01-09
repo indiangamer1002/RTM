@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Bold, Italic, List, ListOrdered } from 'lucide-react';
+import { Bold, Italic, List, ListOrdered, Type } from 'lucide-react';
 
 interface RichTextEditorProps {
   value: string;
@@ -14,7 +14,7 @@ export const RichTextEditor = ({ value, onChange, placeholder }: RichTextEditorP
 
   return (
     <div className="rich-text-editor w-full">
-      {/* Editor - Simple textarea for now */}
+      {/* Editor - Enhanced textarea */}
       <div className="relative">
         <textarea
           value={value}
@@ -22,65 +22,69 @@ export const RichTextEditor = ({ value, onChange, placeholder }: RichTextEditorP
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder || 'Start typing...'}
-          className={`w-full p-3 focus:outline-none text-foreground leading-relaxed text-base transition-all duration-200 resize-none ${
+          className={`w-full p-4 focus:outline-none text-foreground leading-relaxed text-sm transition-all duration-200 resize-none bg-background border rounded-md ${
             isFocused
-              ? 'min-h-[120px] border border-border rounded-lg bg-background'
+              ? 'min-h-[140px] border-primary/50 shadow-sm'
               : isEmpty
-                ? 'min-h-[60px] border border-transparent hover:border-border rounded-lg cursor-text'
-                : 'min-h-[60px] border border-transparent hover:border-border rounded-lg'
+                ? 'min-h-[80px] border-border hover:border-border/80'
+                : 'min-h-[80px] border-border hover:border-border/80'
           }`}
-          rows={isFocused ? 6 : 3}
+          rows={isFocused ? 8 : 4}
         />
         {/* Custom placeholder overlay when empty and not focused */}
         {isEmpty && !isFocused && (
-          <div
-            className="absolute top-3 left-3 text-muted-foreground italic cursor-text hover:text-foreground transition-colors pointer-events-none"
-          >
+          <div className="absolute top-4 left-4 text-muted-foreground italic cursor-text hover:text-foreground transition-colors pointer-events-none flex items-center gap-2">
+            <Type className="h-4 w-4" />
             {placeholder || 'Click to add content...'}
           </div>
         )}
       </div>
 
-      {/* Toolbar - Only visible when focused - Bottom position */}
+      {/* Toolbar - Only visible when focused */}
       {isFocused && (
-        <div className="flex items-center gap-1 p-2 border-t border-border bg-muted/20 mt-1">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 hover:bg-muted"
-            title="Bold (Coming soon)"
-          >
-            <Bold className="h-4 w-4" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 hover:bg-muted"
-            title="Italic (Coming soon)"
-          >
-            <Italic className="h-4 w-4" />
-          </Button>
-          <div className="w-px h-6 bg-border mx-2" />
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 hover:bg-muted"
-            title="Bullet List (Coming soon)"
-          >
-            <List className="h-4 w-4" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 hover:bg-muted"
-            title="Numbered List (Coming soon)"
-          >
-            <ListOrdered className="h-4 w-4" />
-          </Button>
+        <div className="flex items-center justify-between gap-2 p-3 border-t border-border bg-muted/30 mt-0 rounded-b-md">
+          <div className="flex items-center gap-1">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0 hover:bg-muted"
+              title="Bold (Coming soon)"
+            >
+              <Bold className="h-3.5 w-3.5" />
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0 hover:bg-muted"
+              title="Italic (Coming soon)"
+            >
+              <Italic className="h-3.5 w-3.5" />
+            </Button>
+            <div className="w-px h-5 bg-border mx-1" />
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0 hover:bg-muted"
+              title="Bullet List (Coming soon)"
+            >
+              <List className="h-3.5 w-3.5" />
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0 hover:bg-muted"
+              title="Numbered List (Coming soon)"
+            >
+              <ListOrdered className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {value.length} characters
+          </div>
         </div>
       )}
     </div>
