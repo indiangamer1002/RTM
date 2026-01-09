@@ -30,64 +30,66 @@ const typeMap: Record<RequirementType, 'info' | 'warning' | 'neutral'> = {
 };
 
 function getTaskSegments(req: Requirement): StatusSegment[] {
+  const newItem = req.tasks.filter(t => t.status === 'New');
+  const active = req.tasks.filter(t => t.status === 'Active');
   const completed = req.tasks.filter(t => t.status === 'Completed');
-  const inProgress = req.tasks.filter(t => t.status === 'In Progress');
-  const open = req.tasks.filter(t => t.status === 'Open');
+  const approved = req.tasks.filter(t => t.status === 'Approved');
 
   return [
-    { label: 'Completed', count: completed.length, color: 'green', items: completed.map(t => ({ id: t.id, title: t.title, status: `Assignee: ${t.assignee}` })) },
-    { label: 'In Progress', count: inProgress.length, color: 'blue', items: inProgress.map(t => ({ id: t.id, title: t.title, status: `Assignee: ${t.assignee}` })) },
-    { label: 'Open', count: open.length, color: 'gray', items: open.map(t => ({ id: t.id, title: t.title, status: `Due: ${t.dueDate}` })) },
+    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(t => ({ id: t.id, title: t.title, status: `Due: ${t.dueDate}` })) },
+    { label: 'Active', count: active.length, color: 'blue', items: active.map(t => ({ id: t.id, title: t.title, status: `Assignee: ${t.assignee}` })) },
+    { label: 'Completed', count: completed.length, color: 'teal', items: completed.map(t => ({ id: t.id, title: t.title, status: `Assignee: ${t.assignee}` })) },
+    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(t => ({ id: t.id, title: t.title, status: 'Approved' })) },
   ];
 }
 
-function getTestPrepSegments(req: Requirement): StatusSegment[] {
-  const ready = req.testCases.filter(tc => tc.status === 'Ready');
-  const inProgress = req.testCases.filter(tc => tc.status === 'In Progress');
-  const notStarted = req.testCases.filter(tc => tc.status === 'Not Started');
+function getTestCaseSegments(req: Requirement): StatusSegment[] {
+  const newItem = req.testCases.filter(tc => tc.status === 'New');
+  const active = req.testCases.filter(tc => tc.status === 'Active');
+  const performed = req.testCases.filter(tc => tc.status === 'performed');
+  const approved = req.testCases.filter(tc => tc.status === 'approved');
+  const defect = req.testCases.filter(tc => tc.status === 'Defect found');
 
   return [
-    { label: 'Ready', count: ready.length, color: 'green', items: ready.map(tc => ({ id: tc.id, title: tc.title, status: tc.tester ? `Tester: ${tc.tester}` : 'Ready for execution' })) },
-    { label: 'In Progress', count: inProgress.length, color: 'blue', items: inProgress.map(tc => ({ id: tc.id, title: tc.title, status: tc.tester ? `Tester: ${tc.tester}` : 'In preparation' })) },
-    { label: 'Not Started', count: notStarted.length, color: 'gray', items: notStarted.map(tc => ({ id: tc.id, title: tc.title, status: 'Pending preparation' })) },
+    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(tc => ({ id: tc.id, title: tc.title, status: 'New' })) },
+    { label: 'Active', count: active.length, color: 'blue', items: active.map(tc => ({ id: tc.id, title: tc.title, status: 'Active' })) },
+    { label: 'Performed', count: performed.length, color: 'purple', items: performed.map(tc => ({ id: tc.id, title: tc.title, status: 'Performed' })) },
+    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(tc => ({ id: tc.id, title: tc.title, status: 'Approved' })) },
+    { label: 'Defect', count: defect.length, color: 'red', items: defect.map(tc => ({ id: tc.id, title: tc.title, status: 'Defect Found' })) },
   ];
 }
 
 function getExecutionSegments(req: Requirement): StatusSegment[] {
-  const pass = req.testCases.filter(tc => tc.executionResult === 'Pass');
-  const fail = req.testCases.filter(tc => tc.executionResult === 'Fail');
-  const blocked = req.testCases.filter(tc => tc.executionResult === 'Blocked');
-  const notRun = req.testCases.filter(tc => !tc.executionResult || tc.executionResult === 'Not Run');
-
-  return [
-    { label: 'Pass', count: pass.length, color: 'green', items: pass.map(tc => ({ id: tc.id, title: tc.title, status: tc.lastRun ? `Last run: ${tc.lastRun}` : 'Passed' })) },
-    { label: 'Fail', count: fail.length, color: 'red', items: fail.map(tc => ({ id: tc.id, title: tc.title, status: tc.lastRun ? `Last run: ${tc.lastRun}` : 'Failed' })) },
-    { label: 'Blocked', count: blocked.length, color: 'blue', items: blocked.map(tc => ({ id: tc.id, title: tc.title, status: 'Blocked' })) },
-    { label: 'Not Run', count: notRun.length, color: 'gray', items: notRun.map(tc => ({ id: tc.id, title: tc.title, status: 'Not executed' })) },
-  ];
+  return getTestCaseSegments(req);
 }
 
 function getIssueSegments(req: Requirement): StatusSegment[] {
-  const critical = req.issues.filter(i => i.severity === 'Critical' || i.severity === 'High');
-  const medium = req.issues.filter(i => i.severity === 'Medium');
-  const low = req.issues.filter(i => i.severity === 'Low');
+  const newItem = req.issues.filter(i => i.status === 'New');
+  const active = req.issues.filter(i => i.status === 'Active');
+  const resolved = req.issues.filter(i => i.status === 'Resolved');
+  const approved = req.issues.filter(i => i.status === 'Approved');
 
   return [
-    { label: 'Critical/High', count: critical.length, color: 'red', items: critical.map(i => ({ id: i.id, title: i.title, status: `${i.severity} - ${i.status}` })) },
-    { label: 'Medium', count: medium.length, color: 'blue', items: medium.map(i => ({ id: i.id, title: i.title, status: `${i.severity} - ${i.status}` })) },
-    { label: 'Low', count: low.length, color: 'green', items: low.map(i => ({ id: i.id, title: i.title, status: `${i.severity} - ${i.status}` })) },
+    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(i => ({ id: i.id, title: i.title, status: 'New' })) },
+    { label: 'Active', count: active.length, color: 'blue', items: active.map(i => ({ id: i.id, title: i.title, status: 'Active' })) },
+    { label: 'Resolved', count: resolved.length, color: 'teal', items: resolved.map(i => ({ id: i.id, title: i.title, status: 'Resolved' })) },
+    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(i => ({ id: i.id, title: i.title, status: 'Approved' })) },
   ];
 }
 
 function getSignOffSegments(req: Requirement): StatusSegment[] {
+  const newItem = req.signOffs.filter(s => s.status === 'New');
+  const active = req.signOffs.filter(s => s.status === 'Active');
   const approved = req.signOffs.filter(s => s.status === 'Approved');
-  const pending = req.signOffs.filter(s => s.status === 'Pending');
   const rejected = req.signOffs.filter(s => s.status === 'Rejected');
+  const completed = req.signOffs.filter(s => s.status === 'Completed');
 
   return [
-    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(s => ({ id: s.id, title: s.stakeholder, status: `${s.role} - ${s.date || 'Approved'}` })) },
-    { label: 'Pending', count: pending.length, color: 'blue', items: pending.map(s => ({ id: s.id, title: s.stakeholder, status: `${s.role} - Awaiting` })) },
-    { label: 'Rejected', count: rejected.length, color: 'red', items: rejected.map(s => ({ id: s.id, title: s.stakeholder, status: `${s.role} - Rejected` })) },
+    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(s => ({ id: s.id, title: s.stakeholder, status: 'New' })) },
+    { label: 'Active', count: active.length, color: 'blue', items: active.map(s => ({ id: s.id, title: s.stakeholder, status: 'Active' })) },
+    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(s => ({ id: s.id, title: s.stakeholder, status: 'Approved' })) },
+    { label: 'Rejected', count: rejected.length, color: 'red', items: rejected.map(s => ({ id: s.id, title: s.stakeholder, status: 'Rejected' })) },
+    { label: 'Completed', count: completed.length, color: 'teal', items: completed.map(s => ({ id: s.id, title: s.stakeholder, status: 'Completed' })) },
   ];
 }
 

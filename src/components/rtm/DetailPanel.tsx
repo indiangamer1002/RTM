@@ -81,24 +81,29 @@ function TasksTab({ tasks }: { tasks: Task[] }) {
     );
   }
 
+  const newItem = tasks.filter(t => t.status === 'New').length;
+  const active = tasks.filter(t => t.status === 'Active').length;
   const completed = tasks.filter(t => t.status === 'Completed').length;
-  const inProgress = tasks.filter(t => t.status === 'In Progress').length;
-  const open = tasks.filter(t => t.status === 'Open').length;
+  const approved = tasks.filter(t => t.status === 'Approved').length;
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-3 gap-3">
-        <div className="p-3 bg-status-success-light rounded-lg text-center">
-          <p className="text-2xl font-bold text-status-success">{completed}</p>
-          <p className="text-xs text-status-success">Completed</p>
+      <div className="grid grid-cols-4 gap-3">
+        <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
+          <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{newItem}</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400">New</p>
         </div>
-        <div className="p-3 bg-status-info-light rounded-lg text-center">
-          <p className="text-2xl font-bold text-status-info">{inProgress}</p>
-          <p className="text-xs text-status-info">In Progress</p>
+        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{active}</p>
+          <p className="text-xs text-blue-600 dark:text-blue-500">Active</p>
         </div>
-        <div className="p-3 bg-muted/50 rounded-lg text-center">
-          <p className="text-2xl font-bold text-muted-foreground">{open}</p>
-          <p className="text-xs text-muted-foreground">Open</p>
+        <div className="p-3 bg-teal-100 dark:bg-teal-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-teal-700 dark:text-teal-400">{completed}</p>
+          <p className="text-xs text-teal-600 dark:text-teal-500">Completed</p>
+        </div>
+        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-green-700 dark:text-green-400">{approved}</p>
+          <p className="text-xs text-green-600 dark:text-green-500">Approved</p>
         </div>
       </div>
 
@@ -115,7 +120,7 @@ function TasksTab({ tasks }: { tasks: Task[] }) {
               </div>
               <StatusBadge
                 label={task.status}
-                type={task.status === 'Completed' ? 'success' : task.status === 'In Progress' ? 'info' : 'neutral'}
+                type={task.status === 'Completed' ? 'teal' : task.status === 'Approved' ? 'success' : task.status === 'Active' ? 'info' : 'neutral'}
               />
             </div>
           </div>
@@ -136,29 +141,34 @@ function TestCasesTab({ testCases }: { testCases: TestCase[] }) {
     );
   }
 
-  const pass = testCases.filter(tc => tc.executionResult === 'Pass').length;
-  const fail = testCases.filter(tc => tc.executionResult === 'Fail').length;
-  const blocked = testCases.filter(tc => tc.executionResult === 'Blocked').length;
-  const notRun = testCases.filter(tc => !tc.executionResult || tc.executionResult === 'Not Run').length;
+  const newItem = testCases.filter(tc => tc.status === 'New').length;
+  const active = testCases.filter(tc => tc.status === 'Active').length;
+  const performed = testCases.filter(tc => tc.status === 'performed').length;
+  const approved = testCases.filter(tc => tc.status === 'approved').length;
+  const defectFound = testCases.filter(tc => tc.status === 'Defect found').length;
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-4 gap-3">
-        <div className="p-3 bg-status-success-light rounded-lg text-center">
-          <p className="text-2xl font-bold text-status-success">{pass}</p>
-          <p className="text-xs text-status-success">Passed</p>
+      <div className="grid grid-cols-5 gap-2">
+        <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
+          <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{newItem}</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400">New</p>
         </div>
-        <div className="p-3 bg-status-error-light rounded-lg text-center">
-          <p className="text-2xl font-bold text-status-error">{fail}</p>
-          <p className="text-xs text-status-error">Failed</p>
+        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{active}</p>
+          <p className="text-xs text-blue-600 dark:text-blue-500">Active</p>
         </div>
-        <div className="p-3 bg-status-warning-light rounded-lg text-center">
-          <p className="text-2xl font-bold text-status-warning">{blocked}</p>
-          <p className="text-xs text-status-warning">Blocked</p>
+        <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-purple-700 dark:text-purple-400">{performed}</p>
+          <p className="text-xs text-purple-600 dark:text-purple-500">Performed</p>
         </div>
-        <div className="p-3 bg-muted/50 rounded-lg text-center">
-          <p className="text-2xl font-bold text-muted-foreground">{notRun}</p>
-          <p className="text-xs text-muted-foreground">Not Run</p>
+        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-green-700 dark:text-green-400">{approved}</p>
+          <p className="text-xs text-green-600 dark:text-green-500">Approved</p>
+        </div>
+        <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-red-700 dark:text-red-400">{defectFound}</p>
+          <p className="text-xs text-red-600 dark:text-red-500">Defect</p>
         </div>
       </div>
 
@@ -169,12 +179,12 @@ function TestCasesTab({ testCases }: { testCases: TestCase[] }) {
               <div className="flex-1 min-w-0">
                 <h4 className="text-sm font-medium text-foreground truncate">{tc.title}</h4>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {tc.lastRun ? `Last run: ${tc.lastRun} by ${tc.tester}` : `Status: ${tc.status || 'Not Started'}`}
+                  {tc.lastRun ? `Last run: ${tc.lastRun} by ${tc.tester}` : `Status: ${tc.status}`}
                 </p>
               </div>
               <StatusBadge
-                label={tc.executionResult || 'Not Run'}
-                type={tc.executionResult === 'Pass' ? 'success' : tc.executionResult === 'Fail' ? 'error' : tc.executionResult === 'Blocked' ? 'warning' : 'neutral'}
+                label={tc.status}
+                type={tc.status === 'approved' ? 'success' : tc.status === 'Defect found' ? 'error' : tc.status === 'performed' ? 'purple' : tc.status === 'Active' ? 'info' : 'neutral'}
               />
             </div>
           </div>
@@ -195,24 +205,29 @@ function IssuesTab({ issues }: { issues: Issue[] }) {
     );
   }
 
-  const critical = issues.filter(i => i.severity === 'Critical' || i.severity === 'High').length;
-  const medium = issues.filter(i => i.severity === 'Medium').length;
-  const low = issues.filter(i => i.severity === 'Low').length;
+  const newItem = issues.filter(i => i.status === 'New').length;
+  const active = issues.filter(i => i.status === 'Active').length;
+  const resolved = issues.filter(i => i.status === 'Resolved').length;
+  const approved = issues.filter(i => i.status === 'Approved').length;
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-3 gap-3">
-        <div className="p-3 bg-status-error-light rounded-lg text-center">
-          <p className="text-2xl font-bold text-status-error">{critical}</p>
-          <p className="text-xs text-status-error">Critical/High</p>
+      <div className="grid grid-cols-4 gap-3">
+        <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
+          <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{newItem}</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400">New</p>
         </div>
-        <div className="p-3 bg-status-info-light rounded-lg text-center">
-          <p className="text-2xl font-bold text-status-info">{medium}</p>
-          <p className="text-xs text-status-info">Medium</p>
+        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{active}</p>
+          <p className="text-xs text-blue-600 dark:text-blue-500">Active</p>
         </div>
-        <div className="p-3 bg-status-success-light rounded-lg text-center">
-          <p className="text-2xl font-bold text-status-success">{low}</p>
-          <p className="text-xs text-status-success">Low</p>
+        <div className="p-3 bg-teal-100 dark:bg-teal-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-teal-700 dark:text-teal-400">{resolved}</p>
+          <p className="text-xs text-teal-600 dark:text-teal-500">Resolved</p>
+        </div>
+        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-green-700 dark:text-green-400">{approved}</p>
+          <p className="text-xs text-green-600 dark:text-green-500">Approved</p>
         </div>
       </div>
 
@@ -232,7 +247,7 @@ function IssuesTab({ issues }: { issues: Issue[] }) {
               </div>
               <StatusBadge
                 label={issue.status}
-                type={issue.status === 'Resolved' || issue.status === 'Closed' ? 'success' : issue.status === 'In Progress' ? 'info' : 'warning'}
+                type={issue.status === 'Resolved' || issue.status === 'Approved' ? 'teal' : issue.status === 'Active' ? 'info' : 'neutral'}
               />
             </div>
           </div>
@@ -253,24 +268,34 @@ function SignOffsTab({ signOffs }: { signOffs: SignOff[] }) {
     );
   }
 
+  const newItem = signOffs.filter(s => s.status === 'New').length;
+  const active = signOffs.filter(s => s.status === 'Active').length;
   const approved = signOffs.filter(s => s.status === 'Approved').length;
-  const pending = signOffs.filter(s => s.status === 'Pending').length;
   const rejected = signOffs.filter(s => s.status === 'Rejected').length;
+  const completed = signOffs.filter(s => s.status === 'Completed').length;
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-3 gap-3">
-        <div className="p-3 bg-status-success-light rounded-lg text-center">
-          <p className="text-2xl font-bold text-status-success">{approved}</p>
-          <p className="text-xs text-status-success">Approved</p>
+      <div className="grid grid-cols-5 gap-2">
+        <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
+          <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{newItem}</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400">New</p>
         </div>
-        <div className="p-3 bg-status-info-light rounded-lg text-center">
-          <p className="text-2xl font-bold text-status-info">{pending}</p>
-          <p className="text-xs text-status-info">Pending</p>
+        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{active}</p>
+          <p className="text-xs text-blue-600 dark:text-blue-500">Active</p>
         </div>
-        <div className="p-3 bg-status-error-light rounded-lg text-center">
-          <p className="text-2xl font-bold text-status-error">{rejected}</p>
-          <p className="text-xs text-status-error">Rejected</p>
+        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-green-700 dark:text-green-400">{approved}</p>
+          <p className="text-xs text-green-600 dark:text-green-500">Approved</p>
+        </div>
+        <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-red-700 dark:text-red-400">{rejected}</p>
+          <p className="text-xs text-red-600 dark:text-red-500">Rejected</p>
+        </div>
+        <div className="p-3 bg-teal-100 dark:bg-teal-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-teal-700 dark:text-teal-400">{completed}</p>
+          <p className="text-xs text-teal-600 dark:text-teal-500">Completed</p>
         </div>
       </div>
 
@@ -285,7 +310,7 @@ function SignOffsTab({ signOffs }: { signOffs: SignOff[] }) {
               </div>
               <StatusBadge
                 label={signOff.status}
-                type={signOff.status === 'Approved' ? 'success' : signOff.status === 'Pending' ? 'warning' : 'error'}
+                type={signOff.status === 'Approved' ? 'success' : signOff.status === 'Completed' ? 'teal' : signOff.status === 'Rejected' ? 'error' : signOff.status === 'Active' ? 'info' : 'neutral'}
               />
             </div>
           </div>

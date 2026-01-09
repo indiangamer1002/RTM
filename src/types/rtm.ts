@@ -3,10 +3,10 @@
 export type Priority = 'High' | 'Medium' | 'Low';
 export type RequirementStatus = 'New' | 'Active' | 'Completed' | 'Approved';
 export type RequirementType = 'Business' | 'Functional' | 'Technical';
-export type TestStatus = 'Not Started' | 'In Progress' | 'Ready';
+export type TestStatus = 'New' | 'Active' | 'performed' | 'approved' | 'Defect found';
 export type ExecutionResult = 'Pass' | 'Fail' | 'Blocked' | 'Not Run';
 export type IssueSeverity = 'Critical' | 'High' | 'Medium' | 'Low';
-export type SignOffStatus = 'Pending' | 'Approved' | 'Rejected';
+export type SignOffStatus = 'New' | 'Active' | 'Approved' | 'Rejected' | 'Completed';
 
 export interface NavigationNode {
   id: string;
@@ -19,7 +19,7 @@ export interface NavigationNode {
 export interface Task {
   id: string;
   title: string;
-  status: 'Open' | 'In Progress' | 'Completed';
+  status: 'New' | 'Active' | 'Completed' | 'Approved';
   assignee: string;
   dueDate: string;
 }
@@ -37,7 +37,7 @@ export interface Issue {
   id: string;
   title: string;
   severity: IssueSeverity;
-  status: 'Open' | 'In Progress' | 'Resolved' | 'Closed';
+  status: 'New' | 'Active' | 'Resolved' | 'Approved';
   assignee: string;
 }
 
