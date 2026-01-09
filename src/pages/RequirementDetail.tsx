@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ArrowLeft, Settings, HelpCircle, Bell, Copy, MoreVertical, ChevronDown, X, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import VisualTraceboard from '@/components/rtm/VisualTraceboard';
 
 const RequirementDetail = () => {
   const navigate = useNavigate();
@@ -16,9 +17,9 @@ const RequirementDetail = () => {
   const [selectedGroup, setSelectedGroup] = useState('Backend Team');
   const [selectedArea, setSelectedArea] = useState('K4 - Product Development');
   const [activeTab, setActiveTab] = useState('Overview');
-  const tabs = ['Overview', 'Knowledge base', 'Stakeholders', 'Links', 'History', 'Files'];
+  const tabs = ['Overview', 'Knowledge base', 'Stakeholders', 'Links', 'History', 'Traceboard', 'Files'];
   const [tags, setTags] = useState(['High Priority', 'Calendar', 'Integration']);
-  const removeTag = (tagToRemove) => {
+  const removeTag = (tagToRemove: string) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
   const stakeholders = [
@@ -27,7 +28,7 @@ const RequirementDetail = () => {
     { name: 'Mike Davis', initials: 'MD' },
     { name: 'Lisa Wilson', initials: 'LW' }
   ];
-  const getStateColor = (state) => {
+  const getStateColor = (state: string) => {
     switch (state) {
       case 'Preparation - Approve...':
         return 'bg-yellow-400';
@@ -49,7 +50,7 @@ const RequirementDetail = () => {
         <header className="h-14 bg-background border-b border-border flex items-center justify-between px-4">
           {/* Left: Back Button */}
           <div className="flex items-center gap-6">
-            <Button 
+            <Button
               onClick={() => navigate(-1)}
               variant="ghost"
               className="h-9 px-2 text-primary hover:text-primary/80 hover:bg-transparent"
@@ -125,7 +126,7 @@ const RequirementDetail = () => {
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>
-              
+
               {/* Second Row */}
               <div className="flex items-center justify-between gap-4 px-2">
                 <div className="flex items-center gap-6">
@@ -159,7 +160,7 @@ const RequirementDetail = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                  
+
                   {/* Tags */}
                   <div className="flex items-center gap-2 flex-nowrap">
                     {tags.map((tag, index) => (
@@ -174,7 +175,7 @@ const RequirementDetail = () => {
                     </Button>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   {/* Save Button */}
                   <Button
@@ -184,14 +185,14 @@ const RequirementDetail = () => {
                     Save
                   </Button>
 
-                  
+
                   {/* More Options */}
                   <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
-              
+
               {/* Third Row with Tab Bar */}
               <div className="mt-4 p-3 bg-gray-50 rounded-lg">
                 <div className="flex items-start gap-8 mb-4">
@@ -229,7 +230,7 @@ const RequirementDetail = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   {/* Process */}
                   <div className="flex items-center gap-2 pr-8">
                     <label className="text-xs font-medium text-foreground min-w-fit">Process</label>
@@ -244,7 +245,7 @@ const RequirementDetail = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   {/* Group */}
                   <div className="flex items-center gap-2">
                     <label className="text-xs font-medium text-foreground min-w-fit">Group</label>
@@ -260,7 +261,7 @@ const RequirementDetail = () => {
                     </Select>
                   </div>
                 </div>
-                
+
                 {/* Tab Bar */}
                 <div className="border-b border-gray-300">
                   <div className="flex gap-1">
@@ -269,11 +270,10 @@ const RequirementDetail = () => {
                         key={tab}
                         variant="ghost"
                         onClick={() => setActiveTab(tab)}
-                        className={`px-4 py-2 text-sm rounded-none border-b-2 transition-colors ${
-                          activeTab === tab
+                        className={`px-4 py-2 text-sm rounded-none border-b-2 transition-colors ${activeTab === tab
                             ? 'border-primary text-primary bg-transparent'
                             : 'border-transparent text-muted-foreground hover:text-foreground'
-                        }`}
+                          }`}
                       >
                         {tab}
                       </Button>
@@ -283,8 +283,17 @@ const RequirementDetail = () => {
               </div>
             </div>
             {/* Tab Content */}
-            <div className="flex-1 flex items-center justify-center p-8">
-              <span className="text-lg text-muted-foreground">{activeTab} Content</span>
+            <div className="flex-1 flex flex-col p-0 overflow-hidden h-full">
+              {/* added h-full to container to ensure full height for canvas */}
+              {activeTab === 'Traceboard' ? (
+                <div className="h-[600px] w-full p-4">
+                  <VisualTraceboard />
+                </div>
+              ) : (
+                <div className="flex items-center justify-center p-8 h-full">
+                  <span className="text-lg text-muted-foreground">{activeTab} Content</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
