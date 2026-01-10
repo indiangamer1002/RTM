@@ -8,13 +8,23 @@ import { knowledgeBaseService } from '@/services/knowledgeBaseService';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Loader2, Save, PenLine, Printer, Download, Share2, Undo } from 'lucide-react';
+import { 
+    Loader2, Save, PenLine, Printer, Download, Share2, Undo, 
+    FileText, BookOpen, ExternalLink, Code, Navigation, ArrowRight, 
+    Search, GitBranch, ArrowUp, ArrowDown, Table 
+} from 'lucide-react';
 import { RichTextEditor } from './knowledge-base/RichTextEditor';
 import { StructuredPanels } from './knowledge-base/StructuredPanels';
 import { AttachmentsList } from './knowledge-base/AttachmentsList';
 import { MetadataPanel, ChangeLogPanel } from './knowledge-base/ChangeLogPanel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { 
+    Accordion, 
+    AccordionContent, 
+    AccordionItem, 
+    AccordionTrigger 
+} from '@/components/ui/accordion';
 
 interface KnowledgeBaseTabProps {
   requirementId: string;
@@ -123,67 +133,232 @@ export const KnowledgeBaseTab = ({ requirementId }: KnowledgeBaseTabProps) => {
   if (!data || !localContent) return null;
 
   return (
-    <div className="w-full h-full px-6 py-4">
-      {/* Header Actions */}
-      <div className="flex justify-between items-center pb-4 border-b">
-        <div className="flex items-center gap-3">
-            <h2 className="text-lg font-semibold tracking-tight">Documentation</h2>
-            {isSaving && (
-                <span className="text-xs text-muted-foreground flex items-center gap-1">
-                    <Loader2 className="h-3 w-3 animate-spin" /> Saving...
-                </span>
-            )}
-            {!isSaving && lastSaved && (
-                <span className="text-xs text-muted-foreground">
-                    Saved {lastSaved.toLocaleTimeString()}
-                </span>
-            )}
+    <div className="w-full h-full">
+      <div className="px-6 py-4 max-w-none">
+        {/* Header Actions */}
+        <div className="flex justify-between items-center pb-4 border-b">
+          <div className="flex items-center gap-3">
+              <h2 className="text-lg font-semibold tracking-tight">Documentation</h2>
+              {isSaving && (
+                  <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      <Loader2 className="h-3 w-3 animate-spin" /> Saving...
+                  </span>
+              )}
+              {!isSaving && lastSaved && (
+                  <span className="text-xs text-muted-foreground">
+                      Saved {lastSaved.toLocaleTimeString()}
+                  </span>
+              )}
+          </div>
+          
+          <div className="flex items-center gap-2">
+              {!editMode ? (
+                  <>
+                      <Button variant="outline" size="sm" onClick={() => toast.info("Export feature coming soon")}>
+                          <Download className="h-4 w-4 mr-2" /> Export
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => toast.info("Share feature coming soon")}>
+                          <Share2 className="h-4 w-4 mr-2" /> Share
+                      </Button>
+                      <Button onClick={() => setEditMode(true)} size="sm">
+                          <PenLine className="h-4 w-4 mr-2" /> Edit Mode
+                      </Button>
+                  </>
+              ) : (
+                  <>
+                      <Button variant="ghost" size="sm" onClick={() => {
+                          setLocalContent(data.content); // Revert
+                          setEditMode(false);
+                      }}>
+                          <Undo className="h-4 w-4 mr-2" /> Cancel
+                      </Button>
+                      <Button onClick={handleManualSave} disabled={isSaving} size="sm" className="bg-red-600 hover:bg-red-700 text-white">
+                          <Save className="h-4 w-4 mr-2" /> Save Changes
+                      </Button>
+                  </>
+              )}
+          </div>
         </div>
-        
-        <div className="flex items-center gap-2">
-            {!editMode ? (
-                <>
-                    <Button variant="outline" size="sm" onClick={() => toast.info("Export feature coming soon")}>
-                        <Download className="h-4 w-4 mr-2" /> Export
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => toast.info("Share feature coming soon")}>
-                        <Share2 className="h-4 w-4 mr-2" /> Share
-                    </Button>
-                    <Button onClick={() => setEditMode(true)} size="sm">
-                        <PenLine className="h-4 w-4 mr-2" /> Edit Mode
-                    </Button>
-                </>
-            ) : (
-                <>
-                    <Button variant="ghost" size="sm" onClick={() => {
-                        setLocalContent(data.content); // Revert
-                        setEditMode(false);
-                    }}>
-                        <Undo className="h-4 w-4 mr-2" /> Cancel
-                    </Button>
-                    <Button onClick={handleManualSave} disabled={isSaving} size="sm" className="bg-red-600 hover:bg-red-700 text-white">
-                        <Save className="h-4 w-4 mr-2" /> Save Changes
-                    </Button>
-                </>
-            )}
-        </div>
-      </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-          {/* Main Content Area */}
-          <div className="xl:col-span-3 space-y-6">
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mt-6">
+            {/* Main Content Area */}
+            <div className="xl:col-span-3 space-y-6">
               
-              {/* Description Section */}
+              {/* Knowledge Base Content - Accordion Structure */}
               <section className="space-y-2">
                   <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-semibold uppercase text-muted-foreground tracking-wider">Description</h3>
+                      <h3 className="text-sm font-semibold uppercase text-muted-foreground tracking-wider">Knowledge Base Content</h3>
                   </div>
-                  <RichTextEditor 
-                      value={editMode ? localContent.description : data.content.description}
-                      onChange={(val) => setLocalContent({ ...localContent, description: val })}
-                      readOnly={!editMode}
-                      minHeight="min-h-[150px]"
-                  />
+                  
+                  <div className="bg-card border border-border rounded-lg">
+                    <Accordion type="multiple" className="w-full">
+                      {/* Overview Section */}
+                      <AccordionItem value="overview" className="border-b border-border">
+                        <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50">
+                          <div className="flex items-center gap-2">
+                            <FileText className="h-4 w-4 text-primary" />
+                            <span className="font-medium">Overview</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-4 pb-4">
+                          <div className="space-y-3">
+                            <h4 className="font-medium text-sm">REQ-001 Scope</h4>
+                            <p className="text-sm text-muted-foreground leading-relaxed">
+                              Implementation of scalable navigation for Process Explorer (Focus Drill sidebar + Context Finder overlay) 
+                              to handle deep hierarchies without scrolling fatigue.
+                            </p>
+                            <div className="bg-muted/30 p-3 rounded-md">
+                              <p className="text-xs text-muted-foreground">
+                                <strong>Goal:</strong> Enable users to navigate complex process hierarchies efficiently through 
+                                two complementary navigation patterns that reduce cognitive load and improve discoverability.
+                              </p>
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      {/* Key Resources Section */}
+                      <AccordionItem value="resources" className="border-b border-border">
+                        <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50">
+                          <div className="flex items-center gap-2">
+                            <BookOpen className="h-4 w-4 text-primary" />
+                            <span className="font-medium">Key Resources</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-4 pb-4">
+                          <div className="space-y-4">
+                            <div>
+                              <h4 className="font-medium text-sm mb-2">Design System Guidelines</h4>
+                              <div className="space-y-2">
+                                <Button variant="outline" size="sm" className="w-full justify-start h-8">
+                                  <ExternalLink className="h-3 w-3 mr-2" />
+                                  Storybook - Sidebar Components
+                                </Button>
+                                <Button variant="outline" size="sm" className="w-full justify-start h-8">
+                                  <ExternalLink className="h-3 w-3 mr-2" />
+                                  Storybook - Modal Patterns
+                                </Button>
+                                <Button variant="outline" size="sm" className="w-full justify-start h-8">
+                                  <ExternalLink className="h-3 w-3 mr-2" />
+                                  Miller Columns Reference
+                                </Button>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <h4 className="font-medium text-sm mb-2">SAP Process Explorer Reference</h4>
+                              <Button variant="outline" size="sm" className="w-full justify-start h-8">
+                                <ExternalLink className="h-3 w-3 mr-2" />
+                                SAP Signavio Navigation Patterns
+                              </Button>
+                            </div>
+
+                            <div>
+                              <h4 className="font-medium text-sm mb-2">Prototypes</h4>
+                              <div className="space-y-2">
+                                <Button variant="outline" size="sm" className="w-full justify-start h-8">
+                                  <Code className="h-3 w-3 mr-2" />
+                                  Context Finder Demo
+                                </Button>
+                                <Button variant="outline" size="sm" className="w-full justify-start h-8">
+                                  <Code className="h-3 w-3 mr-2" />
+                                  Focus Drill Demo
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      {/* Navigation Tips Section */}
+                      <AccordionItem value="navigation" className="border-b border-border">
+                        <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50">
+                          <div className="flex items-center gap-2">
+                            <Navigation className="h-4 w-4 text-primary" />
+                            <span className="font-medium">Navigation Concepts</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-4 pb-4">
+                          <div className="space-y-4">
+                            <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-md border border-blue-200 dark:border-blue-800">
+                              <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
+                                <ArrowRight className="h-3 w-3" />
+                                Focus Drill
+                              </h4>
+                              <p className="text-xs text-muted-foreground mb-2">
+                                Sidebar shows one level at a time; Back button + breadcrumb for casual browsing
+                              </p>
+                              <ul className="text-xs text-muted-foreground space-y-1 ml-4">
+                                <li>• Reduces cognitive load by showing only relevant context</li>
+                                <li>• Breadcrumb navigation for quick backtracking</li>
+                                <li>• Ideal for focused, task-oriented exploration</li>
+                              </ul>
+                            </div>
+
+                            <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded-md border border-green-200 dark:border-green-800">
+                              <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
+                                <Search className="h-3 w-3" />
+                                Context Finder
+                              </h4>
+                              <p className="text-xs text-muted-foreground mb-2">
+                                Large overlay with 3–4 Miller columns for visual exploration of 20+ deep structures
+                              </p>
+                              <ul className="text-xs text-muted-foreground space-y-1 ml-4">
+                                <li>• Multi-column view for exploring relationships</li>
+                                <li>• Handles deep hierarchies without scrolling fatigue</li>
+                                <li>• Visual overview of entire process structure</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      {/* Related Processes Section */}
+                      <AccordionItem value="related" className="border-0">
+                        <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50">
+                          <div className="flex items-center gap-2">
+                            <GitBranch className="h-4 w-4 text-primary" />
+                            <span className="font-medium">Related Processes</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-4 pb-4">
+                          <div className="space-y-4">
+                            <div>
+                              <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
+                                <ArrowUp className="h-3 w-3 text-orange-500" />
+                                Upstream Dependencies
+                              </h4>
+                              <div className="bg-orange-50 dark:bg-orange-950/20 p-3 rounded-md border border-orange-200 dark:border-orange-800">
+                                <Button variant="ghost" size="sm" className="w-full justify-start h-8 p-2">
+                                  <FileText className="h-3 w-3 mr-2" />
+                                  REQ-002: Process Hierarchy Data Model
+                                </Button>
+                                <p className="text-xs text-muted-foreground mt-1 px-2">
+                                  Defines the data structure and API contracts for hierarchical process data
+                                </p>
+                              </div>
+                            </div>
+
+                            <div>
+                              <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
+                                <ArrowDown className="h-3 w-3 text-blue-500" />
+                                Downstream Dependencies
+                              </h4>
+                              <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-md border border-blue-200 dark:border-blue-800">
+                                <Button variant="ghost" size="sm" className="w-full justify-start h-8 p-2">
+                                  <Table className="h-3 w-3 mr-2" />
+                                  REQ-003: Main Content Table Updates
+                                </Button>
+                                <p className="text-xs text-muted-foreground mt-1 px-2">
+                                  Updates to the main content area to integrate with new navigation patterns
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </div>
               </section>
 
               {/* Implementation Notes */}
@@ -235,6 +410,7 @@ export const KnowledgeBaseTab = ({ requirementId }: KnowledgeBaseTabProps) => {
               </div>
           </div>
       </div>
+    </div>
     </div>
   );
 };

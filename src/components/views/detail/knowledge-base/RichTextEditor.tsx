@@ -16,7 +16,6 @@ interface RichTextEditorProps {
 export const RichTextEditor = ({ 
   value, 
   onChange, 
-  placeholder = "Start typing...", 
   minHeight = "min-h-[200px]",
   readOnly = false 
 }: RichTextEditorProps) => {
@@ -111,7 +110,6 @@ export const RichTextEditor = ({
         id="kb-editor"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
         className={cn(
           "border-0 focus-visible:ring-0 rounded-none resize-y p-4 font-mono text-sm leading-relaxed",
           minHeight

@@ -18,11 +18,10 @@ const RequirementDetail = () => {
   const [selectedState, setSelectedState] = useState('Preparation - Approve...');
   const [selectedProcess, setSelectedProcess] = useState('Development Process');
   const [selectedGroup, setSelectedGroup] = useState('Backend Team');
-  const [selectedArea, setSelectedArea] = useState('K4 - Product Development');
   const [activeTab, setActiveTab] = useState('Overview');
   const tabs = ['Overview', 'Knowledge base', 'Stakeholders', 'Links', 'History', 'Files'];
   const [tags, setTags] = useState(['High Priority', 'Calendar', 'Integration']);
-  const removeTag = (tagToRemove) => {
+  const removeTag = (tagToRemove: string) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
   const stakeholders = [
@@ -31,7 +30,7 @@ const RequirementDetail = () => {
     { name: 'Mike Davis', initials: 'MD' },
     { name: 'Lisa Wilson', initials: 'LW' }
   ];
-  const getStateColor = (state) => {
+  const getStateColor = (state: string) => {
     switch (state) {
       case 'Preparation - Approve...':
         return 'bg-yellow-400';
@@ -48,9 +47,9 @@ const RequirementDetail = () => {
   return (
     <div className="fixed inset-0 bg-background flex flex-col z-50">
       {/* Fixed Header */}
-      <div className="flex-none bg-background z-10 border-b border-border">
+      <div className="flex-none bg-background z-30 border-b border-border">
           {/* Main Header */}
-          <header className="h-14 flex items-center justify-between px-4">
+          <header className="h-14 flex items-center justify-between px-4 lg:pr-[360px]">
             {/* Left: Back Button */}
             <div className="flex items-center gap-6">
               <Button 
@@ -103,8 +102,8 @@ const RequirementDetail = () => {
           <div className="accent-bar" />
 
           {/* Title and Controls Area */}
-          <div className="px-2 py-4 bg-background lg:pr-[360px]">
-             {/* ID and Title Row */}
+          <div className="px-4 py-4 bg-background">
+             {/* ID and Title Row with Save/More buttons */}
              <div className="flex items-center gap-3 mb-3">
                <span className="text-base text-foreground font-semibold">13061</span>
                <Input
@@ -121,75 +120,71 @@ const RequirementDetail = () => {
                >
                  <Copy className="h-4 w-4" />
                </Button>
-             </div>
-             
-             {/* Second Row */}
-             <div className="flex items-center justify-between gap-4 px-2">
-               <div className="flex items-center gap-6">
-                 {/* Stakeholder Dropdown */}
-                 <Select value={selectedStakeholder} onValueChange={setSelectedStakeholder}>
-                   <SelectTrigger className="min-w-48 border-transparent bg-transparent p-0 h-auto hover:border-border hover:bg-white hover:border rounded-md px-2 py-1 [&>svg]:hidden focus:border-border focus:bg-white focus:!ring-0">
-                     <SelectValue asChild>
-                       <div className="flex items-center gap-2">
-                         <Avatar className="h-8 w-8">
-                           <AvatarFallback className="bg-blue-500 text-white text-sm font-medium">
-                             {stakeholders.find(s => s.name === selectedStakeholder)?.initials || 'JS'}
-                           </AvatarFallback>
-                         </Avatar>
-                         <span className="text-sm text-foreground">{selectedStakeholder}</span>
-                         <ChevronDown className="h-3 w-3 text-muted-foreground" />
-                       </div>
-                     </SelectValue>
-                   </SelectTrigger>
-                   <SelectContent>
-                     {stakeholders.map((stakeholder) => (
-                       <SelectItem key={stakeholder.name} value={stakeholder.name}>
-                         <div className="flex items-center gap-2">
-                           <Avatar className="h-6 w-6">
-                             <AvatarFallback className="bg-blue-500 text-white text-xs font-medium">
-                               {stakeholder.initials}
-                             </AvatarFallback>
-                           </Avatar>
-                           <span>{stakeholder.name}</span>
-                         </div>
-                       </SelectItem>
-                     ))}
-                   </SelectContent>
-                 </Select>
-                 
-                 {/* Tags */}
-                 <div className="flex items-center gap-2 flex-nowrap">
-                   {tags.map((tag, index) => (
-                     <Badge key={index} variant="secondary" className="flex items-center gap-1 whitespace-nowrap">
-                       {tag}
-                       <X className="h-3 w-3 cursor-pointer hover:text-red-500" onClick={() => removeTag(tag)} />
-                     </Badge>
-                   ))}
-                   <Button variant="ghost" className="h-6 px-2 text-xs text-blue-500 hover:text-blue-600 hover:bg-blue-50">
-                     <Plus className="h-3 w-3 mr-1" />
-                     Add Tag
-                   </Button>
-                 </div>
-               </div>
                
-               <div className="flex items-center gap-2">
-                 {/* Save Button */}
+               {/* Save Button and More Options - moved here */}
+               <div className="flex items-center gap-2 ml-4">
                  <Button
                    disabled
                    className="h-7 px-4 py-1 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md disabled:opacity-50 hover:disabled:opacity-100 text-sm"
                  >
                    Save
                  </Button>
-
-                 {/* More Options */}
                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
                    <MoreVertical className="h-4 w-4" />
                  </Button>
                </div>
              </div>
              
+             {/* Second Row - Stakeholder and Tags */}
+             <div className="flex items-center gap-6 px-2 mb-4">
+               {/* Stakeholder Dropdown */}
+               <Select value={selectedStakeholder} onValueChange={setSelectedStakeholder}>
+                 <SelectTrigger className="min-w-48 border-transparent bg-transparent p-0 h-auto hover:border-border hover:bg-white hover:border rounded-md px-2 py-1 [&>svg]:hidden focus:border-border focus:bg-white focus:!ring-0">
+                   <SelectValue asChild>
+                     <div className="flex items-center gap-2">
+                       <Avatar className="h-8 w-8">
+                         <AvatarFallback className="bg-blue-500 text-white text-sm font-medium">
+                           {stakeholders.find(s => s.name === selectedStakeholder)?.initials || 'JS'}
+                         </AvatarFallback>
+                       </Avatar>
+                       <span className="text-sm text-foreground">{selectedStakeholder}</span>
+                       <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                     </div>
+                   </SelectValue>
+                 </SelectTrigger>
+                 <SelectContent>
+                   {stakeholders.map((stakeholder) => (
+                     <SelectItem key={stakeholder.name} value={stakeholder.name}>
+                       <div className="flex items-center gap-2">
+                         <Avatar className="h-6 w-6">
+                           <AvatarFallback className="bg-blue-500 text-white text-xs font-medium">
+                             {stakeholder.initials}
+                           </AvatarFallback>
+                         </Avatar>
+                         <span>{stakeholder.name}</span>
+                       </div>
+                     </SelectItem>
+                   ))}
+                 </SelectContent>
+               </Select>
+               
+               {/* Tags */}
+               <div className="flex items-center gap-2 flex-nowrap">
+                 {tags.map((tag, index) => (
+                   <Badge key={index} variant="secondary" className="flex items-center gap-1 whitespace-nowrap">
+                     {tag}
+                     <X className="h-3 w-3 cursor-pointer hover:text-red-500" onClick={() => removeTag(tag)} />
+                   </Badge>
+                 ))}
+                 <Button variant="ghost" className="h-6 px-2 text-xs text-blue-500 hover:text-blue-600 hover:bg-blue-50">
+                   <Plus className="h-3 w-3 mr-1" />
+                   Add Tag
+                 </Button>
+               </div>
+             </div>
+             
              {/* Third Row with Tab Bar */}
-             <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+             <div className="mt-0 p-3 bg-gray-50 rounded-lg">
                <div className="flex items-start gap-8 mb-4">
                  {/* State - Process - Group Selects */}
                  <div className="flex items-center gap-2">
@@ -277,7 +272,7 @@ const RequirementDetail = () => {
       </div>
 
       {/* Right Sidebar - Discussions - Fixed Panel on Desktop, Stacked on Mobile */}
-      <div className="w-full h-[400px] lg:h-auto lg:fixed lg:right-0 lg:top-14 lg:bottom-0 lg:w-[350px] border-t lg:border-t-0 lg:border-l border-border bg-background shadow-xl lg:shadow-none z-20 pointer-events-auto">
+      <div className="w-full h-[400px] lg:h-auto lg:fixed lg:right-0 lg:w-[350px] border-t lg:border-t-0 lg:border-l border-border bg-background shadow-xl lg:shadow-none z-20 pointer-events-auto lg:top-[120px] lg:bottom-0">
          <DiscussionsPanel requirementId="13061" />
       </div>
     </div>
