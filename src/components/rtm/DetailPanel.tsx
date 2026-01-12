@@ -15,14 +15,10 @@ interface DetailPanelProps {
   initialTab?: string;
 }
 
+
 function OverviewTab({ requirement }: { requirement: Requirement }) {
   return (
     <div className="space-y-3">
-      <div className="pb-2 border-b border-border">
-        <span className="text-xs font-mono text-muted-foreground block">{requirement.reqId}</span>
-        <h2 className="text-lg font-semibold text-foreground leading-tight">{requirement.title}</h2>
-      </div>
-
       <div>
         <h3 className="text-xs font-medium text-muted-foreground mb-1">Description</h3>
         <p className="text-sm text-foreground leading-snug line-clamp-3">{requirement.description}</p>
@@ -89,6 +85,12 @@ function OverviewTab({ requirement }: { requirement: Requirement }) {
     </div>
   );
 }
+
+// ... TasksTab, TestCasesTab, IssuesTab, SignOffsTab, CTATab, MeetingsTab, AuditHistoryTab ...
+
+// I need to be careful with the context matching for DetailPanel's return as lines are skipped in the example but need to match the file.
+// The next chunk will target DetailPanel's render.
+
 
 function TasksTab({ tasks }: { tasks: Task[] }) {
   if (tasks.length === 0) {
@@ -583,6 +585,10 @@ export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overvi
         {/* Content */}
         <ScrollArea className="h-[calc(100%-60px)]">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
+            <div className="px-6 py-4 border-b border-border bg-background">
+              <span className="text-xs font-mono text-muted-foreground block">{requirement.reqId}</span>
+              <h2 className="text-lg font-semibold text-foreground leading-tight">{requirement.title}</h2>
+            </div>
             <TabsList className="w-full flex rounded-none border-b border-border bg-transparent h-auto p-0">
               <TabsTrigger
                 value="overview"
