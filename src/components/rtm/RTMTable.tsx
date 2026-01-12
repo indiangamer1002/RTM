@@ -36,10 +36,10 @@ function getTaskSegments(req: Requirement): StatusSegment[] {
   const approved = req.tasks.filter(t => t.status === 'Approved');
 
   return [
-    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(t => ({ id: t.id, title: t.title, status: `Due: ${t.dueDate}` })) },
-    { label: 'Active', count: active.length, color: 'blue', items: active.map(t => ({ id: t.id, title: t.title, status: `Assignee: ${t.assignee}` })) },
-    { label: 'Completed', count: completed.length, color: 'teal', items: completed.map(t => ({ id: t.id, title: t.title, status: `Assignee: ${t.assignee}` })) },
-    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(t => ({ id: t.id, title: t.title, status: 'Approved' })) },
+    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(t => ({ id: t.id, title: t.title, status: `Planned to: ${t.dueDate}` })) },
+    { label: 'Active', count: active.length, color: 'blue', items: active.map(t => ({ id: t.id, title: t.title, status: `Planned to: ${t.dueDate}` })) },
+    { label: 'Completed', count: completed.length, color: 'teal', items: completed.map(t => ({ id: t.id, title: t.title, status: `Planned to: ${t.dueDate}` })) },
+    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(t => ({ id: t.id, title: t.title, status: `Planned to: ${t.dueDate}` })) },
   ];
 }
 
@@ -51,11 +51,11 @@ function getTestCaseSegments(req: Requirement): StatusSegment[] {
   const defect = req.testCases.filter(tc => tc.status === 'Defect found');
 
   return [
-    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(tc => ({ id: tc.id, title: tc.title, status: 'New' })) },
-    { label: 'Active', count: active.length, color: 'blue', items: active.map(tc => ({ id: tc.id, title: tc.title, status: 'Active' })) },
-    { label: 'Performed', count: performed.length, color: 'purple', items: performed.map(tc => ({ id: tc.id, title: tc.title, status: 'Performed' })) },
-    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(tc => ({ id: tc.id, title: tc.title, status: 'Approved' })) },
-    { label: 'Defect', count: defect.length, color: 'red', items: defect.map(tc => ({ id: tc.id, title: tc.title, status: 'Defect Found' })) },
+    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
+    { label: 'Active', count: active.length, color: 'blue', items: active.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
+    { label: 'Performed', count: performed.length, color: 'purple', items: performed.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
+    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
+    { label: 'Defect', count: defect.length, color: 'red', items: defect.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
   ];
 }
 
@@ -70,10 +70,10 @@ function getIssueSegments(req: Requirement): StatusSegment[] {
   const approved = req.issues.filter(i => i.status === 'Approved');
 
   return [
-    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(i => ({ id: i.id, title: i.title, status: 'New' })) },
-    { label: 'Active', count: active.length, color: 'blue', items: active.map(i => ({ id: i.id, title: i.title, status: 'Active' })) },
-    { label: 'Resolved', count: resolved.length, color: 'teal', items: resolved.map(i => ({ id: i.id, title: i.title, status: 'Resolved' })) },
-    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(i => ({ id: i.id, title: i.title, status: 'Approved' })) },
+    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(i => ({ id: i.id, title: i.title, status: `Planned to: ${i.dueDate}` })) },
+    { label: 'Active', count: active.length, color: 'blue', items: active.map(i => ({ id: i.id, title: i.title, status: `Planned to: ${i.dueDate}` })) },
+    { label: 'Resolved', count: resolved.length, color: 'teal', items: resolved.map(i => ({ id: i.id, title: i.title, status: `Planned to: ${i.dueDate}` })) },
+    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(i => ({ id: i.id, title: i.title, status: `Planned to: ${i.dueDate}` })) },
   ];
 }
 
@@ -85,11 +85,39 @@ function getSignOffSegments(req: Requirement): StatusSegment[] {
   const completed = req.signOffs.filter(s => s.status === 'Completed');
 
   return [
-    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(s => ({ id: s.id, title: s.stakeholder, status: 'New' })) },
-    { label: 'Active', count: active.length, color: 'blue', items: active.map(s => ({ id: s.id, title: s.stakeholder, status: 'Active' })) },
-    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(s => ({ id: s.id, title: s.stakeholder, status: 'Approved' })) },
-    { label: 'Rejected', count: rejected.length, color: 'red', items: rejected.map(s => ({ id: s.id, title: s.stakeholder, status: 'Rejected' })) },
-    { label: 'Completed', count: completed.length, color: 'teal', items: completed.map(s => ({ id: s.id, title: s.stakeholder, status: 'Completed' })) },
+    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(s => ({ id: s.id, title: s.stakeholder, status: `Planned to: ${s.dueDate}` })) },
+    { label: 'Active', count: active.length, color: 'blue', items: active.map(s => ({ id: s.id, title: s.stakeholder, status: `Planned to: ${s.dueDate}` })) },
+    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(s => ({ id: s.id, title: s.stakeholder, status: `Planned to: ${s.dueDate}` })) },
+    { label: 'Rejected', count: rejected.length, color: 'red', items: rejected.map(s => ({ id: s.id, title: s.stakeholder, status: `Planned to: ${s.dueDate}` })) },
+    { label: 'Completed', count: completed.length, color: 'teal', items: completed.map(s => ({ id: s.id, title: s.stakeholder, status: `Planned to: ${s.dueDate}` })) },
+  ];
+}
+
+function getCTASegments(req: Requirement): StatusSegment[] {
+  const newItem = req.ctas.filter(c => c.status === 'New');
+  const active = req.ctas.filter(c => c.status === 'Active');
+  const completed = req.ctas.filter(c => c.status === 'Completed');
+  const pending = req.ctas.filter(c => c.status === 'Pending');
+
+  return [
+    { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(c => ({ id: c.id, title: c.title, status: `Planned to: ${c.dueDate}` })) },
+    { label: 'Active', count: active.length, color: 'blue', items: active.map(c => ({ id: c.id, title: c.title, status: `Planned to: ${c.dueDate}` })) },
+    { label: 'Pending', count: pending.length, color: 'orange', items: pending.map(c => ({ id: c.id, title: c.title, status: `Planned to: ${c.dueDate}` })) },
+    { label: 'Completed', count: completed.length, color: 'teal', items: completed.map(c => ({ id: c.id, title: c.title, status: `Planned to: ${c.dueDate}` })) },
+  ];
+}
+
+function getMeetingSegments(req: Requirement): StatusSegment[] {
+  const scheduled = req.meetings.filter(m => m.status === 'Scheduled');
+  const completed = req.meetings.filter(m => m.status === 'Completed');
+  const cancelled = req.meetings.filter(m => m.status === 'Cancelled');
+  const pending = req.meetings.filter(m => m.status === 'Pending');
+
+  return [
+    { label: 'Scheduled', count: scheduled.length, color: 'blue', items: scheduled.map(m => ({ id: m.id, title: m.title, status: `Planned to: ${m.dueDate}` })) },
+    { label: 'Pending', count: pending.length, color: 'orange', items: pending.map(m => ({ id: m.id, title: m.title, status: `Planned to: ${m.dueDate}` })) },
+    { label: 'Completed', count: completed.length, color: 'teal', items: completed.map(m => ({ id: m.id, title: m.title, status: `Planned to: ${m.dueDate}` })) },
+    { label: 'Cancelled', count: cancelled.length, color: 'red', items: cancelled.map(m => ({ id: m.id, title: m.title, status: `Planned to: ${m.dueDate}` })) },
   ];
 }
 
@@ -106,6 +134,8 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
     140, // Testcase
     140, // Issues
     140, // Sign-offs
+    140, // CTA
+    140, // Meetings
   ];
 
   // Initial widths matching the minimums to prevent gaps
@@ -165,6 +195,8 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
             {renderHeader("TESTCASES", 7, "text-center min-w-[140px]")}
             {renderHeader("Issues", 8, "text-center min-w-[100px]")}
             {renderHeader("Sign-offs", 9, "text-center min-w-[100px]")}
+            {renderHeader("CTA", 10, "text-center min-w-[100px]")}
+            {renderHeader("Meetings", 11, "text-center min-w-[100px]")}
           </tr>
         </thead>
         <tbody>
@@ -173,6 +205,8 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
             const executionSegments = getExecutionSegments(req);
             const issueSegments = getIssueSegments(req);
             const signOffSegments = getSignOffSegments(req);
+            const ctaSegments = getCTASegments(req);
+            const meetingSegments = getMeetingSegments(req);
 
             return (
               <tr
@@ -295,6 +329,34 @@ export function RTMTable({ requirements, onRequirementClick }: RTMTableProps) {
                       total={req.signOffs.length}
                       title="Sign-offs"
                       onViewDetails={() => onRequirementClick(req, 'signoffs')}
+                      reqId={req.reqId}
+                      reqTitle={req.title}
+                    />
+                  </div>
+                </td>
+
+                {/* CTA - Status Bar */}
+                <td className="px-3 py-2 border-b border-r border-border" style={{ width: colWidths[10] }}>
+                  <div className="overflow-hidden">
+                    <StatusBar
+                      segments={ctaSegments}
+                      total={req.ctas.length}
+                      title="CTA"
+                      onViewDetails={() => onRequirementClick(req, 'cta')}
+                      reqId={req.reqId}
+                      reqTitle={req.title}
+                    />
+                  </div>
+                </td>
+
+                {/* Meetings - Status Bar */}
+                <td className="px-3 py-2 border-b border-border" style={{ width: colWidths[11] }}>
+                  <div className="overflow-hidden">
+                    <StatusBar
+                      segments={meetingSegments}
+                      total={req.meetings.length}
+                      title="Meetings"
+                      onViewDetails={() => onRequirementClick(req, 'meetings')}
                       reqId={req.reqId}
                       reqTitle={req.title}
                     />
