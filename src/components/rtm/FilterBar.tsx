@@ -380,10 +380,6 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
 
               {/* Right: Icon Group - Fixed Position */}
               <div className="flex items-center gap-1 flex-shrink-0">
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" title="Clear All Filters">
-                  <RotateCcw className="h-4 w-4" />
-                </Button>
-
                 <Button
                   variant="ghost"
                   size="icon"
@@ -550,32 +546,7 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
               <Maximize className="h-4 w-4" />
             </Button>
 
-            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Refresh">
-              <RefreshCw className="h-4 w-4" />
-            </Button>
-
-            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Advanced Filters">
-              <Filter className="h-4 w-4" />
-            </Button>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Columns">
-                  <Layout className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                {[
-                  "Req ID", "Req Title", "Type", "Source Owner", "Priority", "Status",
-                  "Task", "TESTCASES", "Issues", "Sign-offs", "CTA", "Meetings"
-                ].map((col) => (
-                  <div key={col} className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted/50 rounded cursor-pointer" onClick={() => onColumnToggle(col)}>
-                    <Checkbox checked={visibleColumns.includes(col)} id={`col-${col}`} />
-                    <label htmlFor={`col-${col}`} className="text-xs flex-1 cursor-pointer">{col}</label>
-                  </div>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            
           </div>
         </div>
       </div>
