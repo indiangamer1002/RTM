@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 export interface StatusSegment {
   label: string;
   count: number;
-  color: 'blue' | 'green' | 'red' | 'gray';
+  color: 'blue' | 'green' | 'red' | 'gray' | 'purple' | 'teal' | 'orange';
   items?: { id: string; title: string; status: string }[];
 }
 
@@ -25,11 +25,14 @@ interface StatusBarProps {
   reqTitle?: string;
 }
 
-const colorClasses: Record<string, { bg: string; text: string }> = {
-  blue: { bg: 'bg-[#1976D2]', text: 'text-white' },
-  green: { bg: 'bg-[#4CAF50]', text: 'text-white' },
-  red: { bg: 'bg-[#F44336]', text: 'text-white' },
-  gray: { bg: 'bg-[#9E9E9E]', text: 'text-white' },
+const colorClasses: Record<string, { bg: string; text: string; border: string; activeBg: string }> = {
+  blue: { bg: 'bg-blue-500', text: 'text-white', border: 'data-[state=active]:border-blue-500', activeBg: 'data-[state=active]:bg-blue-50' },
+  green: { bg: 'bg-green-500', text: 'text-white', border: 'data-[state=active]:border-green-500', activeBg: 'data-[state=active]:bg-green-50' },
+  red: { bg: 'bg-red-500', text: 'text-white', border: 'data-[state=active]:border-red-500', activeBg: 'data-[state=active]:bg-red-50' },
+  gray: { bg: 'bg-gray-500', text: 'text-white', border: 'data-[state=active]:border-gray-500', activeBg: 'data-[state=active]:bg-gray-50' },
+  purple: { bg: 'bg-purple-500', text: 'text-white', border: 'data-[state=active]:border-purple-500', activeBg: 'data-[state=active]:bg-purple-50' },
+  teal: { bg: 'bg-teal-500', text: 'text-white', border: 'data-[state=active]:border-teal-500', activeBg: 'data-[state=active]:bg-teal-50' },
+  orange: { bg: 'bg-orange-500', text: 'text-white', border: 'data-[state=active]:border-orange-500', activeBg: 'data-[state=active]:bg-orange-50' },
 };
 
 export function StatusBar({ segments, total, title, emptyText = '-', onViewDetails, reqId, reqTitle }: StatusBarProps) {
@@ -80,7 +83,7 @@ export function StatusBar({ segments, total, title, emptyText = '-', onViewDetai
         </div>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[380px] p-0 shadow-2xl border-2 bg-popover"
+        className="w-[550px] p-0 shadow-2xl border-2 bg-popover"
         collisionPadding={16}
         side="left"
         align="center"
@@ -110,7 +113,7 @@ export function StatusBar({ segments, total, title, emptyText = '-', onViewDetai
           </div>
         </div>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full justify-start rounded-none border-b bg-transparent h-auto p-0">
+          <TabsList className="w-full justify-start rounded-none border-b bg-transparent h-auto p-0 overflow-x-auto flex-nowrap no-scrollbar">
             {segments.map((segment) => {
               const colors = colorClasses[segment.color];
               const isActive = activeTab === segment.label;
@@ -120,8 +123,9 @@ export function StatusBar({ segments, total, title, emptyText = '-', onViewDetai
                   key={segment.label}
                   value={segment.label}
                   className={cn(
-                    'flex-1 rounded-none border-b-2 border-transparent py-2 px-3 text-xs font-medium transition-all',
-                    'data-[state=active]:border-primary data-[state=active]:bg-primary/5',
+                    'flex-1 min-w-fit rounded-none border-b-2 border-transparent py-2 px-3 text-xs font-medium transition-all whitespace-nowrap',
+                    colors.border,
+                    colors.activeBg,
                     'hover:bg-muted/50'
                   )}
                 >

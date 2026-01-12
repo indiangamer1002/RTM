@@ -3,268 +3,474 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RichTextEditor } from './RichTextEditor';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { StatusBadge } from './StatusBadge';
-import { Maximize2, Calendar, User, Flag, FileText, Clock, CheckCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { ChevronDown, ChevronUp, Maximize2, FileText, Users, CheckCircle, Code, TestTube, Rocket, Settings, Edit3, History, Download, User, Info } from 'lucide-react';
 
 interface OverviewTabProps {
   requirementId: string;
 }
 
 export const OverviewTab = ({ requirementId }: OverviewTabProps) => {
-  const [description, setDescription] = useState('');
-  const [expectedOutcome, setExpectedOutcome] = useState('');
+  const [description, setDescription] = useState('Calendar and Events - Outlook calendar is not getting blocked when events are created from application');
+  const [expectedOutcome, setExpectedOutcome] = useState('Users should be able to create events that properly block calendar time');
+  const [definedRequirement, setDefinedRequirement] = useState('');
+  const [acceptanceCriteria, setAcceptanceCriteria] = useState('');
   const [sourceOwner, setSourceOwner] = useState('');
   const [priority, setPriority] = useState('');
   const [type, setType] = useState('');
+  const [isAnalystMode, setIsAnalystMode] = useState(false);
+  const [hasAnalystData, setHasAnalystData] = useState(false);
+  const [analystInfo, setAnalystInfo] = useState({ name: 'Sarah Johnson', date: 'Jan 11, 2025' });
+  const [documentGenerated, setDocumentGenerated] = useState(false);
+  const [isGeneratingDoc, setIsGeneratingDoc] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<{[key: string]: boolean}>({});
+  const [collapsedSections, setCollapsedSections] = useState<{[key: string]: boolean}>({});
+
+  const lifecycleStages = [
+    { id: 'identification', name: 'Identification', icon: FileText, status: 'completed' },
+    { id: 'analysis', name: 'Analysis', icon: Users, status: hasAnalystData ? 'completed' : 'active' },
+    { id: 'documentation', name: 'Documentation', icon: FileText, status: documentGenerated ? 'completed' : hasAnalystData ? 'active' : 'pending' },
+    { id: 'approval', name: 'Approval', icon: CheckCircle, status: 'pending' },
+    { id: 'design', name: 'Design', icon: Settings, status: 'pending' },
+    { id: 'development', name: 'Development', icon: Code, status: 'pending' },
+    { id: 'testing', name: 'Testing', icon: TestTube, status: 'pending' },
+    { id: 'deployment', name: 'Deployment', icon: Rocket, status: 'pending' },
+    { id: 'support', name: 'Support', icon: Settings, status: 'pending' }
+  ];
+
+  const getStageColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'bg-green-500';
+      case 'active': return 'bg-blue-500';
+      case 'pending': return 'bg-gray-300';
+      default: return 'bg-gray-300';
+    }
+  };
+
+  const handleStartAnalysis = () => {
+    setIsAnalystMode(true);
+    setDefinedRequirement(description);
+    setAcceptanceCriteria(expectedOutcome);
+  };
+
+  const handleProceedWithAnalysis = () => {
+    setDescription(definedRequirement);
+    setExpectedOutcome(acceptanceCriteria);
+    setIsAnalystMode(false);
+    setHasAnalystData(true);
+    // Mock: Set current user as analyst
+    setAnalystInfo({ name: 'Sarah Johnson', date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) });
+  };
+
+  const handleCancelAnalysis = () => {
+    setIsAnalystMode(false);
+    setDefinedRequirement('');
+    setAcceptanceCriteria('');
+  };
+
+  const handleGenerateDocument = () => {
+    setIsGeneratingDoc(true);
+    // Mock document generation process
+    setTimeout(() => {
+      setDocumentGenerated(true);
+      setIsGeneratingDoc(false);
+    }, 2000);
+  };
+
+  const toggleExpand = (section: string) => {
+    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
+    setCollapsedSections(prev => ({ ...prev, [section]: false }));
+  };
+
+  const toggleCollapse = (section: string) => {
+    setCollapsedSections(prev => ({ ...prev, [section]: !prev[section] }));
+    setExpandedSections(prev => ({ ...prev, [section]: false }));
+  };
 
   return (
-    <div className="h-full bg-background p-6">
-      {/* Top Section - Balanced Details */}
-      <div className="grid grid-cols-2 gap-6 mb-6">
-        {/* Requirement Details - Left */}
-        <div className="bg-card border border-border rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <Flag className="h-4 w-4 text-primary" />
-            <Label className="text-base font-semibold text-foreground">Requirement Details</Label>
-          </div>
-          
-          <div className="space-y-4">
-            {/* Source Owner */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <User className="h-3.5 w-3.5 text-muted-foreground" />
-                <Label className="text-sm font-medium text-foreground">Source Owner</Label>
-              </div>
-              <Select value={sourceOwner} onValueChange={setSourceOwner}>
-                <SelectTrigger className="h-8 bg-background border-border hover:border-primary/50 transition-colors">
-                  <SelectValue placeholder="Select owner" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="john">John Smith</SelectItem>
-                  <SelectItem value="sarah">Sarah Johnson</SelectItem>
-                  <SelectItem value="mike">Mike Davis</SelectItem>
-                  <SelectItem value="lisa">Lisa Wilson</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Priority */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Flag className="h-3.5 w-3.5 text-muted-foreground" />
-                <Label className="text-sm font-medium text-foreground">Priority</Label>
-              </div>
-              <Select value={priority} onValueChange={setPriority}>
-                <SelectTrigger className="h-8 bg-background border-border hover:border-primary/50 transition-colors">
-                  <SelectValue placeholder="Select priority" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="high">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-red-500" />
-                      High
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-y-auto p-4 pb-20">
+        {/* RTM Lifecycle Tracker */}
+        <div className="mb-6 p-3 bg-gray-50 rounded-lg">
+          <Label className="text-sm font-medium text-foreground mb-3 block">Requirement Lifecycle (RTM)</Label>
+          <div className="flex items-center gap-2 overflow-x-auto pb-2">
+            {lifecycleStages.map((stage, index) => {
+              const Icon = stage.icon;
+              return (
+                <div key={stage.id} className="flex items-center gap-2 flex-shrink-0">
+                  <div className="flex flex-col items-center gap-1">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getStageColor(stage.status)}`}>
+                      <Icon className="h-4 w-4 text-white" />
                     </div>
-                  </SelectItem>
-                  <SelectItem value="medium">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-yellow-500" />
-                      Medium
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="low">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-green-500" />
-                      Low
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Type */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <FileText className="h-3.5 w-3.5 text-muted-foreground" />
-                <Label className="text-sm font-medium text-foreground">Type</Label>
-              </div>
-              <Select value={type} onValueChange={setType}>
-                <SelectTrigger className="h-8 bg-background border-border hover:border-primary/50 transition-colors">
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="feature">Feature Request</SelectItem>
-                  <SelectItem value="bug">Bug Fix</SelectItem>
-                  <SelectItem value="enhancement">Enhancement</SelectItem>
-                  <SelectItem value="business">Business Requirement</SelectItem>
-                  <SelectItem value="functional">Functional Requirement</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Additional Details */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-3.5 w-3.5 text-muted-foreground" />
-                <Label className="text-sm font-medium text-foreground">Status</Label>
-              </div>
-              <div className="flex gap-2">
-                {priority && (
-                  <StatusBadge 
-                    label={priority.charAt(0).toUpperCase() + priority.slice(1)} 
-                    type={priority === 'high' ? 'error' : priority === 'medium' ? 'warning' : 'success'} 
-                  />
-                )}
-                {type && (
-                  <StatusBadge 
-                    label={type.charAt(0).toUpperCase() + type.slice(1)} 
-                    type="info" 
-                  />
-                )}
-              </div>
-            </div>
+                    <span className="text-xs text-center whitespace-nowrap">{stage.name}</span>
+                  </div>
+                  {index < lifecycleStages.length - 1 && (
+                    <div className="w-8 h-px bg-gray-300 mt-[-12px]" />
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Progress & Timeline - Right */}
-        <div className="bg-card border border-border rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <Clock className="h-4 w-4 text-primary" />
-            <Label className="text-base font-semibold text-foreground">Progress & Timeline</Label>
-          </div>
-          
-          {/* Progress Indicator */}
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-muted-foreground">Overall Progress</span>
-              <span className="text-sm font-medium text-foreground">20%</span>
-            </div>
-            <div className="h-2 bg-muted rounded-full overflow-hidden">
-              <div className="h-full w-[20%] bg-primary rounded-full transition-all duration-300" />
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">Requirements gathering phase</p>
+        <div className="flex gap-8">
+          {/* Column 1 - 65% */}
+          <div className="flex-1 w-[65%]">
+            {/* Analyst Mode - Analysis Interface */}
+            {isAnalystMode && (
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Label className="text-base font-medium text-foreground">Analyst Review</Label>
+                    <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">Review Mode</Badge>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className={expandedSections.definedRequirement ? 'fixed inset-0 z-50 bg-white p-4' : ''}>
+                    <div className="flex items-center justify-between mb-3">
+                      <Label className="text-base font-medium text-foreground">Defined Requirement</Label>
+                      <div className="flex items-center gap-1">
+                        <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" onClick={() => toggleExpand('definedRequirement')}>
+                          <Maximize2 className="h-3 w-3" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" onClick={() => toggleCollapse('definedRequirement')}>
+                          {collapsedSections.definedRequirement ? <ChevronDown className="h-3 w-3" /> : <ChevronUp className="h-3 w-3" />}
+                        </Button>
+                      </div>
+                    </div>
+                    {!collapsedSections.definedRequirement && (
+                      <RichTextEditor
+                        value={definedRequirement}
+                        onChange={setDefinedRequirement}
+                        placeholder="Provide structured, analyzed requirements with clear scope and assumptions..."
+                      />
+                    )}
+                  </div>
+                  
+                  <div className={expandedSections.acceptanceCriteria ? 'fixed inset-0 z-50 bg-white p-4' : ''}>
+                    <div className="flex items-center justify-between mb-3">
+                      <Label className="text-base font-medium text-foreground">Acceptance Criteria</Label>
+                      <div className="flex items-center gap-1">
+                        <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" onClick={() => toggleExpand('acceptanceCriteria')}>
+                          <Maximize2 className="h-3 w-3" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" onClick={() => toggleCollapse('acceptanceCriteria')}>
+                          {collapsedSections.acceptanceCriteria ? <ChevronDown className="h-3 w-3" /> : <ChevronUp className="h-3 w-3" />}
+                        </Button>
+                      </div>
+                    </div>
+                    {!collapsedSections.acceptanceCriteria && (
+                      <RichTextEditor
+                        value={acceptanceCriteria}
+                        onChange={setAcceptanceCriteria}
+                        placeholder="Define specific, measurable, and testable acceptance criteria..."
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Main Content - Description & Expected Outcome */}
+            {!isAnalystMode && (
+              <>
+                {/* Description Section */}
+                <div className={`mb-6 ${expandedSections.description ? 'fixed inset-0 z-50 bg-white p-4' : ''}`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Label className="text-base font-medium text-foreground">Description</Label>
+                      {hasAnalystData && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <div className="flex items-center gap-1 cursor-help">
+                                <Badge variant="secondary" className="text-xs bg-green-50 text-green-700 border-green-200">
+                                  Reviewed
+                                </Badge>
+                                <Info className="h-3 w-3 text-muted-foreground" />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Reviewed by {analystInfo.name} on {analystInfo.date}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {hasAnalystData && (
+                        <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" title="View Original">
+                          <History className="h-3 w-3" />
+                        </Button>
+                      )}
+                      <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" onClick={() => toggleExpand('description')}>
+                        <Maximize2 className="h-3 w-3" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" onClick={() => toggleCollapse('description')}>
+                        {collapsedSections.description ? <ChevronDown className="h-3 w-3" /> : <ChevronUp className="h-3 w-3" />}
+                      </Button>
+                    </div>
+                  </div>
+                  {!collapsedSections.description && (
+                    <RichTextEditor
+                      value={description}
+                      onChange={setDescription}
+                      placeholder="Enter the business need or problem statement..."
+                    />
+                  )}
+                </div>
+
+                {/* Expected Outcome Section */}
+                <div className={`mb-6 ${expandedSections.expectedOutcome ? 'fixed inset-0 z-50 bg-white p-4' : ''}`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Label className="text-base font-medium text-foreground">Expected Outcome</Label>
+                      {hasAnalystData && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <div className="flex items-center gap-1 cursor-help">
+                                <Badge variant="secondary" className="text-xs bg-green-50 text-green-700 border-green-200">
+                                  Reviewed
+                                </Badge>
+                                <Info className="h-3 w-3 text-muted-foreground" />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Reviewed by {analystInfo.name} on {analystInfo.date}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {hasAnalystData && (
+                        <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" title="View Original">
+                          <History className="h-3 w-3" />
+                        </Button>
+                      )}
+                      <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" onClick={() => toggleExpand('expectedOutcome')}>
+                        <Maximize2 className="h-3 w-3" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" onClick={() => toggleCollapse('expectedOutcome')}>
+                        {collapsedSections.expectedOutcome ? <ChevronDown className="h-3 w-3" /> : <ChevronUp className="h-3 w-3" />}
+                      </Button>
+                    </div>
+                  </div>
+                  {!collapsedSections.expectedOutcome && (
+                    <RichTextEditor
+                      value={expectedOutcome}
+                      onChange={setExpectedOutcome}
+                      placeholder="Describe what success looks like..."
+                    />
+                  )}
+                </div>
+              </>
+            )}
           </div>
 
-          {/* Release Timelines */}
-          <div className="mb-4">
-            <Label className="text-base font-semibold text-foreground mb-4 block">Release Timelines</Label>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Raised on:</span>
-                <span className="text-sm text-foreground font-medium">-</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Approved on:</span>
-                <span className="text-sm text-foreground font-medium">-</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Development Completed:</span>
-                <span className="text-sm text-foreground font-medium">-</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Testing Completed:</span>
-                <span className="text-sm text-foreground font-medium">-</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Released on:</span>
-                <span className="text-sm text-foreground font-medium">-</span>
+          {/* Column 2 - 35% */}
+          <div className="w-[35%] space-y-6">
+            {/* Requirement Classification */}
+            <div>
+              <Label className="text-base font-medium text-foreground mb-4 block">Requirement Classification</Label>
+              <div className="space-y-3">
+                <div>
+                  <Label className="text-sm font-medium text-foreground mb-1 block">Source Owner</Label>
+                  <Select value={sourceOwner} onValueChange={setSourceOwner}>
+                    <SelectTrigger className="h-8">
+                      <SelectValue placeholder="Select owner" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="john">John Smith</SelectItem>
+                      <SelectItem value="sarah">Sarah Johnson</SelectItem>
+                      <SelectItem value="mike">Mike Davis</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <Label className="text-sm font-medium text-foreground mb-1 block">Priority</Label>
+                  <Select value={priority} onValueChange={setPriority}>
+                    <SelectTrigger className="h-8">
+                      <SelectValue placeholder="Select priority" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="low">Low</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <Label className="text-sm font-medium text-foreground mb-1 block">Type</Label>
+                  <Select value={type} onValueChange={setType}>
+                    <SelectTrigger className="h-8">
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="business">Business Requirement</SelectItem>
+                      <SelectItem value="functional">Functional Requirement</SelectItem>
+                      <SelectItem value="non-functional">Non-Functional Requirement</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Bottom Row - Risk Level Only */}
-          <div className="pt-3 border-t border-border">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Risk Level:</Label>
-                <StatusBadge label="Low" type="success" />
+            {/* Traceability Information */}
+            <div>
+              <Label className="text-base font-medium text-foreground mb-4 block">Traceability</Label>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Identified:</span>
+                  <span className="text-foreground">Jan 10, 2025</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Analyzed:</span>
+                  <span className="text-foreground">{hasAnalystData ? analystInfo.date : '-'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Documented:</span>
+                  <span className="text-foreground">{documentGenerated ? new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '-'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Approved:</span>
+                  <span className="text-foreground">-</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Design Complete:</span>
+                  <span className="text-foreground">-</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Dev Complete:</span>
+                  <span className="text-foreground">-</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Testing Complete:</span>
+                  <span className="text-foreground">-</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Released:</span>
+                  <span className="text-foreground">-</span>
+                </div>
               </div>
-              <div className="text-xs text-muted-foreground">
-                Last updated: 2 hours ago
+            </div>
+
+            {/* Linked Artifacts */}
+            <div>
+              <Label className="text-base font-medium text-foreground mb-4 block">Linked Artifacts</Label>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">BRD Document:</span>
+                  <span className={documentGenerated ? "text-blue-500 cursor-pointer hover:underline" : "text-foreground"}>
+                    {documentGenerated ? 'REQ-13061-BRD.pdf' : 'Not generated'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Design Docs:</span>
+                  <span className="text-blue-500 cursor-pointer hover:underline">0 linked</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Test Cases:</span>
+                  <span className="text-blue-500 cursor-pointer hover:underline">0 linked</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Code Objects:</span>
+                  <span className="text-blue-500 cursor-pointer hover:underline">0 linked</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Release:</span>
+                  <span className="text-blue-500 cursor-pointer hover:underline">Not assigned</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content Section - Side by Side */}
-      <div className="grid grid-cols-2 gap-6 h-[calc(100vh-400px)]">
-        {/* Description */}
-        <div className="bg-card border border-border rounded-lg overflow-hidden flex flex-col">
-          <div className="flex items-center justify-between p-4 border-b border-border bg-muted/30 flex-shrink-0">
-            <div className="flex items-center gap-2">
-              <FileText className="h-4 w-4 text-primary" />
-              <Label className="text-base font-semibold text-foreground">Description</Label>
-            </div>
-            <div className="flex items-center gap-1">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-7 w-7 text-muted-foreground hover:text-foreground"
-                title="Expand"
-              >
-                <Maximize2 className="h-3.5 w-3.5" />
+      {/* Fixed Footer with Workflow Actions - Only for Overview Tab */}
+      <div className="absolute bottom-0 left-0 right-[25%] bg-white border-t border-border p-4 z-10">
+        <div className="flex items-center gap-3">
+          {/* Analyst Action Button */}
+          {!hasAnalystData && !isAnalystMode && (
+            <Button onClick={handleStartAnalysis} size="sm" className="bg-blue-600 hover:bg-blue-700">
+              <Edit3 className="h-4 w-4 mr-2" />
+              Start Analysis Review
+            </Button>
+          )}
+
+          {/* Analysis Mode Controls */}
+          {isAnalystMode && (
+            <div className="flex gap-2">
+              <Button onClick={handleProceedWithAnalysis} size="sm" className="bg-blue-600 hover:bg-blue-700">
+                Proceed
+              </Button>
+              <Button onClick={handleCancelAnalysis} variant="ghost" size="sm">
+                Cancel
               </Button>
             </div>
-          </div>
-          <div className="p-4 flex-1 overflow-hidden">
-            <RichTextEditor
-              value={description}
-              onChange={setDescription}
-              />
-          </div>
-        </div>
+          )}
 
-        {/* Expected Outcome */}
-        <div className="bg-card border border-border rounded-lg overflow-hidden flex flex-col">
-          <div className="flex items-center justify-between p-4 border-b border-border bg-muted/30 flex-shrink-0">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-primary" />
-              <Label className="text-base font-semibold text-foreground">Expected Outcome</Label>
-            </div>
-            <div className="flex items-center gap-1">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-7 w-7 text-muted-foreground hover:text-foreground"
-                title="Expand"
-              >
-                <Maximize2 className="h-3.5 w-3.5" />
+          {/* Document Generation Button */}
+          {hasAnalystData && !documentGenerated && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                  <FileText className="h-4 w-4 mr-2" />
+                  Generate Documentation
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Generate Requirement Documentation</DialogTitle>
+                  <DialogDescription>
+                    This will create a formal Business Requirements Document (BRD) based on the analyzed requirement data.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="py-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                      <span className="text-sm font-medium">Document Type</span>
+                      <span className="text-sm text-muted-foreground">Business Requirements Document</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                      <span className="text-sm font-medium">Template</span>
+                      <span className="text-sm text-muted-foreground">Standard BRD Template v2.1</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                      <span className="text-sm font-medium">Analyst</span>
+                      <span className="text-sm text-muted-foreground">{analystInfo.name}</span>
+                    </div>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button onClick={handleGenerateDocument} disabled={isGeneratingDoc}>
+                    {isGeneratingDoc ? 'Generating...' : 'Generate Document'}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          )}
+
+          {/* Document Ready Actions */}
+          {documentGenerated && (
+            <div className="flex items-center gap-3">
+              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                <FileText className="h-3 w-3 mr-1" />
+                Document Generated
+              </Badge>
+              <Button variant="outline" size="sm">
+                <Download className="h-3 w-3 mr-1" />
+                Download BRD
               </Button>
             </div>
-          </div>
-          <div className="p-4 flex-1 overflow-hidden">
-            <RichTextEditor
-              value={expectedOutcome}
-              onChange={setExpectedOutcome}
-              />
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom Action Bar */}
-      <div className="mt-6 flex items-center justify-between p-4 bg-muted/30 border border-border rounded-lg">
-        <div className="flex items-center gap-4">
-          <Button variant="outline" size="sm" className="h-8">
-            <FileText className="h-3.5 w-3.5 mr-2" />
-            Add Attachment
-          </Button>
-          <Button variant="outline" size="sm" className="h-8">
-            <User className="h-3.5 w-3.5 mr-2" />
-            Assign Stakeholder
-          </Button>
-          <Button variant="outline" size="sm" className="h-8">
-            <Calendar className="h-3.5 w-3.5 mr-2" />
-            Set Deadline
-          </Button>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="h-8">
-            Cancel
-          </Button>
-          <Button size="sm" className="h-8">
-            Save Changes
-          </Button>
+          )}
         </div>
       </div>
     </div>

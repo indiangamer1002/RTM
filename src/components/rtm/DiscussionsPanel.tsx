@@ -42,7 +42,7 @@ export const DiscussionsPanel = ({ requirementId }: DiscussionsPanelProps) => {
       timestamp: '30 minutes ago'
     }
   ]);
-  
+
   const [newMessage, setNewMessage] = useState('');
 
   const handleSendMessage = () => {
@@ -54,7 +54,7 @@ export const DiscussionsPanel = ({ requirementId }: DiscussionsPanelProps) => {
         message: newMessage,
         timestamp: 'Just now'
       };
-      setMessages([...messages, message]);
+      setMessages([message, ...messages]);
       setNewMessage('');
     }
   };
@@ -114,7 +114,7 @@ export const DiscussionsPanel = ({ requirementId }: DiscussionsPanelProps) => {
           </Button>
         </div>
       </div>
-      
+
       {/* Bottom spacing */}
       <div className="h-1"></div>
     </div>
