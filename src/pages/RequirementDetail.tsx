@@ -6,7 +6,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ArrowLeft, Settings, HelpCircle, Bell, Copy, MoreVertical, ChevronDown, X, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import VisualTraceboard from '@/components/rtm/VisualTraceboard';
+
+import HistoryTab from '@/components/rtm/HistoryTab';
 
 const RequirementDetail = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const RequirementDetail = () => {
   const [selectedGroup, setSelectedGroup] = useState('Backend Team');
   const [selectedArea, setSelectedArea] = useState('K4 - Product Development');
   const [activeTab, setActiveTab] = useState('Overview');
-  const tabs = ['Overview', 'Knowledge base', 'Stakeholders', 'Links', 'History', 'Traceboard', 'Files'];
+  const tabs = ['Overview', 'Knowledge base', 'Stakeholders', 'Links', 'History', 'Files'];
   const [tags, setTags] = useState(['High Priority', 'Calendar', 'Integration']);
   const removeTag = (tagToRemove: string) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
@@ -271,8 +272,8 @@ const RequirementDetail = () => {
                         variant="ghost"
                         onClick={() => setActiveTab(tab)}
                         className={`px-4 py-2 text-sm rounded-none border-b-2 transition-colors ${activeTab === tab
-                            ? 'border-primary text-primary bg-transparent'
-                            : 'border-transparent text-muted-foreground hover:text-foreground'
+                          ? 'border-primary text-primary bg-transparent'
+                          : 'border-transparent text-muted-foreground hover:text-foreground'
                           }`}
                       >
                         {tab}
@@ -285,10 +286,8 @@ const RequirementDetail = () => {
             {/* Tab Content */}
             <div className="flex-1 flex flex-col p-0 overflow-hidden h-full">
               {/* added h-full to container to ensure full height for canvas */}
-              {activeTab === 'Traceboard' ? (
-                <div className="h-[600px] w-full p-4">
-                  <VisualTraceboard />
-                </div>
+              {activeTab === 'History' ? (
+                <HistoryTab />
               ) : (
                 <div className="flex items-center justify-center p-8 h-full">
                   <span className="text-lg text-muted-foreground">{activeTab} Content</span>
