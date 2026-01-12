@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { OverviewTab } from '@/components/rtm/OverviewTab';
 import { LinksTab } from '@/components/rtm/LinksTab';
+import { FilesTab } from '@/components/rtm/FilesTab';
 import { DiscussionsPanel } from '@/components/rtm/DiscussionsPanel';
 
 const RequirementDetail = () => {
@@ -293,6 +294,8 @@ const RequirementDetail = () => {
                   <OverviewTab requirementId="13061" />
                 ) : activeTab === 'Links' ? (
                   <LinksTab requirementId="13061" />
+                ) : activeTab === 'Files' ? (
+                  <FilesTab requirementId="13061" />
                 ) : (
                   <div className="flex items-center justify-center p-8">
                     <span className="text-lg text-muted-foreground">{activeTab} Content</span>
