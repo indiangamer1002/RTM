@@ -380,10 +380,6 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
 
               {/* Right: Icon Group - Fixed Position */}
               <div className="flex items-center gap-1 flex-shrink-0">
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" title="Clear All Filters">
-                  <RotateCcw className="h-4 w-4" />
-                </Button>
-
                 <Button
                   variant="ghost"
                   size="icon"
