@@ -111,21 +111,21 @@ function TasksTab({ tasks }: { tasks: Task[] }) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-4 gap-3">
-        <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
-          <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{newItem}</p>
-          <p className="text-xs text-gray-600 dark:text-gray-400">New</p>
+        <div className="p-3 bg-[#6c8893]/10 dark:bg-[#6c8893]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#6c8893] dark:text-[#6c8893]">{newItem}</p>
+          <p className="text-xs text-[#6c8893] dark:text-[#6c8893]">New</p>
         </div>
-        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{active}</p>
-          <p className="text-xs text-blue-600 dark:text-blue-500">Active</p>
+        <div className="p-3 bg-[#5899da]/10 dark:bg-[#5899da]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#5899da] dark:text-[#5899da]">{active}</p>
+          <p className="text-xs text-[#5899da] dark:text-[#5899da]">Active</p>
         </div>
-        <div className="p-3 bg-teal-100 dark:bg-teal-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-teal-700 dark:text-teal-400">{completed}</p>
-          <p className="text-xs text-teal-600 dark:text-teal-500">Completed</p>
+        <div className="p-3 bg-[#51aa7a]/10 dark:bg-[#51aa7a]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#51aa7a] dark:text-[#51aa7a]">{completed}</p>
+          <p className="text-xs text-[#51aa7a] dark:text-[#51aa7a]">Completed</p>
         </div>
-        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-green-700 dark:text-green-400">{approved}</p>
-          <p className="text-xs text-green-600 dark:text-green-500">Approved</p>
+        <div className="p-3 bg-[#945ecf]/10 dark:bg-[#945ecf]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#945ecf] dark:text-[#945ecf]">{approved}</p>
+          <p className="text-xs text-[#945ecf] dark:text-[#945ecf]">Approved</p>
         </div>
       </div>
 
@@ -178,25 +178,25 @@ function TestCasesTab({ testCases }: { testCases: TestCase[] }) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-5 gap-2">
-        <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
-          <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{newItem}</p>
-          <p className="text-xs text-gray-600 dark:text-gray-400">New</p>
+        <div className="p-3 bg-[#6c8893]/10 dark:bg-[#6c8893]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#6c8893] dark:text-[#6c8893]">{newItem}</p>
+          <p className="text-xs text-[#6c8893] dark:text-[#6c8893]">New</p>
         </div>
-        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{active}</p>
-          <p className="text-xs text-blue-600 dark:text-blue-500">Active</p>
+        <div className="p-3 bg-[#5899da]/10 dark:bg-[#5899da]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#5899da] dark:text-[#5899da]">{active}</p>
+          <p className="text-xs text-[#5899da] dark:text-[#5899da]">Active</p>
         </div>
-        <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-purple-700 dark:text-purple-400">{performed}</p>
-          <p className="text-xs text-purple-600 dark:text-purple-500">Performed</p>
+        <div className="p-3 bg-[#51aa7a]/10 dark:bg-[#51aa7a]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#51aa7a] dark:text-[#51aa7a]">{performed}</p>
+          <p className="text-xs text-[#51aa7a] dark:text-[#51aa7a]">Performed</p>
         </div>
-        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-green-700 dark:text-green-400">{approved}</p>
-          <p className="text-xs text-green-600 dark:text-green-500">Approved</p>
+        <div className="p-3 bg-[#945ecf]/10 dark:bg-[#945ecf]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#945ecf] dark:text-[#945ecf]">{approved}</p>
+          <p className="text-xs text-[#945ecf] dark:text-[#945ecf]">Approved</p>
         </div>
-        <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-red-700 dark:text-red-400">{defectFound}</p>
-          <p className="text-xs text-red-600 dark:text-red-500">Defect</p>
+        <div className="p-3 bg-[#808080]/10 dark:bg-[#808080]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#808080] dark:text-[#808080]">{defectFound}</p>
+          <p className="text-xs text-[#808080] dark:text-[#808080]">Defect</p>
         </div>
       </div>
 
@@ -219,7 +219,7 @@ function TestCasesTab({ testCases }: { testCases: TestCase[] }) {
               </div>
               <StatusBadge
                 label={tc.status}
-                type={tc.status === 'approved' ? 'success' : tc.status === 'Defect found' ? 'error' : tc.status === 'performed' ? 'purple' : tc.status === 'Active' ? 'info' : 'neutral'}
+                type={tc.status === 'approved' ? 'success' : tc.status === 'Defect found' ? 'purple' : tc.status === 'performed' ? 'teal' : tc.status === 'Active' ? 'info' : 'neutral'}
               />
             </div>
           </div>
@@ -248,21 +248,21 @@ function IssuesTab({ issues }: { issues: Issue[] }) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-4 gap-3">
-        <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
-          <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{newItem}</p>
-          <p className="text-xs text-gray-600 dark:text-gray-400">New</p>
+        <div className="p-3 bg-[#6c8893]/10 dark:bg-[#6c8893]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#6c8893] dark:text-[#6c8893]">{newItem}</p>
+          <p className="text-xs text-[#6c8893] dark:text-[#6c8893]">New</p>
         </div>
-        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{active}</p>
-          <p className="text-xs text-blue-600 dark:text-blue-500">Active</p>
+        <div className="p-3 bg-[#5899da]/10 dark:bg-[#5899da]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#5899da] dark:text-[#5899da]">{active}</p>
+          <p className="text-xs text-[#5899da] dark:text-[#5899da]">Active</p>
         </div>
-        <div className="p-3 bg-teal-100 dark:bg-teal-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-teal-700 dark:text-teal-400">{resolved}</p>
-          <p className="text-xs text-teal-600 dark:text-teal-500">Resolved</p>
+        <div className="p-3 bg-[#51aa7a]/10 dark:bg-[#51aa7a]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#51aa7a] dark:text-[#51aa7a]">{resolved}</p>
+          <p className="text-xs text-[#51aa7a] dark:text-[#51aa7a]">Resolved</p>
         </div>
-        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-green-700 dark:text-green-400">{approved}</p>
-          <p className="text-xs text-green-600 dark:text-green-500">Approved</p>
+        <div className="p-3 bg-[#945ecf]/10 dark:bg-[#945ecf]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#945ecf] dark:text-[#945ecf]">{approved}</p>
+          <p className="text-xs text-[#945ecf] dark:text-[#945ecf]">Approved</p>
         </div>
       </div>
 
@@ -285,7 +285,7 @@ function IssuesTab({ issues }: { issues: Issue[] }) {
               </div>
               <StatusBadge
                 label={issue.status}
-                type={issue.status === 'Resolved' || issue.status === 'Approved' ? 'teal' : issue.status === 'Active' ? 'info' : 'neutral'}
+                type={issue.status === 'Resolved' ? 'teal' : issue.status === 'Approved' ? 'success' : issue.status === 'Active' ? 'info' : 'neutral'}
               />
             </div>
           </div>
@@ -315,25 +315,25 @@ function SignOffsTab({ signOffs }: { signOffs: SignOff[] }) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-5 gap-2">
-        <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
-          <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{newItem}</p>
-          <p className="text-xs text-gray-600 dark:text-gray-400">New</p>
+        <div className="p-3 bg-[#6c8893]/10 dark:bg-[#6c8893]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#6c8893] dark:text-[#6c8893]">{newItem}</p>
+          <p className="text-xs text-[#6c8893] dark:text-[#6c8893]">New</p>
         </div>
-        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{active}</p>
-          <p className="text-xs text-blue-600 dark:text-blue-500">Active</p>
+        <div className="p-3 bg-[#5899da]/10 dark:bg-[#5899da]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#5899da] dark:text-[#5899da]">{active}</p>
+          <p className="text-xs text-[#5899da] dark:text-[#5899da]">Active</p>
         </div>
-        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-green-700 dark:text-green-400">{approved}</p>
-          <p className="text-xs text-green-600 dark:text-green-500">Approved</p>
+        <div className="p-3 bg-[#51aa7a]/10 dark:bg-[#51aa7a]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#51aa7a] dark:text-[#51aa7a]">{approved}</p>
+          <p className="text-xs text-[#51aa7a] dark:text-[#51aa7a]">Approved</p>
         </div>
-        <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-red-700 dark:text-red-400">{rejected}</p>
-          <p className="text-xs text-red-600 dark:text-red-500">Rejected</p>
+        <div className="p-3 bg-[#E74C3C]/10 dark:bg-[#E74C3C]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#E74C3C] dark:text-[#E74C3C]">{rejected}</p>
+          <p className="text-xs text-[#E74C3C] dark:text-[#E74C3C]">Rejected</p>
         </div>
-        <div className="p-3 bg-teal-100 dark:bg-teal-900/30 rounded-lg text-center">
-          <p className="text-2xl font-bold text-teal-700 dark:text-teal-400">{completed}</p>
-          <p className="text-xs text-teal-600 dark:text-teal-500">Completed</p>
+        <div className="p-3 bg-[#51aa7a]/10 dark:bg-[#51aa7a]/20 rounded-lg text-center">
+          <p className="text-2xl font-bold text-[#51aa7a] dark:text-[#51aa7a]">{completed}</p>
+          <p className="text-xs text-[#51aa7a] dark:text-[#51aa7a]">Completed</p>
         </div>
       </div>
 
@@ -356,7 +356,7 @@ function SignOffsTab({ signOffs }: { signOffs: SignOff[] }) {
               </div>
               <StatusBadge
                 label={signOff.status}
-                type={signOff.status === 'Approved' ? 'success' : signOff.status === 'Completed' ? 'teal' : signOff.status === 'Rejected' ? 'error' : signOff.status === 'Active' ? 'info' : 'neutral'}
+                type={signOff.status === 'Approved' ? 'teal' : signOff.status === 'Completed' ? 'teal' : signOff.status === 'Rejected' ? 'error' : signOff.status === 'Active' ? 'info' : 'neutral'}
               />
             </div>
           </div>
@@ -625,13 +625,7 @@ export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overvi
                 <CheckSquare className="h-3.5 w-3.5 mr-1.5" />
                 Sign-offs ({requirement.signOffs.length})
               </TabsTrigger>
-              <TabsTrigger
-                value="audit"
-                className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
-              >
-                <History className="h-3.5 w-3.5 mr-1.5" />
-                Audit
-              </TabsTrigger>
+
               <TabsTrigger
                 value="cta"
                 className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
@@ -664,9 +658,7 @@ export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overvi
               <TabsContent value="signoffs" className="mt-0">
                 <SignOffsTab signOffs={requirement.signOffs} />
               </TabsContent>
-              <TabsContent value="audit" className="mt-0">
-                <AuditHistoryTab auditHistory={requirement.auditHistory} />
-              </TabsContent>
+
               <TabsContent value="cta" className="mt-0">
                 <CTATab ctas={requirement.ctas || []} />
               </TabsContent>

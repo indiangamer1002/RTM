@@ -26,12 +26,12 @@ interface StatusBarProps {
 }
 
 const colorClasses: Record<string, { bg: string; text: string; border: string; activeBg: string }> = {
-  blue: { bg: 'bg-blue-500', text: 'text-white', border: 'data-[state=active]:border-blue-500', activeBg: 'data-[state=active]:bg-blue-50' },
-  green: { bg: 'bg-green-500', text: 'text-white', border: 'data-[state=active]:border-green-500', activeBg: 'data-[state=active]:bg-green-50' },
-  red: { bg: 'bg-red-500', text: 'text-white', border: 'data-[state=active]:border-red-500', activeBg: 'data-[state=active]:bg-red-50' },
-  gray: { bg: 'bg-gray-500', text: 'text-white', border: 'data-[state=active]:border-gray-500', activeBg: 'data-[state=active]:bg-gray-50' },
-  purple: { bg: 'bg-purple-500', text: 'text-white', border: 'data-[state=active]:border-purple-500', activeBg: 'data-[state=active]:bg-purple-50' },
-  teal: { bg: 'bg-teal-500', text: 'text-white', border: 'data-[state=active]:border-teal-500', activeBg: 'data-[state=active]:bg-teal-50' },
+  blue: { bg: 'bg-[#5899da]', text: 'text-white', border: 'data-[state=active]:border-[#5899da]', activeBg: 'data-[state=active]:bg-[#5899da]/10' },
+  green: { bg: 'bg-[#945ecf]', text: 'text-white', border: 'data-[state=active]:border-[#945ecf]', activeBg: 'data-[state=active]:bg-[#945ecf]/10' },
+  red: { bg: 'bg-[#E74C3C]', text: 'text-white', border: 'data-[state=active]:border-[#E74C3C]', activeBg: 'data-[state=active]:bg-[#E74C3C]/10' },
+  gray: { bg: 'bg-[#6c8893]', text: 'text-white', border: 'data-[state=active]:border-[#6c8893]', activeBg: 'data-[state=active]:bg-[#6c8893]/10' },
+  purple: { bg: 'bg-[#808080]', text: 'text-white', border: 'data-[state=active]:border-[#808080]', activeBg: 'data-[state=active]:bg-[#808080]/10' },
+  teal: { bg: 'bg-[#51aa7a]', text: 'text-white', border: 'data-[state=active]:border-[#51aa7a]', activeBg: 'data-[state=active]:bg-[#51aa7a]/10' },
   orange: { bg: 'bg-orange-500', text: 'text-white', border: 'data-[state=active]:border-orange-500', activeBg: 'data-[state=active]:bg-orange-50' },
 };
 

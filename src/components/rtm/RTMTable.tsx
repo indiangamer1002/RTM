@@ -72,9 +72,9 @@ function getTestCaseSegments(req: Requirement): StatusSegment[] {
   return [
     { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
     { label: 'Active', count: active.length, color: 'blue', items: active.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
-    { label: 'Performed', count: performed.length, color: 'purple', items: performed.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
+    { label: 'Performed', count: performed.length, color: 'teal', items: performed.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
     { label: 'Approved', count: approved.length, color: 'green', items: approved.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
-    { label: 'Defect', count: defect.length, color: 'red', items: defect.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
+    { label: 'Defect', count: defect.length, color: 'purple', items: defect.map(tc => ({ id: tc.id, title: tc.title, status: `Planned to: ${tc.dueDate}` })) },
   ];
 }
 
@@ -106,7 +106,7 @@ function getSignOffSegments(req: Requirement): StatusSegment[] {
   return [
     { label: 'New', count: newItem.length, color: 'gray', items: newItem.map(s => ({ id: s.id, title: s.stakeholder, status: `Planned to: ${s.dueDate}` })) },
     { label: 'Active', count: active.length, color: 'blue', items: active.map(s => ({ id: s.id, title: s.stakeholder, status: `Planned to: ${s.dueDate}` })) },
-    { label: 'Approved', count: approved.length, color: 'green', items: approved.map(s => ({ id: s.id, title: s.stakeholder, status: `Planned to: ${s.dueDate}` })) },
+    { label: 'Approved', count: approved.length, color: 'teal', items: approved.map(s => ({ id: s.id, title: s.stakeholder, status: `Planned to: ${s.dueDate}` })) },
     { label: 'Rejected', count: rejected.length, color: 'red', items: rejected.map(s => ({ id: s.id, title: s.stakeholder, status: `Planned to: ${s.dueDate}` })) },
     { label: 'Completed', count: completed.length, color: 'teal', items: completed.map(s => ({ id: s.id, title: s.stakeholder, status: `Planned to: ${s.dueDate}` })) },
   ];
