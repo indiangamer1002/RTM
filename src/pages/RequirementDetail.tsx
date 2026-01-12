@@ -316,7 +316,7 @@ const RequirementDetail = () => {
               </div>
 
               {/* Discussions Panel - 25% */}
-              <div className="w-[25%] flex-shrink-0 h-full overflow-y-auto">
+              <div className="w-[25%] flex-shrink-0 h-full overflow-y-auto border-l border-border">
                 <DiscussionsPanel requirementId="13061" />
               </div>
             </div>
