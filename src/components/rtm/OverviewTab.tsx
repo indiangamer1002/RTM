@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { ChevronDown, ChevronUp, Maximize2, FileText, Users, CheckCircle, Code, TestTube, Rocket, Settings, Edit3, History, Download, User, Info } from 'lucide-react';
+import { ChevronDown, ChevronUp, Maximize2, FileText, Users, CheckCircle, Code, TestTube, Rocket, Settings, Edit3, History, Download, User, Info, Clock, ClipboardList } from 'lucide-react';
 
 interface OverviewTabProps {
   requirementId: string;
@@ -26,8 +26,8 @@ export const OverviewTab = ({ requirementId }: OverviewTabProps) => {
   const [analystInfo, setAnalystInfo] = useState({ name: 'Sarah Johnson', date: 'Jan 11, 2025' });
   const [documentGenerated, setDocumentGenerated] = useState(false);
   const [isGeneratingDoc, setIsGeneratingDoc] = useState(false);
-  const [expandedSections, setExpandedSections] = useState<{[key: string]: boolean}>({});
-  const [collapsedSections, setCollapsedSections] = useState<{[key: string]: boolean}>({});
+  const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({});
+  const [collapsedSections, setCollapsedSections] = useState<{ [key: string]: boolean }>({});
 
   const lifecycleStages = [
     { id: 'identification', name: 'Identification', icon: FileText, status: 'completed' },
@@ -128,7 +128,7 @@ export const OverviewTab = ({ requirementId }: OverviewTabProps) => {
                     <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">Review Mode</Badge>
                   </div>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div className={expandedSections.definedRequirement ? 'fixed inset-0 z-50 bg-white p-4' : ''}>
                     <div className="flex items-center justify-between mb-3">
@@ -150,7 +150,7 @@ export const OverviewTab = ({ requirementId }: OverviewTabProps) => {
                       />
                     )}
                   </div>
-                  
+
                   <div className={expandedSections.acceptanceCriteria ? 'fixed inset-0 z-50 bg-white p-4' : ''}>
                     <div className="flex items-center justify-between mb-3">
                       <Label className="text-base font-medium text-foreground">Acceptance Criteria</Label>
@@ -292,7 +292,7 @@ export const OverviewTab = ({ requirementId }: OverviewTabProps) => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label className="text-sm font-medium text-foreground mb-1 block">Priority</Label>
                   <Select value={priority} onValueChange={setPriority}>
@@ -306,7 +306,7 @@ export const OverviewTab = ({ requirementId }: OverviewTabProps) => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label className="text-sm font-medium text-foreground mb-1 block">Type</Label>
                   <Select value={type} onValueChange={setType}>

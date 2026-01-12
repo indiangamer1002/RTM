@@ -24,6 +24,19 @@ function collectDescendantIds(node: NavigationNode): string[] {
 }
 
 
+// Helper to find the path from root to a specific node ID
+const findPathToNode = (nodes: NavigationNode[], targetId: string, currentPath: NavigationNode[] = []): NavigationNode[] | null => {
+  for (const node of nodes) {
+    if (node.id === targetId) return currentPath;
+    if (node.children) {
+      const found = findPathToNode(node.children, targetId, [...currentPath, node]);
+      if (found) return found;
+    }
+  }
+  return null;
+};
+
+
 export function AppShell() {
   const navigate = useNavigate();
   const [selectedNode, setSelectedNode] = useState<NavigationNode | null>(null);
@@ -35,6 +48,18 @@ export function AppShell() {
   const [selectedRequirement, setSelectedRequirement] = useState<Requirement | null>(null);
   const [detailPanelTab, setDetailPanelTab] = useState('overview');
   const [isFinderOpen, setIsFinderOpen] = useState(false);
+  const [visibleColumns, setVisibleColumns] = useState<string[]>([
+    "Req ID", "Req Title", "Type", "Source Owner", "Priority", "Status",
+    "Task", "TESTCASES", "Issues", "Sign-offs", "CTA", "Meetings"
+  ]);
+
+  const handleColumnToggle = (column: string) => {
+    setVisibleColumns(prev =>
+      prev.includes(column)
+        ? prev.filter(c => c !== column)
+        : [...prev, column]
+    );
+  };
 
   const breadcrumb = ['MDLP FY25', 'RTM', 'Home'];
   const viewOptions = [
@@ -44,17 +69,6 @@ export function AppShell() {
     { id: 'trace', label: 'Trace View', icon: GitBranch }
   ];
 
-  // Helper to find the path from root to a specific node ID
-  const findPathToNode = (nodes: NavigationNode[], targetId: string, currentPath: NavigationNode[] = []): NavigationNode[] | null => {
-    for (const node of nodes) {
-      if (node.id === targetId) return currentPath;
-      if (node.children) {
-        const found = findPathToNode(node.children, targetId, [...currentPath, node]);
-        if (found) return found;
-      }
-    }
-    return null;
-  };
 
   // Filter requirements based on drill-down context OR specific leaf selection
   const filteredRequirements = useMemo(() => {
@@ -246,7 +260,11 @@ export function AppShell() {
             </div>
 
             {/* Filter Bar - Part of the fixed area */}
-            <FilterBar onViewChange={setCurrentView} />
+            <FilterBar
+              onViewChange={setCurrentView}
+              visibleColumns={visibleColumns}
+              onColumnToggle={handleColumnToggle}
+            />
           </div>
 
           {/* Dedicated Content Area - Edge to Edge, No Page Scroll */}
@@ -254,6 +272,7 @@ export function AppShell() {
             <RTMTable
               requirements={filteredRequirements}
               onRequirementClick={handleRequirementClick}
+              visibleColumns={visibleColumns}
             />
           </div>
         </main>

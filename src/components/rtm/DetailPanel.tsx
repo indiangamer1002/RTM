@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { X, FileText, ClipboardList, TestTube, Bug, CheckSquare, History } from 'lucide-react';
-import { Requirement, Task, TestCase, Issue, SignOff, AuditEntry } from '@/types/rtm';
+import { X, FileText, ClipboardList, TestTube, Bug, CheckSquare, History, Users, Calendar, Flag } from 'lucide-react';
+import { Requirement, Task, TestCase, Issue, SignOff, AuditEntry, Stakeholder, CTA, Meeting } from '@/types/rtm';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { StatusBadge } from './StatusBadge';
@@ -17,52 +17,73 @@ interface DetailPanelProps {
 
 function OverviewTab({ requirement }: { requirement: Requirement }) {
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-sm font-medium text-muted-foreground mb-2">Description</h3>
-        <p className="text-sm text-foreground leading-relaxed">{requirement.description}</p>
+    <div className="space-y-3">
+      <div className="pb-2 border-b border-border">
+        <span className="text-xs font-mono text-muted-foreground block">{requirement.reqId}</span>
+        <h2 className="text-lg font-semibold text-foreground leading-tight">{requirement.title}</h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div>
+        <h3 className="text-xs font-medium text-muted-foreground mb-1">Description</h3>
+        <p className="text-sm text-foreground leading-snug line-clamp-3">{requirement.description}</p>
+      </div>
+
+      <div className="grid grid-cols-4 gap-3">
         <div>
-          <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Type</h4>
+          <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Type</h4>
           <StatusBadge label={requirement.type} type={requirement.type === 'Business' ? 'info' : requirement.type === 'Functional' ? 'warning' : 'neutral'} />
         </div>
         <div>
-          <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Priority</h4>
+          <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Priority</h4>
           <StatusBadge label={requirement.priority} type={requirement.priority === 'High' ? 'error' : requirement.priority === 'Medium' ? 'warning' : 'success'} />
         </div>
         <div>
-          <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Status</h4>
+          <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Status</h4>
           <StatusBadge label={requirement.status} type={requirement.status === 'Completed' || requirement.status === 'Approved' ? 'success' : requirement.status === 'Active' ? 'info' : 'neutral'} />
         </div>
         <div>
-          <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Owner</h4>
-          <span className="text-sm text-foreground">{requirement.sourceOwner}</span>
+          <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Owner</h4>
+          <span className="text-xs text-foreground font-medium">{requirement.sourceOwner}</span>
+        </div>
+        <div>
+          <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Scope</h4>
+          <span className="text-xs text-foreground font-medium">{requirement.scope}</span>
+        </div>
+        <div>
+          <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Process</h4>
+          <span className="text-xs text-foreground font-medium">{requirement.businessProcess}</span>
+        </div>
+        <div>
+          <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Approver</h4>
+          <span className="text-xs text-foreground font-medium">{requirement.approver}</span>
+        </div>
+        <div>
+          <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Planned to</h4>
+          <span className="text-xs text-foreground font-medium">{requirement.dueDate || '-'}</span>
         </div>
       </div>
 
       <div>
-        <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Stakeholders</h4>
-        <div className="flex flex-wrap gap-2">
+        <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-2">Stakeholders</h4>
+        <div className="flex flex-wrap gap-1.5">
           {requirement.stakeholders.map((s) => (
-            <div key={s.id} className="flex items-center gap-2 bg-muted/50 rounded-full px-3 py-1.5">
-              <Avatar className="h-5 w-5">
+            <div key={s.id} className="flex items-center gap-1.5 bg-muted/50 rounded-full px-2 py-1">
+              <Avatar className="h-4 w-4">
                 <AvatarFallback className="text-[8px] bg-primary text-primary-foreground">
                   {s.name.split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>
               </Avatar>
-              <span className="text-xs font-medium">{s.name}</span>
-              <span className="text-[10px] text-muted-foreground">({s.role})</span>
+              <span className="text-[10px] font-medium">{s.name}</span>
+              <span className="text-[9px] text-muted-foreground">({s.role})</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="pt-4 border-t border-border">
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>Created: {requirement.createdAt}</span>
-          <span>Last updated: {requirement.updatedAt} by {requirement.lastUpdatedBy}</span>
+      <div className="pt-2 border-t border-border mt-auto">
+        <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+          <span>Created: {requirement.createdAt} by {requirement.createdBy}</span>
+          <span>Updated: {requirement.updatedAt} by {requirement.lastUpdatedBy}</span>
         </div>
       </div>
     </div>
@@ -111,10 +132,16 @@ function TasksTab({ tasks }: { tasks: Task[] }) {
           <div key={task.id} className="p-3 bg-muted/30 rounded-lg border border-border hover:border-primary/30 transition-colors">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-medium text-foreground truncate">{task.title}</h4>
+                <div className="flex items-center gap-2">
+                  <StatusBadge
+                    label={task.priority}
+                    type={task.priority === 'High' ? 'error' : task.priority === 'Medium' ? 'warning' : 'neutral'}
+                  />
+                  <h4 className="text-sm font-medium text-foreground truncate">{task.title}</h4>
+                </div>
                 <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
-                  <span>Assignee: {task.assignee}</span>
-                  <span>Due: {task.dueDate}</span>
+                  <span>Assigned to: {task.assignee}</span>
+                  <span>Planned to: {task.dueDate}</span>
                 </div>
               </div>
               <StatusBadge
@@ -176,10 +203,17 @@ function TestCasesTab({ testCases }: { testCases: TestCase[] }) {
           <div key={tc.id} className="p-3 bg-muted/30 rounded-lg border border-border hover:border-primary/30 transition-colors">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-medium text-foreground truncate">{tc.title}</h4>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {tc.lastRun ? `Last run: ${tc.lastRun} by ${tc.tester}` : `Status: ${tc.status}`}
-                </p>
+                <div className="flex items-center gap-2">
+                  <StatusBadge
+                    label={tc.priority}
+                    type={tc.priority === 'High' ? 'error' : tc.priority === 'Medium' ? 'warning' : 'neutral'}
+                  />
+                  <h4 className="text-sm font-medium text-foreground truncate">{tc.title}</h4>
+                </div>
+                <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                  <span>Assigned to: {tc.assignee}</span>
+                  <span>Planned to: {tc.dueDate}</span>
+                </div>
               </div>
               <StatusBadge
                 label={tc.status}
@@ -242,7 +276,10 @@ function IssuesTab({ issues }: { issues: Issue[] }) {
                   />
                   <h4 className="text-sm font-medium text-foreground truncate">{issue.title}</h4>
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">Assignee: {issue.assignee}</p>
+                <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                  <span>Assigned to: {issue.assignee}</span>
+                  <span>Planned to: {issue.dueDate}</span>
+                </div>
               </div>
               <StatusBadge
                 label={issue.status}
@@ -303,14 +340,158 @@ function SignOffsTab({ signOffs }: { signOffs: SignOff[] }) {
           <div key={signOff.id} className="p-3 bg-muted/30 rounded-lg border border-border">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-sm font-medium text-foreground">{signOff.role}</h4>
-                <p className="text-xs text-muted-foreground mt-1">{signOff.stakeholder}</p>
-                {signOff.date && <p className="text-xs text-muted-foreground">Signed: {signOff.date}</p>}
+                <div className="flex items-center gap-2">
+                  <StatusBadge
+                    label={signOff.priority}
+                    type={signOff.priority === 'High' ? 'error' : signOff.priority === 'Medium' ? 'warning' : 'neutral'}
+                  />
+                  <h4 className="text-sm font-medium text-foreground">{signOff.role}</h4>
+                </div>
+                <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                  <span>Assigned to: {signOff.stakeholder}</span>
+                  <span>Planned to: {signOff.dueDate}</span>
+                </div>
               </div>
               <StatusBadge
                 label={signOff.status}
                 type={signOff.status === 'Approved' ? 'success' : signOff.status === 'Completed' ? 'teal' : signOff.status === 'Rejected' ? 'error' : signOff.status === 'Active' ? 'info' : 'neutral'}
               />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CTATab({ ctas }: { ctas: CTA[] }) {
+  if (ctas.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center">
+        <Flag className="h-12 w-12 text-muted-foreground/30 mb-3" />
+        <p className="text-sm text-muted-foreground">No CTAs linked to this requirement</p>
+        <Button variant="outline" size="sm" className="mt-4">Add CTA</Button>
+      </div>
+    );
+  }
+
+  const newItem = ctas.filter(c => c.status === 'New').length;
+  const active = ctas.filter(c => c.status === 'Active').length;
+  const completed = ctas.filter(c => c.status === 'Completed').length;
+  const pending = ctas.filter(c => c.status === 'Pending').length;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-4 gap-3">
+        <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
+          <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{newItem}</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400">New</p>
+        </div>
+        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{active}</p>
+          <p className="text-xs text-blue-600 dark:text-blue-500">Active</p>
+        </div>
+        <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-orange-700 dark:text-orange-400">{pending}</p>
+          <p className="text-xs text-orange-600 dark:text-orange-500">Pending</p>
+        </div>
+        <div className="p-3 bg-teal-100 dark:bg-teal-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-teal-700 dark:text-teal-400">{completed}</p>
+          <p className="text-xs text-teal-600 dark:text-teal-500">Completed</p>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {ctas.map((cta) => (
+          <div key={cta.id} className="p-3 bg-muted/30 rounded-lg border border-border hover:border-primary/30 transition-colors">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <StatusBadge
+                    label={cta.priority}
+                    type={cta.priority === 'High' ? 'error' : cta.priority === 'Medium' ? 'warning' : 'neutral'}
+                  />
+                  <h4 className="text-sm font-medium text-foreground truncate">{cta.title}</h4>
+                </div>
+                <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                  <span>Assigned to: {cta.assignee}</span>
+                  <span>Planned to: {cta.dueDate}</span>
+                </div>
+              </div>
+              <StatusBadge
+                label={cta.status}
+                type={cta.status === 'Completed' ? 'teal' : cta.status === 'Active' ? 'info' : cta.status === 'Pending' ? 'orange' : 'neutral'}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MeetingsTab({ meetings }: { meetings: Meeting[] }) {
+  if (meetings.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center">
+        <Calendar className="h-12 w-12 text-muted-foreground/30 mb-3" />
+        <p className="text-sm text-muted-foreground">No meetings linked to this requirement</p>
+        <Button variant="outline" size="sm" className="mt-4">Schedule Meeting</Button>
+      </div>
+    );
+  }
+
+  const scheduled = meetings.filter(m => m.status === 'Scheduled').length;
+  const completed = meetings.filter(m => m.status === 'Completed').length;
+  const cancelled = meetings.filter(m => m.status === 'Cancelled').length;
+  const pending = meetings.filter(m => m.status === 'Pending').length;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-4 gap-3">
+        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{scheduled}</p>
+          <p className="text-xs text-blue-600 dark:text-blue-500">Scheduled</p>
+        </div>
+        <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-orange-700 dark:text-orange-400">{pending}</p>
+          <p className="text-xs text-orange-600 dark:text-orange-500">Pending</p>
+        </div>
+        <div className="p-3 bg-teal-100 dark:bg-teal-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-teal-700 dark:text-teal-400">{completed}</p>
+          <p className="text-xs text-teal-600 dark:text-teal-500">Completed</p>
+        </div>
+        <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-lg text-center">
+          <p className="text-2xl font-bold text-red-700 dark:text-red-400">{cancelled}</p>
+          <p className="text-xs text-red-600 dark:text-red-500">Cancelled</p>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {meetings.map((meeting) => (
+          <div key={meeting.id} className="p-3 bg-muted/30 rounded-lg border border-border hover:border-primary/30 transition-colors">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <StatusBadge
+                    label={meeting.priority}
+                    type={meeting.priority === 'High' ? 'error' : meeting.priority === 'Medium' ? 'warning' : 'neutral'}
+                  />
+                  <h4 className="text-sm font-medium text-foreground truncate">{meeting.title}</h4>
+                </div>
+                <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                  <span>Organizer: {meeting.organizer}</span>
+                  <span>Date: {meeting.date}</span>
+                  <span>Planned to: {meeting.dueDate}</span>
+                </div>
+              </div>
+              <StatusBadge
+                label={meeting.status}
+                type={meeting.status === 'Completed' ? 'teal' : meeting.status === 'Scheduled' ? 'info' : meeting.status === 'Pending' ? 'orange' : 'error'}
+              />
+            </div>
+            <div className="mt-2 pl-2 border-l-2 border-primary/20">
+              <p className="text-xs text-muted-foreground">Attendees: {meeting.attendees.join(', ')}</p>
             </div>
           </div>
         ))}
@@ -436,7 +617,7 @@ export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overvi
                 className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
               >
                 <CheckSquare className="h-3.5 w-3.5 mr-1.5" />
-                Sign-offs
+                Sign-offs ({requirement.signOffs.length})
               </TabsTrigger>
               <TabsTrigger
                 value="audit"
@@ -445,7 +626,20 @@ export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overvi
                 <History className="h-3.5 w-3.5 mr-1.5" />
                 Audit
               </TabsTrigger>
-
+              <TabsTrigger
+                value="cta"
+                className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
+              >
+                <Flag className="h-3.5 w-3.5 mr-1.5" />
+                CTA ({requirement.ctas?.length || 0})
+              </TabsTrigger>
+              <TabsTrigger
+                value="meetings"
+                className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
+              >
+                <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                Meetings ({requirement.meetings?.length || 0})
+              </TabsTrigger>
             </TabsList>
 
             <div className="p-4">
@@ -467,7 +661,12 @@ export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overvi
               <TabsContent value="audit" className="mt-0">
                 <AuditHistoryTab auditHistory={requirement.auditHistory} />
               </TabsContent>
-
+              <TabsContent value="cta" className="mt-0">
+                <CTATab ctas={requirement.ctas || []} />
+              </TabsContent>
+              <TabsContent value="meetings" className="mt-0">
+                <MeetingsTab meetings={requirement.meetings || []} />
+              </TabsContent>
             </div>
           </Tabs>
         </ScrollArea>

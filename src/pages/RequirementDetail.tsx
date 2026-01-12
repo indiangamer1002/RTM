@@ -12,6 +12,7 @@ import { FilesTab } from '@/components/rtm/FilesTab';
 import { DiscussionsPanel } from '@/components/rtm/DiscussionsPanel';
 import { KnowledgeBaseTab } from '@/components/views/detail/KnowledgeBaseTab';
 import { StakeholdersTab } from '@/components/views/detail/StakeholdersTab';
+import HistoryTab from '@/components/rtm/HistoryTab';
 import { requirementsData } from '@/data/mockData';
 
 const RequirementDetail = () => {
@@ -306,12 +307,7 @@ const RequirementDetail = () => {
                 ) : activeTab === 'Files' ? (
                   <FilesTab requirementId="13061" />
                 ) : activeTab === 'History' ? (
-                  <div className="flex items-center justify-center p-8">
-                    <div className="text-center">
-                      <span className="text-lg font-semibold text-foreground mb-2 block">History</span>
-                      <span className="text-sm text-muted-foreground">Audit trail and change history coming soon</span>
-                    </div>
-                  </div>
+                  <HistoryTab requirementId="13061" />
                 ) : (
                   <div className="flex items-center justify-center p-8">
                     <span className="text-lg text-muted-foreground">{activeTab} Content</span>

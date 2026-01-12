@@ -1,4 +1,4 @@
-import { Download, Upload, Plus, Save, Eye, Search, ChevronDown, Pin, Maximize, RefreshCw, Filter, X, RotateCcw } from 'lucide-react';
+import { Download, Upload, Plus, Save, Eye, Search, ChevronDown, Pin, Maximize, RefreshCw, Filter, X, RotateCcw, Layout } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
@@ -21,6 +21,8 @@ import { cn } from '@/lib/utils';
 interface FilterBarProps {
   onViewChange: (view: string) => void;
   onFullscreenToggle?: () => void;
+  visibleColumns: string[];
+  onColumnToggle: (column: string) => void;
 }
 
 interface FilterOption {
@@ -31,7 +33,7 @@ interface FilterOption {
   width?: string;
 }
 
-export function FilterBar({ onViewChange, onFullscreenToggle }: FilterBarProps) {
+export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, onColumnToggle }: FilterBarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPinMode, setShowPinMode] = useState(false);
   const [filters, setFilters] = useState<FilterOption[]>([
@@ -244,9 +246,9 @@ export function FilterBar({ onViewChange, onFullscreenToggle }: FilterBarProps) 
         <div key={filter.id} className="flex items-center gap-1">
           <div className="relative">
             <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search requirements by ID or title..." 
-              className="h-8 pl-8 pr-3 text-sm border-muted-foreground/20 bg-background hover:border-muted-foreground/40 transition-colors w-80" 
+            <Input
+              placeholder="Search requirements by ID or title..."
+              className="h-8 pl-8 pr-3 text-sm border-muted-foreground/20 bg-background hover:border-muted-foreground/40 transition-colors w-80"
             />
           </div>
           {showPinMode && (
@@ -323,9 +325,9 @@ export function FilterBar({ onViewChange, onFullscreenToggle }: FilterBarProps) 
       </div>
       <div className="relative mb-2">
         <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
-        <Input 
-          placeholder="Search..." 
-          className="h-7 pl-7 text-xs border-muted-foreground/20" 
+        <Input
+          placeholder="Search..."
+          className="h-7 pl-7 text-xs border-muted-foreground/20"
         />
       </div>
       <div className="space-y-1 max-h-32 overflow-y-auto">
@@ -339,8 +341,8 @@ export function FilterBar({ onViewChange, onFullscreenToggle }: FilterBarProps) 
           <div key={option.value} className="flex items-center justify-between py-1 hover:bg-muted/50 rounded px-1">
             <div className="flex items-center space-x-2">
               <Checkbox id={`${filter.id}-${option.value}`} className="h-3 w-3" />
-              <label 
-                htmlFor={`${filter.id}-${option.value}`} 
+              <label
+                htmlFor={`${filter.id}-${option.value}`}
                 className="text-xs cursor-pointer flex-1"
               >
                 {option.label}
@@ -378,6 +380,10 @@ export function FilterBar({ onViewChange, onFullscreenToggle }: FilterBarProps) 
 
               {/* Right: Icon Group - Fixed Position */}
               <div className="flex items-center gap-1 flex-shrink-0">
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" title="Clear All Filters">
+                  <RotateCcw className="h-4 w-4" />
+                </Button>
+
                 <Button
                   variant="ghost"
                   size="icon"
@@ -534,15 +540,42 @@ export function FilterBar({ onViewChange, onFullscreenToggle }: FilterBarProps) 
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" 
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40"
               title="Fullscreen"
               onClick={onFullscreenToggle}
             >
               <Maximize className="h-4 w-4" />
             </Button>
+
+            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Refresh">
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+
+            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Advanced Filters">
+              <Filter className="h-4 w-4" />
+            </Button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Columns">
+                  <Layout className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {[
+                  "Req ID", "Req Title", "Type", "Source Owner", "Priority", "Status",
+                  "Task", "TESTCASES", "Issues", "Sign-offs", "CTA", "Meetings"
+                ].map((col) => (
+                  <div key={col} className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted/50 rounded cursor-pointer" onClick={() => onColumnToggle(col)}>
+                    <Checkbox checked={visibleColumns.includes(col)} id={`col-${col}`} />
+                    <label htmlFor={`col-${col}`} className="text-xs flex-1 cursor-pointer">{col}</label>
+                  </div>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>

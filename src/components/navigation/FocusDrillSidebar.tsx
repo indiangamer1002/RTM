@@ -1,14 +1,14 @@
 import { useState, useMemo, useEffect } from 'react';
-import { ChevronRight, ArrowLeft, Maximize2, Folder, FileText } from 'lucide-react';
+import { ChevronRight, ArrowLeft, Folder, FileText, Layout, Users, Settings } from 'lucide-react';
 import { NavigationNode } from '@/types/rtm';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
-  TooltipTrigger 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
 } from "@/components/ui/tooltip";
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface FocusDrillSidebarProps {
   data: NavigationNode[];
@@ -19,25 +19,26 @@ interface FocusDrillSidebarProps {
   externalPath?: NavigationNode[];
 }
 
-export function FocusDrillSidebar({ 
-  data, 
-  onSelect, 
-  onOpenFinder, 
-  selectedId, 
+export function FocusDrillSidebar({
+  data,
+  onSelect,
+  onOpenFinder,
+  selectedId,
   onContextChange,
-  externalPath 
+  externalPath
 }: FocusDrillSidebarProps) {
   const [history, setHistory] = useState<NavigationNode[][]>([data]);
   const [currentPath, setCurrentPath] = useState<NavigationNode[]>([]);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
+  const [activeTab, setActiveTab] = useState('process');
 
   // Sync internal history with external path changes (e.g. from Finder)
   useEffect(() => {
     if (externalPath && externalPath.length > 0) {
       // Build the history stack from the external path
-      let newHistory: NavigationNode[][] = [data];
+      const newHistory: NavigationNode[][] = [data];
       let currentLevel = data;
-      
+
       for (const node of externalPath) {
         const foundNode = currentLevel.find(n => n.id === node.id);
         if (foundNode && foundNode.children) {
@@ -45,7 +46,7 @@ export function FocusDrillSidebar({
           newHistory.push(currentLevel);
         }
       }
-      
+
       setHistory(newHistory);
       setCurrentPath(externalPath);
     } else if (externalPath === null || (externalPath && externalPath.length === 0)) {
@@ -102,15 +103,31 @@ export function FocusDrillSidebar({
     <TooltipProvider>
       <div className="flex flex-col h-full bg-sidebar-background/40 backdrop-blur-md overflow-hidden border-r border-sidebar-border relative">
         {/* Static Sidebar Title - Always visible */}
-        <div className="px-4 pt-4 pb-4 shrink-0">
-           <h2 className="text-[15px] font-bold text-foreground/90 tracking-tight flex items-center gap-2">
-              Process Explorer
-           </h2>
+        <div className="px-4 pt-4 pb-2 shrink-0">
+          <h2 className="text-[15px] font-bold text-foreground/90 tracking-tight flex items-center gap-2 mb-3">
+            Process Explorer
+          </h2>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="w-full h-8 bg-muted/40 p-0.5 rounded-md">
+              <TabsTrigger value="process" className="flex-1 text-[10px] h-7 data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                <Layout className="h-3 w-3 mr-1" />
+                Process
+              </TabsTrigger>
+              <TabsTrigger value="org" className="flex-1 text-[10px] h-7 data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                <Users className="h-3 w-3 mr-1" />
+                Org
+              </TabsTrigger>
+              <TabsTrigger value="tech" className="flex-1 text-[10px] h-7 data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                <Settings className="h-3 w-3 mr-1" />
+                Tech
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
 
         {/* Unified Interactive Header - Only visible when drilled down */}
         {depth > 0 && (
-          <div 
+          <div
             className="h-14 flex items-center border-b border-sidebar-border/30 px-4 gap-3 shrink-0 transition-colors hover:bg-slate-50/80 cursor-pointer"
             onClick={handleBack}
           >
@@ -139,8 +156,8 @@ export function FocusDrillSidebar({
                 onClick={() => isFolder ? handleDrillDown(node) : onSelect(node)}
                 className={cn(
                   "w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all relative group text-left",
-                  isActive 
-                    ? "bg-secondary/80 text-foreground font-semibold shadow-sm" 
+                  isActive
+                    ? "bg-secondary/80 text-foreground font-semibold shadow-sm"
                     : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                 )}
               >
@@ -152,15 +169,15 @@ export function FocusDrillSidebar({
                   )}
                   <span className="truncate flex-1">{node.name}</span>
                 </div>
-                
+
                 <div className="flex items-center gap-2 shrink-0">
                   {!isFolder && (
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <div className={cn(
                           "h-2 w-2 rounded-full ring-2 ring-offset-1 ring-offset-background transition-all",
-                          isInScope 
-                            ? "bg-emerald-500 ring-emerald-500/20" 
+                          isInScope
+                            ? "bg-emerald-500 ring-emerald-500/20"
                             : "bg-slate-300 ring-slate-300/20"
                         )} />
                       </TooltipTrigger>
@@ -171,12 +188,12 @@ export function FocusDrillSidebar({
                       </TooltipContent>
                     </Tooltip>
                   )}
-                  
+
                   {isFolder && (
                     <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-primary/60 transition-all group-hover:translate-x-0.5" />
                   )}
                 </div>
-                
+
                 {isActive && (
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full shadow-[0_0_8px_rgba(var(--primary),0.3)]" />
                 )}
