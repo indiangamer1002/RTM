@@ -43,7 +43,7 @@ export function AppShell() {
     { id: 'analytics', label: 'Analytics View', icon: BarChart3 },
     { id: 'trace', label: 'Trace View', icon: GitBranch }
   ];
-  
+
   // Helper to find the path from root to a specific node ID
   const findPathToNode = (nodes: NavigationNode[], targetId: string, currentPath: NavigationNode[] = []): NavigationNode[] | null => {
     for (const node of nodes) {
@@ -67,14 +67,14 @@ export function AppShell() {
     if (drillContext) {
       const nodeType = drillContext.type;
       const nodeId = drillContext.id;
-      
+
       if (nodeType === 'scope') {
         return requirementsData.filter(req => req.scopeId === nodeId);
       } else if (nodeType === 'process') {
         return requirementsData.filter(req => req.processId === nodeId);
       }
     }
-    
+
     // Priority 3: Default root level (show all)
     return requirementsData;
   }, [drillContext, selectedNode]);
@@ -90,7 +90,7 @@ export function AppShell() {
 
   const handleNodeSelect = (node: NavigationNode) => {
     setSelectedNode(node);
-    
+
     // If selecting a requirement from FINDER, we want to snap the sidebar to its parent process
     if (node.type === 'requirement') {
       const path = findPathToNode(navigationData[0]?.children || [], node.id);
@@ -132,10 +132,10 @@ export function AppShell() {
   return (
     <div className="h-screen w-screen bg-background flex flex-col overflow-hidden font-sans text-foreground/90">
       {/* Finder Modal Layer */}
-      <FinderModal 
-        isOpen={isFinderOpen} 
-        onOpenChange={setIsFinderOpen} 
-        data={navigationData[0]?.children || []} 
+      <FinderModal
+        isOpen={isFinderOpen}
+        onOpenChange={setIsFinderOpen}
+        data={navigationData[0]?.children || []}
         onSelect={handleNodeSelect}
         onContextChange={handleContextChange}
         currentContext={drillContext}
@@ -148,7 +148,7 @@ export function AppShell() {
         onClose={() => setIsDetailPanelOpen(false)}
         initialTab={detailPanelTab}
       />
-      
+
       {/* Global Header */}
       <GlobalHeader breadcrumb={breadcrumb} />
 
@@ -179,8 +179,8 @@ export function AppShell() {
             onClick={() => setIsNavCollapsed(!isNavCollapsed)}
             className={cn(
               "absolute top-[22px] h-8 w-4 rounded-r border border-l-0 border-border bg-background/90 backdrop-blur-sm shadow-sm hover:bg-muted hover:w-5 transition-all duration-300 group flex items-center justify-center",
-              isNavCollapsed 
-                ? "left-0" 
+              isNavCollapsed
+                ? "left-0"
                 : "-left-px"
             )}
             title={isNavCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
@@ -212,7 +212,7 @@ export function AppShell() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   {viewOptions.map((view) => {
                     const IconComponent = view.icon;
                     return (
@@ -220,7 +220,7 @@ export function AppShell() {
                         key={view.id}
                         variant="outline"
                         size="icon"
-                        className="h-8 w-8 rounded-lg border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-900 transition-all font-medium text-xs whitespace-nowrap"
+                        className="h-9 w-9 rounded-lg border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-900 transition-all"
                         title={view.label}
                       >
                         <IconComponent className="h-4 w-4" />
