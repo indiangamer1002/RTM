@@ -7,6 +7,8 @@ export type TestStatus = 'New' | 'Active' | 'performed' | 'approved' | 'Defect f
 export type ExecutionResult = 'Pass' | 'Fail' | 'Blocked' | 'Not Run';
 export type IssueSeverity = 'Critical' | 'High' | 'Medium' | 'Low';
 export type SignOffStatus = 'New' | 'Active' | 'Approved' | 'Rejected' | 'Completed';
+export type CTAStatus = 'New' | 'Active' | 'Completed' | 'Pending';
+export type MeetingStatus = 'Scheduled' | 'Completed' | 'Cancelled' | 'Pending';
 
 export interface NavigationNode {
   id: string;
@@ -22,6 +24,7 @@ export interface Task {
   status: 'New' | 'Active' | 'Completed' | 'Approved';
   assignee: string;
   dueDate: string;
+  priority: Priority;
 }
 
 export interface TestCase {
@@ -31,6 +34,9 @@ export interface TestCase {
   executionResult?: ExecutionResult;
   lastRun?: string;
   tester?: string;
+  assignee: string;
+  dueDate: string;
+  priority: Priority;
 }
 
 export interface Issue {
@@ -39,6 +45,7 @@ export interface Issue {
   severity: IssueSeverity;
   status: 'New' | 'Active' | 'Resolved' | 'Approved';
   assignee: string;
+  dueDate: string;
 }
 
 export interface SignOff {
@@ -47,6 +54,28 @@ export interface SignOff {
   stakeholder: string;
   status: SignOffStatus;
   date?: string;
+  dueDate: string;
+  priority: Priority;
+}
+
+export interface CTA {
+  id: string;
+  title: string;
+  status: CTAStatus;
+  assignee: string;
+  dueDate: string;
+  priority: Priority;
+}
+
+export interface Meeting {
+  id: string;
+  title: string;
+  status: MeetingStatus;
+  organizer: string;
+  attendees: string[];
+  date: string;
+  dueDate: string; // Used for "Planned to" consistency
+  priority: Priority;
 }
 
 export interface AuditEntry {
@@ -84,13 +113,19 @@ export interface Requirement {
   priority: Priority;
   status: RequirementStatus;
   scopeId: string;
+  scope: string;
   processId: string;
+  businessProcess: string;
+  dueDate?: string;
+  approver: string;
 
   // Traceability links
   tasks: Task[];
   testCases: TestCase[];
   issues: Issue[];
   signOffs: SignOff[];
+  ctas: CTA[];
+  meetings: Meeting[];
 
   // Resources
   documents: Document[];
@@ -101,6 +136,7 @@ export interface Requirement {
 
   // Metadata
   createdAt: string;
+  createdBy: string;
   updatedAt: string;
   lastUpdatedBy: string;
 }
