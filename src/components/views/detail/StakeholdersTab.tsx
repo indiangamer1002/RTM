@@ -105,18 +105,18 @@ export const StakeholdersTab = ({ requirementId }: StakeholdersTabProps) => {
 
   return (
     <div className="w-full h-full px-6 py-4">
-      {/* Header Actions */}
+      {/* Header */}
       <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-lg font-semibold tracking-tight flex items-center gap-2">
-                Team & Governance 
-                <Badge variant="outline" className="ml-1 bg-slate-50">{data.stakeholders.length} Members</Badge>
+                Stakeholders 
+                <Badge variant="outline" className="ml-1">{data.stakeholders.length}</Badge>
             </h2>
-            <p className="text-sm text-muted-foreground">Manage ownership, reviews, and sign-offs.</p>
+            <p className="text-sm text-muted-foreground">Team members and their responsibilities</p>
           </div>
           
           <div className="flex items-center gap-2">
-              <div className="border rounded-md p-1 bg-slate-50 mr-2 hidden sm:block">
+              <div className="border rounded-md p-1 bg-muted/30 mr-2 hidden sm:block">
                   <ToggleGroup type="single" value={viewMode} onValueChange={(v) => v && setViewMode(v as 'grid'|'list')}>
                       <ToggleGroupItem value="grid" size="sm" className="h-7 px-2"><LayoutGrid className="h-3.5 w-3.5"/></ToggleGroupItem>
                       <ToggleGroupItem value="list" size="sm" className="h-7 px-2"><ListIcon className="h-3.5 w-3.5"/></ToggleGroupItem>
@@ -147,7 +147,7 @@ export const StakeholdersTab = ({ requirementId }: StakeholdersTabProps) => {
               />
           </div>
 
-          {/* Right Sidebar - Widgets */}
+          {/* Right Sidebar */}
           <div className="xl:col-span-1 space-y-6">
               {/* Approval Workflow Widget */}
               {data.approvalWorkflow && (

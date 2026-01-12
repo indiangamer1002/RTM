@@ -155,7 +155,7 @@ export const AttachmentsList = ({ attachments, onUpload, onDelete }: Attachments
                 </div>
               </div>
               
-              <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+              <div className="flex items-center gap-1">
                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary">
                    <Eye className="h-4 w-4" />
                  </Button>

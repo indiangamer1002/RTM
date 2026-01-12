@@ -113,6 +113,9 @@ export const DiscussionsPanel = ({ requirementId }: DiscussionsPanelProps) => {
           </Button>
         </div>
       </div>
+      
+      {/* Bottom spacing */}
+      <div className="h-1"></div>
     </div>
   );
 };

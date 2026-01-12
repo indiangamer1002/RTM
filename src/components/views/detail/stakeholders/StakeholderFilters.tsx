@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from '@/components/ui/badge';
 
 interface StakeholderFiltersProps {
   onSearchChange: (value: string) => void;

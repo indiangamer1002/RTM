@@ -1,23 +1,20 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { 
     KnowledgeBase, 
-    KnowledgeBaseContent, 
-    Attachment 
+    KnowledgeBaseContent 
 } from '@/types/knowledgeBase.types';
 import { knowledgeBaseService } from '@/services/knowledgeBaseService';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { 
-    Loader2, Save, PenLine, Printer, Download, Share2, Undo, 
-    FileText, BookOpen, ExternalLink, Code, Navigation, ArrowRight, 
-    Search, GitBranch, ArrowUp, ArrowDown, Table 
+    Loader2, Save, PenLine, Download, Share2, Undo, 
+    FileText, BookOpen, ExternalLink, Code
 } from 'lucide-react';
 import { RichTextEditor } from './knowledge-base/RichTextEditor';
 import { StructuredPanels } from './knowledge-base/StructuredPanels';
 import { AttachmentsList } from './knowledge-base/AttachmentsList';
 import { MetadataPanel, ChangeLogPanel } from './knowledge-base/ChangeLogPanel';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { 
     Accordion, 
@@ -204,13 +201,14 @@ export const KnowledgeBaseTab = ({ requirementId }: KnowledgeBaseTabProps) => {
                           <div className="space-y-3">
                             <h4 className="font-medium text-sm">REQ-001 Scope</h4>
                             <p className="text-sm text-muted-foreground leading-relaxed">
-                              Implementation of scalable navigation for Process Explorer (Focus Drill sidebar + Context Finder overlay) 
-                              to handle deep hierarchies without scrolling fatigue.
+                              Implementation of calendar integration functionality to synchronize events between 
+                              the application and Outlook calendar system, ensuring seamless event management.
                             </p>
                             <div className="bg-muted/30 p-3 rounded-md">
                               <p className="text-xs text-muted-foreground">
-                                <strong>Goal:</strong> Enable users to navigate complex process hierarchies efficiently through 
-                                two complementary navigation patterns that reduce cognitive load and improve discoverability.
+                                <strong>Goal:</strong> Enable users to create, update, and manage calendar events 
+                                that automatically sync with their Outlook calendar, preventing conflicts and 
+                                ensuring consistent scheduling across platforms.
                               </p>
                             </div>
                           </div>
@@ -228,86 +226,43 @@ export const KnowledgeBaseTab = ({ requirementId }: KnowledgeBaseTabProps) => {
                         <AccordionContent className="px-4 pb-4">
                           <div className="space-y-4">
                             <div>
-                              <h4 className="font-medium text-sm mb-2">Design System Guidelines</h4>
+                              <h4 className="font-medium text-sm mb-2">API Documentation</h4>
                               <div className="space-y-2">
                                 <Button variant="outline" size="sm" className="w-full justify-start h-8">
                                   <ExternalLink className="h-3 w-3 mr-2" />
-                                  Storybook - Sidebar Components
+                                  Outlook Calendar API Reference
                                 </Button>
                                 <Button variant="outline" size="sm" className="w-full justify-start h-8">
                                   <ExternalLink className="h-3 w-3 mr-2" />
-                                  Storybook - Modal Patterns
+                                  Microsoft Graph API Documentation
                                 </Button>
                                 <Button variant="outline" size="sm" className="w-full justify-start h-8">
                                   <ExternalLink className="h-3 w-3 mr-2" />
-                                  Miller Columns Reference
+                                  Authentication & Authorization Guide
                                 </Button>
                               </div>
                             </div>
                             
                             <div>
-                              <h4 className="font-medium text-sm mb-2">SAP Process Explorer Reference</h4>
+                              <h4 className="font-medium text-sm mb-2">Technical Specifications</h4>
                               <Button variant="outline" size="sm" className="w-full justify-start h-8">
                                 <ExternalLink className="h-3 w-3 mr-2" />
-                                SAP Signavio Navigation Patterns
+                                Calendar Integration Architecture
                               </Button>
                             </div>
 
                             <div>
-                              <h4 className="font-medium text-sm mb-2">Prototypes</h4>
+                              <h4 className="font-medium text-sm mb-2">Testing Resources</h4>
                               <div className="space-y-2">
                                 <Button variant="outline" size="sm" className="w-full justify-start h-8">
                                   <Code className="h-3 w-3 mr-2" />
-                                  Context Finder Demo
+                                  Integration Test Suite
                                 </Button>
                                 <Button variant="outline" size="sm" className="w-full justify-start h-8">
                                   <Code className="h-3 w-3 mr-2" />
-                                  Focus Drill Demo
+                                  API Mock Server
                                 </Button>
                               </div>
-                            </div>
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-
-                      {/* Navigation Tips Section */}
-                      <AccordionItem value="navigation" className="border-b border-border">
-                        <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50">
-                          <div className="flex items-center gap-2">
-                            <Navigation className="h-4 w-4 text-primary" />
-                            <span className="font-medium">Navigation Concepts</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-4 pb-4">
-                          <div className="space-y-4">
-                            <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-md border border-blue-200 dark:border-blue-800">
-                              <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                                <ArrowRight className="h-3 w-3" />
-                                Focus Drill
-                              </h4>
-                              <p className="text-xs text-muted-foreground mb-2">
-                                Sidebar shows one level at a time; Back button + breadcrumb for casual browsing
-                              </p>
-                              <ul className="text-xs text-muted-foreground space-y-1 ml-4">
-                                <li>• Reduces cognitive load by showing only relevant context</li>
-                                <li>• Breadcrumb navigation for quick backtracking</li>
-                                <li>• Ideal for focused, task-oriented exploration</li>
-                              </ul>
-                            </div>
-
-                            <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded-md border border-green-200 dark:border-green-800">
-                              <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                                <Search className="h-3 w-3" />
-                                Context Finder
-                              </h4>
-                              <p className="text-xs text-muted-foreground mb-2">
-                                Large overlay with 3–4 Miller columns for visual exploration of 20+ deep structures
-                              </p>
-                              <ul className="text-xs text-muted-foreground space-y-1 ml-4">
-                                <li>• Multi-column view for exploring relationships</li>
-                                <li>• Handles deep hierarchies without scrolling fatigue</li>
-                                <li>• Visual overview of entire process structure</li>
-                              </ul>
                             </div>
                           </div>
                         </AccordionContent>
@@ -317,40 +272,34 @@ export const KnowledgeBaseTab = ({ requirementId }: KnowledgeBaseTabProps) => {
                       <AccordionItem value="related" className="border-0">
                         <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50">
                           <div className="flex items-center gap-2">
-                            <GitBranch className="h-4 w-4 text-primary" />
-                            <span className="font-medium">Related Processes</span>
+                            <BookOpen className="h-4 w-4 text-primary" />
+                            <span className="font-medium">Related Documentation</span>
                           </div>
                         </AccordionTrigger>
                         <AccordionContent className="px-4 pb-4">
                           <div className="space-y-4">
                             <div>
-                              <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                                <ArrowUp className="h-3 w-3 text-orange-500" />
-                                Upstream Dependencies
-                              </h4>
-                              <div className="bg-orange-50 dark:bg-orange-950/20 p-3 rounded-md border border-orange-200 dark:border-orange-800">
+                              <h4 className="font-medium text-sm mb-2">Related Requirements</h4>
+                              <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-md border border-blue-200 dark:border-blue-800">
                                 <Button variant="ghost" size="sm" className="w-full justify-start h-8 p-2">
                                   <FileText className="h-3 w-3 mr-2" />
-                                  REQ-002: Process Hierarchy Data Model
+                                  REQ-002: User Authentication System
                                 </Button>
                                 <p className="text-xs text-muted-foreground mt-1 px-2">
-                                  Defines the data structure and API contracts for hierarchical process data
+                                  Defines authentication requirements for accessing external calendar services
                                 </p>
                               </div>
                             </div>
 
                             <div>
-                              <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                                <ArrowDown className="h-3 w-3 text-blue-500" />
-                                Downstream Dependencies
-                              </h4>
-                              <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-md border border-blue-200 dark:border-blue-800">
+                              <h4 className="font-medium text-sm mb-2">Implementation Dependencies</h4>
+                              <div className="bg-orange-50 dark:bg-orange-950/20 p-3 rounded-md border border-orange-200 dark:border-orange-800">
                                 <Button variant="ghost" size="sm" className="w-full justify-start h-8 p-2">
-                                  <Table className="h-3 w-3 mr-2" />
-                                  REQ-003: Main Content Table Updates
+                                  <FileText className="h-3 w-3 mr-2" />
+                                  REQ-003: Event Management Interface
                                 </Button>
                                 <p className="text-xs text-muted-foreground mt-1 px-2">
-                                  Updates to the main content area to integrate with new navigation patterns
+                                  UI components and workflows for managing calendar events within the application
                                 </p>
                               </div>
                             </div>

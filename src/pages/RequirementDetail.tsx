@@ -10,6 +10,7 @@ import { DiscussionsPanel } from '@/components/rtm/DiscussionsPanel';
 import { OverviewTab } from '@/components/rtm/OverviewTab';
 import { KnowledgeBaseTab } from '@/components/views/detail/KnowledgeBaseTab';
 import { StakeholdersTab } from '@/components/views/detail/StakeholdersTab';
+import { cn } from '@/lib/utils';
 
 const RequirementDetail = () => {
   const navigate = useNavigate();
@@ -49,24 +50,27 @@ const RequirementDetail = () => {
       {/* Fixed Header */}
       <div className="flex-none bg-background z-30 border-b border-border">
           {/* Main Header */}
-          <header className="h-14 flex items-center justify-between px-4 lg:pr-[360px]">
-            {/* Left: Back Button */}
-            <div className="flex items-center gap-6">
+          <header className="h-14 flex items-center justify-between px-4 lg:pr-4">
+            {/* Left: Back Button and Breadcrumb */}
+            <div className="flex items-center gap-4 flex-1 min-w-0">
               <Button 
                 onClick={() => navigate(-1)}
                 variant="ghost"
-                className="h-9 px-2 text-primary hover:text-primary/80 hover:bg-transparent"
+                className="h-9 px-2 text-primary hover:text-primary/80 hover:bg-transparent flex-shrink-0"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
 
               {/* Breadcrumb */}
-              <nav className="hidden md:flex items-center text-sm">
+              <nav className="hidden md:flex items-center text-sm min-w-0">
                 {breadcrumb.map((item, index) => (
                   <span key={index} className="flex items-center">
-                    {index > 0 && <span className="breadcrumb-separator">/</span>}
-                    <span className={index === breadcrumb.length - 1 ? 'text-foreground font-medium' : 'breadcrumb-item cursor-pointer'}>
+                    {index > 0 && <span className="breadcrumb-separator mx-1">/</span>}
+                    <span className={cn(
+                      "truncate",
+                      index === breadcrumb.length - 1 ? 'text-foreground font-medium' : 'breadcrumb-item cursor-pointer'
+                    )}>
                       {item}
                     </span>
                   </span>
@@ -74,11 +78,8 @@ const RequirementDetail = () => {
               </nav>
             </div>
 
-            {/* Center: Empty space */}
-            <div className="flex-1 max-w-lg mx-8 hidden lg:block" />
-
             {/* Right: Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-shrink-0">
               <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
                 <Settings className="h-4 w-4" />
               </Button>
@@ -256,7 +257,7 @@ const RequirementDetail = () => {
       </div>
 
       {/* Main Content Area - Scrollable */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden bg-background lg:pr-[350px]">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden bg-background lg:pr-[350px] pb-6">
         <div className="w-full h-full">
            {activeTab === 'Overview' && <OverviewTab requirementId="13061" />}
            {activeTab === 'Knowledge base' && <KnowledgeBaseTab requirementId="13061" />}
