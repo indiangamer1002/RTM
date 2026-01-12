@@ -10,6 +10,8 @@ import { OverviewTab } from '@/components/rtm/OverviewTab';
 import { LinksTab } from '@/components/rtm/LinksTab';
 import { FilesTab } from '@/components/rtm/FilesTab';
 import { DiscussionsPanel } from '@/components/rtm/DiscussionsPanel';
+import { KnowledgeBaseTab } from '@/components/views/detail/KnowledgeBaseTab';
+import { StakeholdersTab } from '@/components/views/detail/StakeholdersTab';
 
 const RequirementDetail = () => {
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ const RequirementDetail = () => {
         <header className="h-14 bg-background border-b border-border flex items-center justify-between px-4">
           {/* Left: Back Button */}
           <div className="flex items-center gap-6">
-            <Button 
+            <Button
               onClick={() => navigate(-1)}
               variant="ghost"
               className="h-9 px-2 text-primary hover:text-primary/80 hover:bg-transparent"
@@ -113,12 +115,12 @@ const RequirementDetail = () => {
             <div className="px-4 pt-3 pb-0 flex-shrink-0">
               {/* ID and Title Row */}
               <div className="flex items-center gap-2 mb-2">
-                <span className="!text-[17px] !font-normal text-foreground" style={{fontSize: '17px', fontWeight: '400'}}>13061</span>
+                <span className="!text-[17px] !font-normal text-foreground" style={{ fontSize: '17px', fontWeight: '400' }}>13061</span>
                 <Input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="flex-1 h-auto px-2 py-1 !text-[17px] !font-normal border-transparent bg-transparent hover:border-border focus:border-border transition-colors"
-                  style={{fontSize: '17px', fontWeight: '400'}}
+                  style={{ fontSize: '17px', fontWeight: '400' }}
                   placeholder="Enter requirement title"
                 />
                 <Button
@@ -130,7 +132,7 @@ const RequirementDetail = () => {
                   <Copy className="h-3 w-3" />
                 </Button>
               </div>
-              
+
               {/* Second Row */}
               <div className="flex items-center justify-between gap-3 mb-3">
                 <div className="flex items-center gap-4">
@@ -164,7 +166,7 @@ const RequirementDetail = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                  
+
                   {/* Tags */}
                   <div className="flex items-center gap-1 flex-nowrap">
                     {tags.map((tag, index) => (
@@ -179,7 +181,7 @@ const RequirementDetail = () => {
                     </Button>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   {/* Save Button */}
                   <Button
@@ -188,14 +190,14 @@ const RequirementDetail = () => {
                   >
                     Save
                   </Button>
-                  
+
                   {/* More Options */}
                   <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
-              
+
               {/* Third Row with Tab Bar */}
               <div className="mt-2 p-2 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-6 mb-3">
@@ -233,7 +235,7 @@ const RequirementDetail = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   {/* Process */}
                   <div className="flex items-center gap-2">
                     <label className="text-xs font-medium text-muted-foreground min-w-fit">Process</label>
@@ -248,7 +250,7 @@ const RequirementDetail = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   {/* Group */}
                   <div className="flex items-center gap-2">
                     <label className="text-xs font-medium text-muted-foreground min-w-fit">Group</label>
@@ -264,7 +266,7 @@ const RequirementDetail = () => {
                     </Select>
                   </div>
                 </div>
-                
+
                 {/* Tab Bar */}
                 <div className="border-b border-gray-300">
                   <div className="flex gap-0">
@@ -273,11 +275,10 @@ const RequirementDetail = () => {
                         key={tab}
                         variant="ghost"
                         onClick={() => setActiveTab(tab)}
-                        className={`px-3 py-2 text-[14px] font-normal rounded-none border-b-2 transition-colors !bg-transparent hover:!bg-transparent ${
-                          activeTab === tab
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-muted-foreground hover:text-foreground'
-                        }`}
+                        className={`px-3 py-2 text-[14px] font-normal rounded-none border-b-2 transition-colors !bg-transparent hover:!bg-transparent ${activeTab === tab
+                          ? 'border-primary text-primary'
+                          : 'border-transparent text-muted-foreground hover:text-foreground'
+                          }`}
                       >
                         {tab}
                       </Button>
@@ -287,22 +288,33 @@ const RequirementDetail = () => {
               </div>
             </div>
             {/* Tab Content with Discussions Panel */}
-            <div className="flex" style={{height: 'calc(100vh - 280px)'}}>
+            <div className="flex" style={{ height: 'calc(100vh - 280px)' }}>
               {/* Main Tab Content - 75% */}
               <div className="flex-1 w-[75%] overflow-y-auto">
                 {activeTab === 'Overview' ? (
                   <OverviewTab requirementId="13061" />
+                ) : activeTab === 'Knowledge base' ? (
+                  <KnowledgeBaseTab requirementId="13061" />
+                ) : activeTab === 'Stakeholders' ? (
+                  <StakeholdersTab requirementId="13061" />
                 ) : activeTab === 'Links' ? (
                   <LinksTab requirementId="13061" />
                 ) : activeTab === 'Files' ? (
                   <FilesTab requirementId="13061" />
+                ) : activeTab === 'History' ? (
+                  <div className="flex items-center justify-center p-8">
+                    <div className="text-center">
+                      <span className="text-lg font-semibold text-foreground mb-2 block">History</span>
+                      <span className="text-sm text-muted-foreground">Audit trail and change history coming soon</span>
+                    </div>
+                  </div>
                 ) : (
                   <div className="flex items-center justify-center p-8">
                     <span className="text-lg text-muted-foreground">{activeTab} Content</span>
                   </div>
                 )}
               </div>
-              
+
               {/* Discussions Panel - 25% */}
               <div className="w-[25%] flex-shrink-0 h-full overflow-y-auto">
                 <DiscussionsPanel requirementId="13061" />
