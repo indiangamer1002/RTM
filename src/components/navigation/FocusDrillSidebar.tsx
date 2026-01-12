@@ -103,26 +103,10 @@ export function FocusDrillSidebar({
     <TooltipProvider>
       <div className="flex flex-col h-full bg-sidebar-background/40 backdrop-blur-md overflow-hidden border-r border-sidebar-border relative">
         {/* Static Sidebar Title - Always visible */}
-        <div className="px-4 pt-4 pb-2 shrink-0">
+        <div className="px-4 pt-4 shrink-0">
           <h2 className="text-[15px] font-bold text-foreground/90 tracking-tight flex items-center gap-2 mb-3">
             Process Explorer
           </h2>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="w-full h-8 bg-muted/40 p-0.5 rounded-md">
-              <TabsTrigger value="process" className="flex-1 text-[10px] h-7 data-[state=active]:bg-background data-[state=active]:shadow-sm">
-                <Layout className="h-3 w-3 mr-1" />
-                Process
-              </TabsTrigger>
-              <TabsTrigger value="org" className="flex-1 text-[10px] h-7 data-[state=active]:bg-background data-[state=active]:shadow-sm">
-                <Users className="h-3 w-3 mr-1" />
-                Org
-              </TabsTrigger>
-              <TabsTrigger value="tech" className="flex-1 text-[10px] h-7 data-[state=active]:bg-background data-[state=active]:shadow-sm">
-                <Settings className="h-3 w-3 mr-1" />
-                Tech
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
         </div>
 
         {/* Unified Interactive Header - Only visible when drilled down */}
