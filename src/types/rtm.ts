@@ -120,6 +120,20 @@ export interface Requirement {
   dueDate?: string;
   approver: string;
 
+  // New filter fields
+  lifecyclePhase: 'identify' | 'analyze' | 'document' | 'approve' | 'design' | 'build' | 'test' | 'release' | 'support';
+  approvalStatus: 'pending' | 'approved' | 'rejected' | 'deferred' | 'baseline';
+  solutionType: 'configuration' | 'custom-dev' | 'enhancement' | 'integration' | 'workflow';
+  traceabilityStatus: 'fully-traced' | 'partially-traced' | 'missing-design' | 'missing-build' | 'missing-test' | 'missing-release';
+  releaseVersion: 'rel-1.0' | 'rel-1.1' | 'hotfix' | 'future' | 'not-released';
+  owner: 'business' | 'product' | 'functional' | 'technical' | 'qa';
+  complianceCategory: 'sox' | 'gdpr' | 'iso' | 'internal-policy' | 'customer-contract' | 'not-applicable';
+  riskLevel: 'high' | 'medium' | 'low' | 'none';
+  changeImpact: 'changed-after-approval' | 'has-open-cr' | 'versioned' | 'retired' | 'none';
+  stageStatus: 'not-started' | 'in-progress' | 'blocked' | 'completed' | 'failed' | 'deferred';
+  sprintCycle: 'sprint-1' | 'sprint-2' | 'sprint-3' | 'backlog' | 'unassigned';
+  tags: string[];
+
   // Traceability links
   tasks: Task[];
   testCases: TestCase[];

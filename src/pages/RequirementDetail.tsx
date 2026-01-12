@@ -13,6 +13,7 @@ import { DiscussionsPanel } from '@/components/rtm/DiscussionsPanel';
 import { KnowledgeBaseTab } from '@/components/views/detail/KnowledgeBaseTab';
 import { StakeholdersTab } from '@/components/views/detail/StakeholdersTab';
 import HistoryTab from '@/components/rtm/HistoryTab';
+import { requirementsData } from '@/data/mockData';
 
 const RequirementDetail = () => {
   const navigate = useNavigate();
@@ -25,6 +26,9 @@ const RequirementDetail = () => {
   const [activeTab, setActiveTab] = useState('Overview');
   const tabs = ['Overview', 'Knowledge base', 'Stakeholders', 'Links', 'History', 'Files'];
   const [tags, setTags] = useState(['High Priority', 'Calendar', 'Integration']);
+  
+  // Get requirement data for REQ-001
+  const currentRequirement = requirementsData.find(req => req.reqId === 'REQ-001');
   const removeTag = (tagToRemove) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
@@ -193,9 +197,9 @@ const RequirementDetail = () => {
                   </Button>
 
                   {/* More Options */}
-                  <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
+                  {/* <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
                     <MoreVertical className="h-4 w-4" />
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
 

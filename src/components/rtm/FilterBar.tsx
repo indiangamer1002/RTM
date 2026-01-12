@@ -42,19 +42,37 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
       label: 'Requirement ID / Title',
       options: [],
       isPinned: true,
-      width: '200px'
+      width: '220px'
     },
     {
-      id: 'tags',
-      label: 'Tags',
+      id: 'lifecycle-phase',
+      label: 'Lifecycle Stage',
       options: [
-        { value: 'security', label: 'Security', count: 15 },
-        { value: 'performance', label: 'Performance', count: 8 },
-        { value: 'ui-ux', label: 'UI/UX', count: 12 },
-        { value: 'integration', label: 'Integration', count: 6 }
+        { value: 'identify', label: 'Identify', count: 23 },
+        { value: 'analyze', label: 'Analyze', count: 45 },
+        { value: 'document', label: 'Document', count: 67 },
+        { value: 'approve', label: 'Approve', count: 34 },
+        { value: 'design', label: 'Design', count: 56 },
+        { value: 'build', label: 'Build', count: 78 },
+        { value: 'test', label: 'Test', count: 43 },
+        { value: 'release', label: 'Release', count: 21 },
+        { value: 'support', label: 'Support / Retired', count: 12 }
       ],
       isPinned: true,
-      width: '140px'
+      width: '190px'
+    },
+    {
+      id: 'approval-status',
+      label: 'Approval Status',
+      options: [
+        { value: 'pending', label: 'Pending Approval', count: 34 },
+        { value: 'approved', label: 'Approved', count: 234 },
+        { value: 'rejected', label: 'Rejected', count: 12 },
+        { value: 'deferred', label: 'Deferred', count: 8 },
+        { value: 'baseline', label: 'Baseline Created', count: 156 }
+      ],
+      isPinned: true,
+      width: '170px'
     },
     {
       id: 'requirement-type',
@@ -68,7 +86,125 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
         { value: 'change-request', label: 'Change Request', count: 34 }
       ],
       isPinned: true,
+      width: '190px'
+    },
+    {
+      id: 'implementation-type',
+      label: 'Solution Type',
+      options: [
+        { value: 'configuration', label: 'Configuration', count: 67 },
+        { value: 'custom-dev', label: 'Custom Development', count: 123 },
+        { value: 'enhancement', label: 'Enhancement', count: 45 },
+        { value: 'integration', label: 'Integration', count: 34 },
+        { value: 'workflow', label: 'Workflow', count: 23 }
+      ],
+      isPinned: false,
       width: '180px'
+    },
+    {
+      id: 'traceability-status',
+      label: 'Traceability Status',
+      options: [
+        { value: 'fully-traced', label: 'Fully Traced', count: 145 },
+        { value: 'partially-traced', label: 'Partially Traced', count: 78 },
+        { value: 'missing-design', label: 'Missing Design Mapping', count: 21 },
+        { value: 'missing-build', label: 'Missing Development Mapping', count: 34 },
+        { value: 'missing-test', label: 'Missing Test Cases', count: 29 },
+        { value: 'missing-release', label: 'Missing Release Mapping', count: 17 }
+      ],
+      isPinned: false,
+      width: '200px'
+    },
+    {
+      id: 'release-version',
+      label: 'Release Version',
+      options: [
+        { value: 'rel-1.0', label: 'Release 1.0', count: 56 },
+        { value: 'rel-1.1', label: 'Release 1.1', count: 78 },
+        { value: 'hotfix', label: 'Hotfix', count: 14 },
+        { value: 'future', label: 'Future Release', count: 92 },
+        { value: 'not-released', label: 'Not Released', count: 121 }
+      ],
+      isPinned: false,
+      width: '170px'
+    },
+    {
+      id: 'owner',
+      label: 'Owner / Responsible',
+      options: [
+        { value: 'business', label: 'Business Owner', count: 48 },
+        { value: 'product', label: 'Product Owner', count: 62 },
+        { value: 'functional', label: 'Functional Consultant', count: 97 },
+        { value: 'technical', label: 'Developer', count: 134 },
+        { value: 'qa', label: 'Tester', count: 59 }
+      ],
+      isPinned: false,
+      width: '190px'
+    },
+    {
+      id: 'compliance-category',
+      label: 'Compliance Category',
+      options: [
+        { value: 'sox', label: 'SOX', count: 18 },
+        { value: 'gdpr', label: 'GDPR', count: 26 },
+        { value: 'iso', label: 'ISO', count: 14 },
+        { value: 'internal-policy', label: 'Internal Policy', count: 33 },
+        { value: 'customer-contract', label: 'Customer Contract', count: 21 },
+        { value: 'not-applicable', label: 'Not Applicable', count: 176 }
+      ],
+      isPinned: false,
+      width: '190px'
+    },
+    {
+      id: 'risk-level',
+      label: 'Risk Level',
+      options: [
+        { value: 'high', label: 'High Risk', count: 19 },
+        { value: 'medium', label: 'Medium Risk', count: 48 },
+        { value: 'low', label: 'Low Risk', count: 112 },
+        { value: 'none', label: 'No Risk Identified', count: 137 }
+      ],
+      isPinned: false,
+      width: '150px'
+    },
+    {
+      id: 'change-impact',
+      label: 'Change Impact',
+      options: [
+        { value: 'changed-after-approval', label: 'Changed After Approval', count: 23 },
+        { value: 'has-open-cr', label: 'Has Open Change Request', count: 41 },
+        { value: 'versioned', label: 'Version > 1.0', count: 67 },
+        { value: 'retired', label: 'Retired Requirement', count: 12 }
+      ],
+      isPinned: false,
+      width: '180px'
+    },
+    {
+      id: 'lifecycle-status',
+      label: 'Stage Status',
+      options: [
+        { value: 'not-started', label: 'Not Started', count: 45 },
+        { value: 'in-progress', label: 'In Progress', count: 123 },
+        { value: 'blocked', label: 'Blocked', count: 18 },
+        { value: 'completed', label: 'Completed', count: 167 },
+        { value: 'failed', label: 'Failed', count: 8 },
+        { value: 'deferred', label: 'Deferred', count: 23 }
+      ],
+      isPinned: false,
+      width: '160px'
+    },
+    {
+      id: 'iteration',
+      label: 'Sprint / Release Cycle',
+      options: [
+        { value: 'sprint-1', label: 'Sprint 1', count: 45 },
+        { value: 'sprint-2', label: 'Sprint 2', count: 67 },
+        { value: 'sprint-3', label: 'Sprint 3', count: 34 },
+        { value: 'backlog', label: 'Backlog', count: 123 },
+        { value: 'unassigned', label: 'Unassigned', count: 78 }
+      ],
+      isPinned: false,
+      width: '160px'
     },
     {
       id: 'priority',
@@ -79,78 +215,20 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
         { value: 'medium', label: 'Medium', count: 156 },
         { value: 'low', label: 'Low', count: 94 }
       ],
-      isPinned: true,
-      width: '140px'
+      isPinned: false,
+      width: '150px'
     },
     {
-      id: 'lifecycle-phase',
-      label: 'Current Lifecycle Phase',
+      id: 'tags',
+      label: 'Tags',
       options: [
-        { value: 'identify', label: 'Identify', count: 23 },
-        { value: 'analyze', label: 'Analyze', count: 45 },
-        { value: 'document', label: 'Document', count: 67 },
-        { value: 'approve', label: 'Approve', count: 34 },
-        { value: 'design', label: 'Design', count: 56 },
-        { value: 'build', label: 'Build', count: 78 },
-        { value: 'test', label: 'Test', count: 43 },
-        { value: 'release', label: 'Release', count: 21 },
-        { value: 'support', label: 'Support / Retired', count: 12 }
+        { value: 'security', label: 'Security', count: 15 },
+        { value: 'performance', label: 'Performance', count: 8 },
+        { value: 'ui-ux', label: 'UI/UX', count: 12 },
+        { value: 'integration', label: 'Integration', count: 6 }
       ],
       isPinned: false,
-      width: '180px'
-    },
-    {
-      id: 'lifecycle-status',
-      label: 'Lifecycle Status',
-      options: [
-        { value: 'not-started', label: 'Not Started', count: 45 },
-        { value: 'in-progress', label: 'In Progress', count: 123 },
-        { value: 'blocked', label: 'Blocked', count: 18 },
-        { value: 'completed', label: 'Completed', count: 167 },
-        { value: 'failed', label: 'Failed', count: 8 },
-        { value: 'deferred', label: 'Deferred', count: 23 }
-      ],
-      isPinned: false,
-      width: '140px'
-    },
-    {
-      id: 'approval-status',
-      label: 'Approval Status',
-      options: [
-        { value: 'pending', label: 'Pending Approval', count: 34 },
-        { value: 'approved', label: 'Approved', count: 234 },
-        { value: 'rejected', label: 'Rejected', count: 12 },
-        { value: 'deferred', label: 'Deferred', count: 8 },
-        { value: 'baseline', label: 'Baseline Created', count: 156 }
-      ],
-      isPinned: false,
-      width: '160px'
-    },
-    {
-      id: 'iteration',
-      label: 'Iteration / Sprint',
-      options: [
-        { value: 'sprint-1', label: 'Sprint 1', count: 45 },
-        { value: 'sprint-2', label: 'Sprint 2', count: 67 },
-        { value: 'sprint-3', label: 'Sprint 3', count: 34 },
-        { value: 'backlog', label: 'Backlog', count: 123 },
-        { value: 'unassigned', label: 'Unassigned', count: 78 }
-      ],
-      isPinned: false,
-      width: '140px'
-    },
-    {
-      id: 'implementation-type',
-      label: 'Implementation Type',
-      options: [
-        { value: 'configuration', label: 'Configuration', count: 67 },
-        { value: 'custom-dev', label: 'Custom Development', count: 123 },
-        { value: 'enhancement', label: 'Enhancement', count: 45 },
-        { value: 'integration', label: 'Integration', count: 34 },
-        { value: 'workflow', label: 'Workflow', count: 23 }
-      ],
-      isPinned: false,
-      width: '160px'
+      width: '150px'
     }
   ]);
 
@@ -429,12 +507,21 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
 
           {/* Right: Action Buttons */}
           <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Refresh">
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+
+            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Advanced Filters">
+              <Filter className="h-4 w-4" />
+            </Button>
+
+            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Import">
+              <Upload className="h-4 w-4" />
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 gap-2 border border-muted-foreground/20 hover:border-muted-foreground/40">
+                <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Export">
                   <Download className="h-4 w-4" />
-                  Export
-                  <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -450,12 +537,6 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
                   <Download className="h-3 w-3 mr-2" />
                   Export to PDF
                 </DropdownMenuItem>
-                <div className="border-t border-border mt-1 pt-1">
-                  <DropdownMenuItem>
-                    <Upload className="h-3 w-3 mr-2" />
-                    Import Data
-                  </DropdownMenuItem>
-                </div>
               </DropdownMenuContent>
             </DropdownMenu>
 

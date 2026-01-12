@@ -20,60 +20,60 @@ interface FileItem {
 
 interface FilesTabProps {
   requirementId: string;
+  documents?: Array<{
+    id: string;
+    name: string;
+    type: string;
+    size: string;
+    uploadedBy: string;
+    uploadedAt: string;
+  }>;
 }
 
-export const FilesTab = ({ requirementId }: FilesTabProps) => {
+export const FilesTab = ({ requirementId, documents = [] }: FilesTabProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [files, setFiles] = useState<FileItem[]>([
-    {
-      id: '1',
-      name: 'REQ-13061-BRD.pdf',
-      tags: ['BRD', 'Generated'],
-      uploadedBy: { name: 'System Generated', initials: 'SG' },
-      uploadedOn: 'Jan 12th 2026',
-      type: 'generated'
-    },
-    {
-      id: '2', 
-      name: 'Functional_Specification_Document.docx',
-      tags: ['FSD', 'Technical'],
-      uploadedBy: { name: 'John Smith', initials: 'JS' },
-      uploadedOn: 'Jan 10th 2026',
-      type: 'uploaded'
-    },
-    {
-      id: '3',
-      name: 'Test_Case_Design_Document.xlsx',
-      tags: ['TCD', 'Testing'],
-      uploadedBy: { name: 'Sarah Johnson', initials: 'SJ' },
-      uploadedOn: 'Jan 9th 2026',
-      type: 'uploaded'
-    },
-    {
-      id: '4',
-      name: 'User_Acceptance_Criteria.pdf',
-      tags: ['UAC', 'Business'],
-      uploadedBy: { name: 'Mike Davis', initials: 'MD' },
-      uploadedOn: 'Jan 8th 2026',
-      type: 'uploaded'
-    },
-    {
-      id: '5',
-      name: 'Technical_Design_Document.pdf',
-      tags: ['TDD', 'Architecture'],
-      uploadedBy: { name: 'Lisa Wilson', initials: 'LW' },
-      uploadedOn: 'Jan 7th 2026',
-      type: 'uploaded'
-    },
-    {
-      id: '6',
-      name: 'Screenshot 2026-01-08 at 1.13.48PM.png',
-      tags: [],
-      uploadedBy: { name: 'KTern Admin 1', initials: 'KA' },
-      uploadedOn: 'Jan 6th 2026',
-      type: 'uploaded'
+  
+  // Convert documents to FileItem format
+  const [files, setFiles] = useState<FileItem[]>(() => {
+    const convertedFiles = documents.map(doc => ({
+      id: doc.id,
+      name: doc.name,
+      tags: doc.name.includes('BRD') ? ['BRD', 'Generated'] : 
+            doc.name.includes('API') ? ['API', 'Technical'] :
+            doc.name.includes('figma') ? ['UI', 'Design'] : ['Document'],
+      uploadedBy: {
+        name: doc.uploadedBy,
+        initials: doc.uploadedBy.split(' ').map(n => n[0]).join('').toUpperCase()
+      },
+      uploadedOn: new Date(doc.uploadedAt).toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      }),
+      type: doc.name.includes('BRD') ? 'generated' as const : 'uploaded' as const,
+      size: doc.size
+    }));
+    
+    // Add generated BRD if not present
+    const hasBRD = convertedFiles.some(f => f.name.includes('BRD'));
+    if (!hasBRD) {
+      convertedFiles.unshift({
+        id: 'generated-brd',
+        name: `${requirementId}-BRD.pdf`,
+        tags: ['BRD', 'Generated'],
+        uploadedBy: { name: 'System Generated', initials: 'SG' },
+        uploadedOn: new Date().toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: 'numeric', 
+          year: 'numeric' 
+        }),
+        type: 'generated',
+        size: '2.1 MB'
+      });
     }
-  ]);
+    
+    return convertedFiles;
+  });
 
   const handleDownload = (file: FileItem) => {
     console.log('Downloading:', file.name);
