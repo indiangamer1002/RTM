@@ -2,6 +2,7 @@ import { Download, Upload, Plus, Save, Eye, Search, ChevronDown, Pin, Maximize, 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import {
   Select,
   SelectContent,
@@ -380,7 +381,7 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
 
               {/* Right: Icon Group - Fixed Position */}
               <div className="flex items-center gap-1 flex-shrink-0">
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" title="Clear All Filters">
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" title="Clear All Filters" onClick={() => toast.info("Feature coming soon")}>
                   <RotateCcw className="h-4 w-4" />
                 </Button>
 
@@ -486,11 +487,11 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
                 <DropdownMenuItem onClick={() => onViewChange('sorted')}>Sorted View</DropdownMenuItem>
                 <div className="border-t border-border mt-1 pt-1">
                   <div className="flex items-center gap-1">
-                    <DropdownMenuItem className="text-primary flex-1">
+                    <DropdownMenuItem className="text-primary flex-1" onClick={() => toast.info("Feature coming soon")}>
                       <Plus className="h-3 w-3 mr-2" />
                       Add View
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="text-primary flex-1">
+                    <DropdownMenuItem className="text-primary flex-1" onClick={() => toast.info("Feature coming soon")}>
                       <Save className="h-3 w-3 mr-2" />
                       Save As
                     </DropdownMenuItem>
@@ -507,34 +508,34 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
 
           {/* Right: Action Buttons */}
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Refresh">
+            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Refresh" onClick={() => toast.info("Feature coming soon")}>
               <RefreshCw className="h-4 w-4" />
             </Button>
 
-            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Advanced Filters">
+            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Advanced Filters" onClick={() => toast.info("Feature coming soon")}>
               <Filter className="h-4 w-4" />
             </Button>
 
-            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Import">
-              <Upload className="h-4 w-4" />
+            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Import" onClick={() => toast.info("Feature coming soon")}>
+              <Download className="h-4 w-4" />
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Export">
-                  <Download className="h-4 w-4" />
+                <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Export" onClick={() => toast.info("Feature coming soon")}>
+                  <Upload className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <Download className="h-3 w-3 mr-2" />
+                <DropdownMenuItem onClick={() => toast.info("Feature coming soon")}>
+                  <Upload className="h-3 w-3 mr-2" />
                   Export to Excel
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Download className="h-3 w-3 mr-2" />
+                <DropdownMenuItem onClick={() => toast.info("Feature coming soon")}>
+                  <Upload className="h-3 w-3 mr-2" />
                   Export to CSV
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Download className="h-3 w-3 mr-2" />
+                <DropdownMenuItem onClick={() => toast.info("Feature coming soon")}>
+                  <Upload className="h-3 w-3 mr-2" />
                   Export to PDF
                 </DropdownMenuItem>
               </DropdownMenuContent>

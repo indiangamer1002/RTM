@@ -3,6 +3,7 @@ import { Requirement, Priority, RequirementStatus, RequirementType } from '@/typ
 import { StatusBadge } from './StatusBadge';
 import { StatusBar, StatusSegment } from './StatusBar';
 import { RTMHoverCard } from './HoverCard';
+import { RequirementCardList } from './RequirementCard';
 import { cn } from '@/lib/utils';
 import { Search, X, Filter } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -144,10 +145,35 @@ export function RTMTable({ requirements, onRequirementClick, visibleColumns = [
   "Req ID", "Req Title", "Type", "Source Owner", "Priority", "Status",
   "Task", "TESTCASES", "Issues", "Sign-offs", "CTA", "Meetings"
 ] }: RTMTableProps) {
+  // Hydration-safe mobile detection - default to table, detect mobile in useEffect
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+
   // Initial widths matching the minimums to prevent gaps
   const [colWidths, setColWidths] = useState<number[]>([...MIN_COLUMN_WIDTHS]);
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [activeFilterCol, setActiveFilterCol] = useState<number | null>(null);
+
+  // Detect mobile after mount (hydration-safe)
+  useEffect(() => {
+    const checkMobile = () => {
+      setViewMode(window.innerWidth < 768 ? 'cards' : 'table');
+    };
+
+    checkMobile();
+
+    // Debounced resize handler
+    let timeoutId: ReturnType<typeof setTimeout>;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(checkMobile, 150);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const filteredRequirements = requirements.filter(req => {
     return Object.entries(filters).every(([key, value]) => {
@@ -241,6 +267,19 @@ export function RTMTable({ requirements, onRequirementClick, visibleColumns = [
     );
   };
 
+  // Mobile view: Render card list
+  if (viewMode === 'cards') {
+    return (
+      <div className="h-full w-full overflow-auto custom-scrollbar bg-background">
+        <RequirementCardList
+          requirements={filteredRequirements}
+          onRequirementClick={onRequirementClick}
+        />
+      </div>
+    );
+  }
+
+  // Desktop/Tablet view: Render table
   return (
     <div className="h-full w-full overflow-auto custom-scrollbar bg-background">
       <table className="w-full border-collapse bg-background table-fixed border-spacing-0">

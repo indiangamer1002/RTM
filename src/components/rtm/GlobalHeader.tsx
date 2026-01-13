@@ -2,6 +2,7 @@ import { Search, Settings, HelpCircle, Bell } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { toast } from 'sonner';
 import kternLogo from '@/assets/kternlogo.png';
 
 interface GlobalHeaderProps {
@@ -35,17 +36,17 @@ export function GlobalHeader({ breadcrumb }: GlobalHeaderProps) {
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
+          <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground" onClick={() => toast.info("Settings coming soon")}>
             <Settings className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
+          <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground" onClick={() => toast.info("Help coming soon")}>
             <HelpCircle className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground relative">
+          <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground relative" onClick={() => toast.info("Notifications coming soon")}>
             <Bell className="h-4 w-4" />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />
           </Button>
-          <div className="ml-2 pl-4 border-l border-border">
+          <div className="ml-2 pl-4 border-l border-border" onClick={() => toast.info("Profile coming soon")}>
             <Avatar className="h-8 w-8 cursor-pointer">
               <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">
                 KA

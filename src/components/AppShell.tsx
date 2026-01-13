@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GlobalHeader } from '@/components/rtm/GlobalHeader';
 import { FocusDrillSidebar } from '@/components/navigation/FocusDrillSidebar';
@@ -7,10 +7,13 @@ import { FilterBar } from '@/components/rtm/FilterBar';
 import { RTMTable } from '@/components/rtm/RTMTable';
 import { navigationData, requirementsData } from '@/data/mockData';
 import { NavigationNode, Requirement } from '@/types/rtm';
-import { ChevronLeft, ChevronRight, LayoutGrid, Link, List, BarChart3, GitBranch } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutGrid, Link, List, BarChart3, GitBranch, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { DetailPanel } from '@/components/rtm/DetailPanel';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { toast } from 'sonner';
 
 // Helper to collect all node IDs in a subtree (for filtering by scope)
 function collectDescendantIds(node: NavigationNode): string[] {
@@ -39,15 +42,25 @@ const findPathToNode = (nodes: NavigationNode[], targetId: string, currentPath: 
 
 export function AppShell() {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [selectedNode, setSelectedNode] = useState<NavigationNode | null>(null);
   const [drillContext, setDrillContext] = useState<NavigationNode | null>(null); // Current folder we're IN
   const [sidebarPath, setSidebarPath] = useState<NavigationNode[]>([]);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [currentView, setCurrentView] = useState('admin');
   const [isDetailPanelOpen, setIsDetailPanelOpen] = useState(false);
   const [selectedRequirement, setSelectedRequirement] = useState<Requirement | null>(null);
   const [detailPanelTab, setDetailPanelTab] = useState('overview');
+  const [activeViewOption, setActiveViewOption] = useState('list');
   const [isFinderOpen, setIsFinderOpen] = useState(false);
+
+  // Auto-collapse sidebar on mobile
+  useEffect(() => {
+    if (isMobile) {
+      setIsNavCollapsed(true);
+    }
+  }, [isMobile]);
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     "Req ID", "Req Title", "Type", "Source Owner", "Priority", "Status",
     "Task", "TESTCASES", "Issues", "Sign-offs", "CTA", "Meetings"
@@ -175,18 +188,50 @@ export function AppShell() {
         isOpen={isDetailPanelOpen}
         onClose={() => setIsDetailPanelOpen(false)}
         initialTab={detailPanelTab}
+        onRequirementChange={(req) => {
+          setSelectedRequirement(req);
+          setDetailPanelTab('overview');
+        }}
       />
 
       {/* Global Header */}
       <GlobalHeader breadcrumb={breadcrumb} />
 
+      {/* Mobile Navigation Drawer */}
+      {isMobile && (
+        <Sheet open={isMobileDrawerOpen} onOpenChange={setIsMobileDrawerOpen}>
+          <SheetContent side="left" className="w-[85%] max-w-[320px] p-0">
+            <SheetHeader className="p-4 border-b">
+              <SheetTitle>Navigation</SheetTitle>
+            </SheetHeader>
+            <div className="h-[calc(100%-60px)] overflow-auto">
+              <FocusDrillSidebar
+                data={navigationData[0]?.children || []}
+                selectedId={selectedNode?.id || null}
+                onSelect={(node) => {
+                  handleNodeSelect(node);
+                  setIsMobileDrawerOpen(false);
+                }}
+                onOpenFinder={() => {
+                  setIsFinderOpen(true);
+                  setIsMobileDrawerOpen(false);
+                }}
+                onContextChange={(ctx) => handleContextChange(ctx, true)}
+                externalPath={sidebarPath}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
+      )}
+
       {/* Main Layout */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Navigation: Focus Drill Pattern */}
+        {/* Left Navigation: Focus Drill Pattern - Hidden on mobile */}
         <div
           className={cn(
-            'transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] flex-shrink-0 border-r border-border overflow-hidden',
-            isNavCollapsed ? 'w-0 opacity-0' : 'w-72 opacity-100'
+            'transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] flex-shrink-0 border-r border-border overflow-hidden',
+            'hidden md:block', // Hide on mobile
+            isNavCollapsed ? 'md:w-0 md:opacity-0' : 'md:w-60 lg:w-72 opacity-100'
           )}
         >
           <FocusDrillSidebar
@@ -199,8 +244,8 @@ export function AppShell() {
           />
         </div>
 
-        {/* Collapse Toggle */}
-        <div className="relative flex-shrink-0 w-0 z-40">
+        {/* Collapse Toggle - Hidden on mobile */}
+        <div className="relative flex-shrink-0 w-0 z-40 hidden md:block">
           <Button
             variant="ghost"
             size="icon"
@@ -226,29 +271,51 @@ export function AppShell() {
           {/* Fixed Header Portion (Title + Filter) */}
           <div className="flex-shrink-0 bg-background border-b border-border shadow-[0_1px_3px_rgba(0,0,0,0.02)] z-30">
             {/* View Title */}
-            <div className="pl-12 pr-6 py-4">
+            <div className="px-4 md:pl-12 md:pr-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
+                  {/* Mobile Menu Button */}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setIsMobileDrawerOpen(true)}
+                    className="md:hidden h-10 w-10 touch-target"
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                  <div className="p-2 bg-primary/10 rounded-lg hidden md:block">
                     <LayoutGrid className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <h1 className="text-lg font-semibold text-slate-900 tracking-tight">Requirement Traceability Matrix</h1>
-                    <div className="flex items-center gap-1 text-[11px] text-slate-400 font-medium uppercase tracking-wider">
+                    <h1 className="text-base md:text-lg font-semibold text-slate-900 tracking-tight">Requirement Traceability Matrix</h1>
+                    <div className="hidden md:flex items-center gap-1 text-[11px] text-slate-400 font-medium uppercase tracking-wider">
                       <Link className="h-3 w-3" />
                       <span>{currentPath.join(' > ')}</span>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="hidden md:flex items-center gap-3">
                   {viewOptions.map((view) => {
                     const IconComponent = view.icon;
+                    const isActive = activeViewOption === view.id;
                     return (
                       <Button
                         key={view.id}
-                        variant="outline"
+                        variant={isActive ? "default" : "outline"}
                         size="icon"
-                        className="h-9 w-9 rounded-lg border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-900 transition-all"
+                        className={cn(
+                          "h-9 w-9 rounded-lg transition-all",
+                          isActive
+                            ? "bg-primary text-primary-foreground border-primary shadow-sm hover:bg-primary/90"
+                            : "border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-900"
+                        )}
+                        onClick={() => {
+                          if (view.id === 'list') {
+                            setActiveViewOption('list');
+                          } else {
+                            toast.info(`${view.label} view coming soon`);
+                          }
+                        }}
                         title={view.label}
                       >
                         <IconComponent className="h-4 w-4" />

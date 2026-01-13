@@ -355,4 +355,78 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome, Safari and Opera */
   }
+
+  /* ===== RESPONSIVE VISIBILITY UTILITIES ===== */
+  /* CSS-first approach for better performance */
+
+  /* Hide on mobile (<768px), show on tablet+ */
+  .hide-mobile {
+    @apply block;
+  }
+  @media (max-width: 767px) {
+    .hide-mobile {
+      display: none !important;
+    }
+  }
+
+  /* Show only on mobile (<768px) */
+  .show-mobile {
+    @apply hidden;
+  }
+  @media (max-width: 767px) {
+    .show-mobile {
+      display: block !important;
+    }
+  }
+
+  /* Hide on tablet (768px-1023px) */
+  .hide-tablet {
+    @apply block;
+  }
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .hide-tablet {
+      display: none !important;
+    }
+  }
+
+  /* Show only on tablet (768px-1023px) */
+  .show-tablet {
+    @apply hidden;
+  }
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .show-tablet {
+      display: block !important;
+    }
+  }
+
+  /* Hide on desktop (>=1024px) */
+  .hide-desktop {
+    @apply block;
+  }
+  @media (min-width: 1024px) {
+    .hide-desktop {
+      display: none !important;
+    }
+  }
+
+  /* Show only on desktop (>=1024px) */
+  .show-desktop {
+    @apply hidden;
+  }
+  @media (min-width: 1024px) {
+    .show-desktop {
+      display: block !important;
+    }
+  }
+
+  /* Touch-friendly minimum tap target */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Prevent iOS zoom on input focus */
+  .input-no-zoom {
+    font-size: 16px !important;
+  }
 }

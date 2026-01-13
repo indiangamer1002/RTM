@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, FileText, ClipboardList, TestTube, Bug, CheckSquare, History, Users, Calendar, Flag } from 'lucide-react';
+import { X, FileText, ClipboardList, TestTube, Bug, CheckSquare, History, Users, Calendar, Flag, ArrowLeft, ChevronDown, Check } from 'lucide-react';
 import { Requirement, Task, TestCase, Issue, SignOff, AuditEntry, Stakeholder, CTA, Meeting } from '@/types/rtm';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -7,12 +7,27 @@ import { StatusBadge } from './StatusBadge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { requirementsData } from '@/data/mockData';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 interface DetailPanelProps {
   requirement: Requirement | null;
   isOpen: boolean;
   onClose: () => void;
   initialTab?: string;
+  onRequirementChange?: (req: Requirement) => void;
 }
 
 
@@ -24,7 +39,7 @@ function OverviewTab({ requirement }: { requirement: Requirement }) {
         <p className="text-sm text-foreground leading-snug line-clamp-3">{requirement.description}</p>
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div>
           <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Type</h4>
           <StatusBadge label={requirement.type} type={requirement.type === 'Business' ? 'info' : requirement.type === 'Functional' ? 'warning' : 'neutral'} />
@@ -503,8 +518,10 @@ function MeetingsTab({ meetings }: { meetings: Meeting[] }) {
 }
 
 
-export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overview' }: DetailPanelProps) {
+export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overview', onRequirementChange }: DetailPanelProps) {
+  const [reqDropdownOpen, setReqDropdownOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(initialTab);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (isOpen) {
@@ -516,31 +533,81 @@ export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overvi
 
   return (
     <>
-      {/* Backdrop */}
-      <div
-        className={cn(
-          'fixed inset-0 bg-foreground/20 z-40 transition-opacity duration-300',
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        )}
-        onClick={onClose}
-      />
+      {/* Backdrop overlay - dims the rest of the screen */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 transition-opacity duration-300"
+          onClick={onClose}
+        />
+      )}
 
-      {/* Panel */}
+      {/* Mobile: Full-screen overlay */}
       <div
         className={cn(
-          'fixed right-0 top-0 h-full w-[800px] max-w-[95vw] bg-background z-50 shadow-panel',
-          'transform transition-transform duration-300 ease-out',
-          isOpen ? 'translate-x-0' : 'translate-x-full'
+          "fixed inset-0 bg-background z-50 transition-transform duration-300 ease-in-out md:hidden",
+          isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
         {/* Header */}
-        <div className="h-14 border-b border-border flex items-center justify-between px-4">
-          <div className="flex items-center gap-3 min-w-0">
-            <span className="text-sm font-mono text-foreground">{requirement.reqId}</span>
+        <div className="h-14 border-b border-border flex items-center justify-between px-4 bg-background">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            {/* Navigable Req ID Dropdown */}
+            <Popover open={reqDropdownOpen} onOpenChange={setReqDropdownOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="ghost"
+                  role="combobox"
+                  aria-expanded={reqDropdownOpen}
+                  className="h-8 px-2 font-mono text-sm hover:bg-muted flex-shrink-0"
+                >
+                  {requirement.reqId}
+                  <ChevronDown className="ml-1 h-3 w-3 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[300px] p-0" align="start">
+                <Command>
+                  <CommandInput placeholder="Search requirements..." className="h-9" />
+                  <CommandEmpty>No requirement found.</CommandEmpty>
+                  <CommandGroup className="max-h-[300px] overflow-auto">
+                    {requirementsData.map((req) => (
+                      <CommandItem
+                        key={req.id}
+                        value={`${req.reqId} ${req.title}`}
+                        onSelect={() => {
+                          if (onRequirementChange) {
+                            onRequirementChange(req);
+                          }
+                          setReqDropdownOpen(false);
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            requirement.id === req.id ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        <div className="flex flex-col">
+                          <span className="font-mono text-xs">{req.reqId}</span>
+                          <span className="text-xs text-muted-foreground truncate">{req.title}</span>
+                        </div>
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
+
             <h2 className="text-sm font-medium text-foreground truncate">{requirement.title}</h2>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 flex-shrink-0">
-            <X className="h-4 w-4" />
+
+          {/* Close button - X visible on both mobile and desktop */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="h-10 w-10 flex-shrink-0 hover:bg-destructive/10 hover:text-destructive transition-colors"
+          >
+            <X className="h-5 w-5" />
           </Button>
         </div>
 
@@ -554,56 +621,217 @@ export function DetailPanel({ requirement, isOpen, onClose, initialTab = 'overvi
               <span className="text-xs font-mono text-muted-foreground block">{requirement.reqId}</span>
               <h2 className="text-lg font-semibold text-foreground leading-tight">{requirement.title}</h2>
             </div>
-            <TabsList className="w-full flex rounded-none border-b border-border bg-transparent h-auto p-0">
+            <TabsList className="w-full flex rounded-none border-b border-border bg-transparent h-auto p-0 overflow-x-auto scrollbar-hide gap-1">
               <TabsTrigger
                 value="overview"
-                className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
               >
                 <FileText className="h-3.5 w-3.5 mr-1.5" />
-                Overview
+                <span className="hidden sm:inline">Overview</span>
               </TabsTrigger>
               <TabsTrigger
                 value="tasks"
-                className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
               >
                 <ClipboardList className="h-3.5 w-3.5 mr-1.5" />
-                Tasks ({requirement.tasks.length})
+                <span className="hidden sm:inline">Tasks</span> ({requirement.tasks.length})
               </TabsTrigger>
               <TabsTrigger
                 value="test-cases"
-                className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
               >
                 <TestTube className="h-3.5 w-3.5 mr-1.5" />
-                Test Cases ({requirement.testCases.length})
+                <span className="hidden sm:inline">Tests</span> ({requirement.testCases.length})
               </TabsTrigger>
               <TabsTrigger
                 value="issues"
-                className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
               >
                 <Bug className="h-3.5 w-3.5 mr-1.5" />
-                Issues ({requirement.issues.length})
+                <span className="hidden sm:inline">Issues</span> ({requirement.issues.length})
               </TabsTrigger>
               <TabsTrigger
                 value="signoffs"
-                className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
               >
                 <CheckSquare className="h-3.5 w-3.5 mr-1.5" />
-                Sign-offs ({requirement.signOffs.length})
+                <span className="hidden sm:inline">Sign-offs</span> ({requirement.signOffs.length})
               </TabsTrigger>
 
               <TabsTrigger
                 value="cta"
-                className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
               >
                 <Flag className="h-3.5 w-3.5 mr-1.5" />
-                CTA ({requirement.ctas?.length || 0})
+                <span className="hidden sm:inline">CTA</span> ({requirement.ctas?.length || 0})
               </TabsTrigger>
               <TabsTrigger
                 value="meetings"
-                className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-2 py-3 text-xs"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
               >
                 <Calendar className="h-3.5 w-3.5 mr-1.5" />
-                Meetings ({requirement.meetings?.length || 0})
+                <span className="hidden sm:inline">Meetings</span> ({requirement.meetings?.length || 0})
+              </TabsTrigger>
+            </TabsList>
+
+            <div className="p-4">
+              <TabsContent value="overview" className="mt-0">
+                <OverviewTab requirement={requirement} />
+              </TabsContent>
+              <TabsContent value="tasks" className="mt-0">
+                <TasksTab tasks={requirement.tasks} />
+              </TabsContent>
+              <TabsContent value="test-cases" className="mt-0">
+                <TestCasesTab testCases={requirement.testCases} />
+              </TabsContent>
+              <TabsContent value="issues" className="mt-0">
+                <IssuesTab issues={requirement.issues} />
+              </TabsContent>
+              <TabsContent value="signoffs" className="mt-0">
+                <SignOffsTab signOffs={requirement.signOffs} />
+              </TabsContent>
+              <TabsContent value="cta" className="mt-0">
+                <CTATab ctas={requirement.ctas || []} />
+              </TabsContent>
+              <TabsContent value="meetings" className="mt-0">
+                <MeetingsTab meetings={requirement.meetings || []} />
+              </TabsContent>
+            </div>
+          </Tabs>
+        </ScrollArea>
+      </div>
+
+      {/* Desktop: Side Panel */}
+      <div
+        className={cn(
+          'fixed bg-background z-50 shadow-panel transform transition-transform duration-300 ease-out hidden md:block',
+          'right-0 top-0 h-full w-[800px] max-w-[95vw]',
+          isOpen ? 'translate-x-0' : 'translate-x-full'
+        )}
+      >
+        {/* Header */}
+        <div className="h-14 border-b border-border flex items-center justify-between px-4 bg-background">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            {/* Navigable Req ID Dropdown */}
+            <Popover open={reqDropdownOpen} onOpenChange={setReqDropdownOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="ghost"
+                  role="combobox"
+                  aria-expanded={reqDropdownOpen}
+                  className="h-8 px-2 font-mono text-sm hover:bg-muted flex-shrink-0"
+                >
+                  {requirement.reqId}
+                  <ChevronDown className="ml-1 h-3 w-3 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[300px] p-0" align="start">
+                <Command>
+                  <CommandInput placeholder="Search requirements..." className="h-9" />
+                  <CommandEmpty>No requirement found.</CommandEmpty>
+                  <CommandGroup className="max-h-[300px] overflow-auto">
+                    {requirementsData.map((req) => (
+                      <CommandItem
+                        key={req.id}
+                        value={`${req.reqId} ${req.title}`}
+                        onSelect={() => {
+                          if (onRequirementChange) {
+                            onRequirementChange(req);
+                          }
+                          setReqDropdownOpen(false);
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            requirement.id === req.id ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        <div className="flex flex-col">
+                          <span className="font-mono text-xs">{req.reqId}</span>
+                          <span className="text-xs text-muted-foreground truncate">{req.title}</span>
+                        </div>
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
+
+            <h2 className="text-sm font-medium text-foreground truncate">{requirement.title}</h2>
+          </div>
+
+          {/* Close button - X visible and prominent */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="h-10 w-10 flex-shrink-0 hover:bg-destructive/10 hover:text-destructive transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+
+        {/* Accent bar */}
+        <div className="accent-bar" />
+
+        {/* Content */}
+        <ScrollArea className="h-[calc(100%-60px)]">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
+            <div className="px-6 py-4 border-b border-border bg-background">
+              <span className="text-xs font-mono text-muted-foreground block">{requirement.reqId}</span>
+              <h2 className="text-lg font-semibold text-foreground leading-tight">{requirement.title}</h2>
+            </div>
+            <TabsList className="w-full flex rounded-none border-b border-border bg-transparent h-auto p-0 overflow-x-auto scrollbar-hide gap-1">
+              <TabsTrigger
+                value="overview"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
+              >
+                <FileText className="h-3.5 w-3.5 mr-1.5" />
+                <span className="hidden sm:inline">Overview</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="tasks"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
+              >
+                <ClipboardList className="h-3.5 w-3.5 mr-1.5" />
+                <span className="hidden sm:inline">Tasks</span> ({requirement.tasks.length})
+              </TabsTrigger>
+              <TabsTrigger
+                value="test-cases"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
+              >
+                <TestTube className="h-3.5 w-3.5 mr-1.5" />
+                <span className="hidden sm:inline">Tests</span> ({requirement.testCases.length})
+              </TabsTrigger>
+              <TabsTrigger
+                value="issues"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
+              >
+                <Bug className="h-3.5 w-3.5 mr-1.5" />
+                <span className="hidden sm:inline">Issues</span> ({requirement.issues.length})
+              </TabsTrigger>
+              <TabsTrigger
+                value="signoffs"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
+              >
+                <CheckSquare className="h-3.5 w-3.5 mr-1.5" />
+                <span className="hidden sm:inline">Sign-offs</span> ({requirement.signOffs.length})
+              </TabsTrigger>
+
+              <TabsTrigger
+                value="cta"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
+              >
+                <Flag className="h-3.5 w-3.5 mr-1.5" />
+                <span className="hidden sm:inline">CTA</span> ({requirement.ctas?.length || 0})
+              </TabsTrigger>
+              <TabsTrigger
+                value="meetings"
+                className="flex-shrink-0 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none px-4 py-3 text-xs touch-target"
+              >
+                <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                <span className="hidden sm:inline">Meetings</span> ({requirement.meetings?.length || 0})
               </TabsTrigger>
             </TabsList>
 
