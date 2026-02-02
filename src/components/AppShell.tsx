@@ -4,7 +4,9 @@ import { GlobalHeader } from '@/components/rtm/GlobalHeader';
 import { FocusDrillSidebar } from '@/components/navigation/FocusDrillSidebar';
 import { FinderModal } from '@/components/navigation/FinderModal';
 import { FilterBar } from '@/components/rtm/FilterBar';
-import { RTMTable } from '@/components/rtm/RTMTable';
+import { RTMTreeTable } from '@/components/rtm/RTMTreeTable';
+import { RTMTraceView } from '@/components/rtm/RTMTraceView';
+import { KPIDashboard } from '@/components/dashboard/KPIDashboard';
 import { navigationData, requirementsData } from '@/data/mockData';
 import { NavigationNode, Requirement } from '@/types/rtm';
 import { ChevronLeft, ChevronRight, LayoutGrid, Link, List, BarChart3, GitBranch } from 'lucide-react';
@@ -48,6 +50,9 @@ export function AppShell() {
   const [selectedRequirement, setSelectedRequirement] = useState<Requirement | null>(null);
   const [detailPanelTab, setDetailPanelTab] = useState('overview');
   const [isFinderOpen, setIsFinderOpen] = useState(false);
+  const [showListView, setShowListView] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [tableView, setTableView] = useState<'explorer' | 'trace'>('explorer');
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     "Req ID", "Req Title", "Type", "Source Owner", "Priority", "Status",
     "Task", "TESTCASES", "Issues", "Sign-offs", "CTA", "Meetings"
@@ -61,78 +66,106 @@ export function AppShell() {
     );
   };
 
-  const breadcrumb = ['MDLP FY25', 'RTM', 'Home'];
+  const breadcrumb = ['MDLP FY25', 'Requirements', 'Home'];
   const viewOptions = [
     { id: 'list', label: 'List View', icon: List },
-    { id: 'grid', label: 'Grid View', icon: LayoutGrid },
-    { id: 'analytics', label: 'Analytics View', icon: BarChart3 },
-    { id: 'trace', label: 'Trace View', icon: GitBranch }
+    // { id: 'grid', label: 'Grid View', icon: LayoutGrid },
+    // { id: 'analytics', label: 'Analytics View', icon: BarChart3 },
+    // { id: 'trace', label: 'Trace View', icon: GitBranch }
   ];
 
 
-  // Filter requirements based on drill-down context OR specific leaf selection
-  const filteredRequirements = useMemo(() => {
-    // Priority 1: Specific leaf-node selection (nth layer click)
-    if (selectedNode && selectedNode.type === 'requirement') {
-      return requirementsData.filter(req => req.id === selectedNode.id);
-    }
-
-    // Priority 2: Drill context (folder-level view)
-    if (drillContext) {
-      const nodeType = drillContext.type;
-      const nodeId = drillContext.id;
-
-      if (nodeType === 'scope') {
-        return requirementsData.filter(req => req.scopeId === nodeId);
-      } else if (nodeType === 'process') {
-        return requirementsData.filter(req => req.processId === nodeId);
+  // Convert requirements data to navigation format with all fields
+  const enhancedNavigationData = useMemo(() => {
+    const requirements = requirementsData.map(req => ({
+      id: req.id,
+      name: req.title,
+      type: 'requirement' as const,
+      status: 'in-scope' as const,
+      requirementStatus: req.status,
+      priority: req.priority,
+      createdBy: req.createdBy,
+      createdOn: req.createdAt,
+      phase: req.lifecyclePhase,
+      coverage: req.traceabilityStatus === 'fully-traced' ? 'full' as const : 
+                req.traceabilityStatus === 'partially-traced' ? 'partial' as const : 'none' as const
+    }));
+    
+    // Group requirements by their process/scope
+    const groupedReqs = requirements.reduce((acc, req) => {
+      const reqData = requirementsData.find(r => r.id === req.id);
+      if (reqData) {
+        const key = reqData.processId || 'other';
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(req);
       }
+      return acc;
+    }, {} as Record<string, NavigationNode[]>);
+
+    // Update navigation structure with requirements
+    return navigationData.map(project => ({
+      ...project,
+      children: project.children?.map(scope => ({
+        ...scope,
+        children: scope.children?.map(process => ({
+          ...process,
+          children: groupedReqs[process.id] || []
+        }))
+      }))
+    }));
+  }, []);
+
+  // Get table data based on current context
+  const getTableData = (): NavigationNode[] => {
+    if (drillContext && drillContext.children) {
+      return drillContext.children;
     }
+    return enhancedNavigationData[0]?.children || [];
+  };
 
-    // Priority 3: Default root level (show all)
-    return requirementsData;
-  }, [drillContext, selectedNode]);
-
-  // Dynamic path based on drill context or selection
-  const currentPath = useMemo(() => {
-    const root = "MDLP FY25";
-
+  // Dynamic breadcrumb for GlobalHeader
+  const globalBreadcrumb = useMemo(() => {
+    const base = ['MDLP FY25', 'Requirements'];
+    
     if (selectedNode) {
       const path = findPathToNode(navigationData[0]?.children || [], selectedNode.id);
       if (path) {
-        return [root, ...path.map(n => n.name), selectedNode.name];
+        return [...base, ...path.map(n => n.name), selectedNode.name];
       }
-      return [root, selectedNode.name];
+      return [...base, selectedNode.name];
     }
 
-    if (drillContext) {
+    if (showListView && drillContext) {
       const path = findPathToNode(navigationData[0]?.children || [], drillContext.id);
       if (path) {
-        return [root, ...path.map(n => n.name), drillContext.name];
+        return [...base, ...path.map(n => n.name), drillContext.name];
       }
-      return [root, drillContext.name];
+      return [...base, drillContext.name];
     }
 
-    return [root, "All Requirements"];
-  }, [drillContext, selectedNode]);
+    return [...base, 'Home'];
+  }, [drillContext, selectedNode, showListView]);
 
   const handleNodeSelect = (node: NavigationNode) => {
-    setSelectedNode(node);
-
-    // If selecting a requirement from FINDER, we want to snap the sidebar to its parent process
+    // If it's a requirement (leaf node), navigate to RequirementDetail page
     if (node.type === 'requirement') {
-      const path = findPathToNode(navigationData[0]?.children || [], node.id);
-      if (path) {
-        setSidebarPath(path);
-        setDrillContext(path[path.length - 1] || null);
-      }
+      navigate(`/requirement/${node.id}`);
+      return;
     }
+    
+    // If it's a folder, show its children in the table
+    setSelectedNode(node);
+    setDrillContext(node);
+    setShowListView(true);
   };
 
   // Handle context change from sidebar or finder (when drilling in/out)
   const handleContextChange = (context: NavigationNode | null, isFromSidebar?: boolean) => {
     setDrillContext(context);
     setSelectedNode(null);
+    
+    // Show list view when there's a context (folder selected)
+    setShowListView(!!context);
 
     // If change comes from FINDER, we need to update sidebar history
     if (!isFromSidebar && context) {
@@ -157,8 +190,46 @@ export function AppShell() {
     }
   };
 
+  const handleShowInListView = (node: NavigationNode) => {
+    setDrillContext(node);
+    setSelectedNode(null);
+    setShowListView(true); // Explicitly enable list view
+  };
+
   return (
     <div className="h-screen w-screen bg-background flex flex-col overflow-hidden font-sans text-foreground/90">
+      {/* Fullscreen Modal */}
+      {isFullscreen && (
+        <div className="fixed inset-0 z-50 bg-background flex flex-col">
+          {/* Fullscreen Filter Bar */}
+          <div className="flex-shrink-0 bg-background border-b border-border shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+            <FilterBar
+              onViewChange={setCurrentView}
+              visibleColumns={visibleColumns}
+              onColumnToggle={handleColumnToggle}
+              onFullscreenToggle={() => setIsFullscreen(false)}
+              tableView={tableView}
+              onTableViewChange={setTableView}
+            />
+          </div>
+          
+          {/* Fullscreen Table */}
+          <div className="flex-1 overflow-hidden">
+            {tableView === 'explorer' ? (
+              <RTMTreeTable
+                data={getTableData()}
+                onRequirementSelect={(node) => navigate(`/requirement/${node.id}`)}
+              />
+            ) : (
+              <RTMTraceView
+                data={enhancedNavigationData}
+                onRequirementSelect={(node) => navigate(`/requirement/${node.id}`)}
+                visibleColumns={visibleColumns}
+              />
+            )}
+          </div>
+        </div>
+      )}
       {/* Finder Modal Layer */}
       <FinderModal
         isOpen={isFinderOpen}
@@ -178,7 +249,7 @@ export function AppShell() {
       />
 
       {/* Global Header */}
-      <GlobalHeader breadcrumb={breadcrumb} />
+      <GlobalHeader breadcrumb={globalBreadcrumb} />
 
       {/* Main Layout */}
       <div className="flex flex-1 overflow-hidden">
@@ -190,12 +261,13 @@ export function AppShell() {
           )}
         >
           <FocusDrillSidebar
-            data={navigationData[0]?.children || []}
+            data={enhancedNavigationData[0]?.children || []}
             selectedId={selectedNode?.id || null}
             onSelect={handleNodeSelect}
             onOpenFinder={() => setIsFinderOpen(true)}
             onContextChange={(ctx) => handleContextChange(ctx, true)}
             externalPath={sidebarPath}
+            onNavigateToNewRequirement={() => navigate('/requirements/new')}
           />
         </div>
 
@@ -223,57 +295,38 @@ export function AppShell() {
 
         {/* Main Content Area */}
         <main className="flex-1 flex flex-col min-w-0 bg-slate-50/50 relative overflow-hidden">
-          {/* Fixed Header Portion (Title + Filter) */}
-          <div className="flex-shrink-0 bg-background border-b border-border shadow-[0_1px_3px_rgba(0,0,0,0.02)] z-30">
-            {/* View Title */}
-            <div className="pl-12 pr-6 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <LayoutGrid className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h1 className="text-lg font-semibold text-slate-900 tracking-tight">Requirement Traceability Matrix</h1>
-                    <div className="flex items-center gap-1 text-[11px] text-slate-400 font-medium uppercase tracking-wider">
-                      <Link className="h-3 w-3" />
-                      <span>{currentPath.join(' > ')}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  {viewOptions.map((view) => {
-                    const IconComponent = view.icon;
-                    return (
-                      <Button
-                        key={view.id}
-                        variant="outline"
-                        size="icon"
-                        className="h-9 w-9 rounded-lg border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-900 transition-all"
-                        title={view.label}
-                      >
-                        <IconComponent className="h-4 w-4" />
-                      </Button>
-                    );
-                  })}
-                </div>
-              </div>
+          {/* Conditional Filter Bar - Only show when table is displayed */}
+          {showListView && (
+            <div className="flex-shrink-0 bg-background border-b border-border shadow-[0_1px_3px_rgba(0,0,0,0.02)] z-30">
+              <FilterBar
+                onViewChange={setCurrentView}
+                visibleColumns={visibleColumns}
+                onColumnToggle={handleColumnToggle}
+                onFullscreenToggle={() => setIsFullscreen(!isFullscreen)}
+                tableView={tableView}
+                onTableViewChange={setTableView}
+              />
             </div>
-
-            {/* Filter Bar - Part of the fixed area */}
-            <FilterBar
-              onViewChange={setCurrentView}
-              visibleColumns={visibleColumns}
-              onColumnToggle={handleColumnToggle}
-            />
-          </div>
+          )}
 
           {/* Dedicated Content Area - Edge to Edge, No Page Scroll */}
           <div className="flex-1 overflow-hidden relative">
-            <RTMTable
-              requirements={filteredRequirements}
-              onRequirementClick={handleRequirementClick}
-              visibleColumns={visibleColumns}
-            />
+            {showListView && !isFullscreen ? (
+              tableView === 'explorer' ? (
+                <RTMTreeTable
+                  data={getTableData()}
+                  onRequirementSelect={(node) => navigate(`/requirement/${node.id}`)}
+                />
+              ) : (
+                <RTMTraceView
+                  data={enhancedNavigationData}
+                  onRequirementSelect={(node) => navigate(`/requirement/${node.id}`)}
+                  visibleColumns={visibleColumns}
+                />
+              )
+            ) : !isFullscreen ? (
+              <KPIDashboard />
+            ) : null}
           </div>
         </main>
       </div>

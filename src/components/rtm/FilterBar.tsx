@@ -1,4 +1,4 @@
-import { Download, Upload, Plus, Save, Eye, Search, ChevronDown, Pin, Maximize, RefreshCw, Filter, X, RotateCcw, Layout } from 'lucide-react';
+import { Download, Upload, Plus, Save, Eye, Search, ChevronDown, Pin, Maximize, RefreshCw, Filter, X, RotateCcw, Layout, TreePine, GitBranch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
@@ -23,6 +23,8 @@ interface FilterBarProps {
   onFullscreenToggle?: () => void;
   visibleColumns: string[];
   onColumnToggle: (column: string) => void;
+  tableView?: 'explorer' | 'trace';
+  onTableViewChange?: (view: 'explorer' | 'trace') => void;
 }
 
 interface FilterOption {
@@ -33,7 +35,7 @@ interface FilterOption {
   width?: string;
 }
 
-export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, onColumnToggle }: FilterBarProps) {
+export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, onColumnToggle, tableView = 'explorer', onTableViewChange }: FilterBarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPinMode, setShowPinMode] = useState(false);
   const [filters, setFilters] = useState<FilterOption[]>([
@@ -360,7 +362,7 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
   return (
     <div className={cn(
       "border-b border-border bg-muted/20 px-4 transition-all duration-200",
-      isExpanded ? "pt-2 pb-4" : "pt-2 pb-2"
+      isExpanded ? "pt-2 pb-4" : "pt-3 pb-3"
     )}>
       <div className="flex flex-col gap-2">
         {/* Collapsed/Pinned Mode: Dropdown Filters */}
@@ -369,7 +371,7 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
             {/* First Row: Filters and Icon Group */}
             <div className="flex items-center justify-between gap-4">
               {/* Left: Filters */}
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 pl-2">
                 <div className="flex items-center gap-3 flex-wrap">
                   {pinnedFilters.map(filter => renderDropdownFilter(filter))}
                 </div>
@@ -380,17 +382,7 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
 
               {/* Right: Icon Group - Fixed Position */}
               <div className="flex items-center gap-1 flex-shrink-0">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 rounded bg-muted/50 border border-border hover:bg-muted"
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  title={isExpanded ? 'Show less filters' : 'Show more filters'}
-                >
-                  <ChevronDown className={cn("h-4 w-4 transition-transform", isExpanded && "rotate-180")} />
-                </Button>
-
-                <Button
+              <Button
                   variant="ghost"
                   size="icon"
                   className={cn(
@@ -402,11 +394,20 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
                 >
                   <Pin className="h-4 w-4" />
                 </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded bg-muted/50 border border-border hover:bg-muted"
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  title={isExpanded ? 'Show less filters' : 'Show more filters'}
+                >
+                  <ChevronDown className={cn("h-4 w-4 transition-transform", isExpanded && "rotate-180")} />
+                </Button>
               </div>
             </div>
 
             {/* Divider between first and second row */}
-            <div className="w-full h-px bg-border" />
+            {/* <div className="w-full h-px bg-border" /> */}
           </>
         )}
 
@@ -414,12 +415,9 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
         {isExpanded && (
           <>
             {/* Header with controls */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-0 pt-2 pl-3">
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-medium">Filter Slicers</h3>
-                <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground" title="Clear All Filters">
-                  <RotateCcw className="h-3 w-3" />
-                </Button>
               </div>
               <div className="flex items-center gap-1">
                 <Button
@@ -447,7 +445,7 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
             </div>
 
             {/* Slicers - Single Row Horizontal Scroll */}
-            <div className="mb-4">
+            <div className="mb-4 pl-2">
               <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent">
                 {filters.map(filter => (
                   <div key={filter.id} className="flex-shrink-0 w-64">
@@ -458,115 +456,10 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
             </div>
 
             {/* Divider */}
-            <div className="w-full h-px bg-border" />
+            {/* <div className="w-full h-px bg-border" /> */}
           </>
         )}
 
-        {/* Second Row: Views and Action Buttons - Always visible */}
-        <div className="flex items-center justify-between gap-4">
-          {/* Left: Saved Views */}
-          <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 gap-2 border border-muted-foreground/20 hover:border-muted-foreground/40">
-                  <Eye className="h-4 w-4" />
-                  Admin View
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                <DropdownMenuItem onClick={() => onViewChange('admin')}>Admin View</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onViewChange('tester')}>Tester View</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onViewChange('business')}>Business View</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onViewChange('filtered')}>Filtered View</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onViewChange('sorted')}>Sorted View</DropdownMenuItem>
-                <div className="border-t border-border mt-1 pt-1">
-                  <div className="flex items-center gap-1">
-                    <DropdownMenuItem className="text-primary flex-1">
-                      <Plus className="h-3 w-3 mr-2" />
-                      Add View
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="text-primary flex-1">
-                      <Save className="h-3 w-3 mr-2" />
-                      Save As
-                    </DropdownMenuItem>
-                  </div>
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          {/* Center: Item Count */}
-          <div className="flex items-center">
-            <span className="text-sm text-muted-foreground">Showing 20 of 435 Items</span>
-          </div>
-
-          {/* Right: Action Buttons */}
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Refresh">
-              <RefreshCw className="h-4 w-4" />
-            </Button>
-
-            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Advanced Filters">
-              <Filter className="h-4 w-4" />
-            </Button>
-
-            <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Import">
-              <Upload className="h-4 w-4" />
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Export">
-                  <Download className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <Download className="h-3 w-3 mr-2" />
-                  Export to Excel
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Download className="h-3 w-3 mr-2" />
-                  Export to CSV
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Download className="h-3 w-3 mr-2" />
-                  Export to PDF
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40"
-              title="Fullscreen"
-              onClick={onFullscreenToggle}
-            >
-              <Maximize className="h-4 w-4" />
-            </Button>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20 hover:border-muted-foreground/40" title="Columns">
-                  <Layout className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                {[
-                  "Req ID", "Req Title", "Type", "Source Owner", "Priority", "Status",
-                  "Task", "TESTCASES", "Issues", "Sign-offs", "CTA", "Meetings"
-                ].map((col) => (
-                  <div key={col} className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted/50 rounded cursor-pointer" onClick={() => onColumnToggle(col)}>
-                    <Checkbox checked={visibleColumns.includes(col)} id={`col-${col}`} />
-                    <label htmlFor={`col-${col}`} className="text-xs flex-1 cursor-pointer">{col}</label>
-                  </div>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
       </div>
     </div>
   );

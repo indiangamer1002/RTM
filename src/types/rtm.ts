@@ -16,6 +16,14 @@ export interface NavigationNode {
   type: 'project' | 'scope' | 'process' | 'requirement';
   children?: NavigationNode[];
   status?: 'in-scope' | 'out-of-scope';
+  
+  // Additional fields for requirements
+  priority?: Priority;
+  createdBy?: string;
+  createdOn?: string;
+  phase?: 'identify' | 'analyze' | 'document' | 'approve' | 'design' | 'build' | 'test' | 'release' | 'support';
+  coverage?: 'full' | 'partial' | 'none';
+  requirementStatus?: RequirementStatus;
 }
 
 export interface Task {
