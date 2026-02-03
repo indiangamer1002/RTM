@@ -33,7 +33,7 @@ function MainLayout() {
   const [showImportDrawer, setShowImportDrawer] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [expanded, setExpanded] = useState({});
-  const [uxView, setUxView] = useState<'trace' | 'matrix'>('trace');
+  const [tableView, setTableView] = useState<'explorer' | 'trace'>('trace');
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     "Req ID", "Req Title", "Type", "Source Owner", "Priority", "Status",
     "Task", "TESTCASES", "Issues", "Sign-offs", "CTA", "Meetings"
@@ -271,26 +271,22 @@ function MainLayout() {
       
       {/* Main Content */}
       <div className="flex-1 overflow-hidden">
-        {uxView === 'trace' ? (
-          <RTMTreeTable 
-            data={currentFolderData}
-            onRequirementSelect={handleRequirementSelect}
-            onFolderFocus={handleFolderFocus}
-            onBackNavigation={handleBackNavigation}
-            showBackButton={navigationStack.length > 0}
-            tableView="trace"
-            onTableViewChange={() => {}}
-            onExpandedChange={setExpanded}
-            visibleItemsCount={getVisibleItemsCount()}
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center">
-              <h3 className="text-lg font-medium text-muted-foreground mb-2">Matrix View</h3>
-              <p className="text-sm text-muted-foreground">Coming soon...</p>
-            </div>
-          </div>
-        )}
+        <RTMTreeTable 
+          data={currentFolderData}
+          onRequirementSelect={handleRequirementSelect}
+          onFolderFocus={handleFolderFocus}
+          onBackNavigation={handleBackNavigation}
+          showBackButton={navigationStack.length > 0}
+          tableView={tableView}
+          onTableViewChange={setTableView}
+          onExpandedChange={setExpanded}
+          visibleItemsCount={getVisibleItemsCount()}
+          isFullscreen={isFullscreen}
+          onFullscreenToggle={() => setIsFullscreen(!isFullscreen)}
+          visibleColumns={visibleColumns}
+          onColumnToggle={handleColumnToggle}
+          availableFolders={availableFolders}
+        />
       </div>
       
       <ImportFromSDDDrawer
