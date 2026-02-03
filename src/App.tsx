@@ -9,7 +9,7 @@ import { GlobalHeader } from '@/components/rtm/GlobalHeader';
 import { FilterBar } from '@/components/rtm/FilterBar';
 import { RTMTreeTable } from '@/components/rtm/RTMTreeTable';
 import { navigationData, requirementsData } from '@/data/mockData';
-import { Eye, ChevronDown, RefreshCw, Filter as FilterIcon, Download, Maximize, Search, Plus, Save, ArrowLeft, FolderPlus, Upload, FileText } from 'lucide-react';
+import { Eye, ChevronDown, RefreshCw, Filter as FilterIcon, Download, Maximize, Search, Plus, Save, ArrowLeft, FolderPlus, Upload, FileText, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -168,12 +168,12 @@ function MainLayout() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </Button>
-            <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
+            {/* <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="3" />
                 <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" />
               </svg>
-            </Button>
+            </Button> */}
             <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground relative">
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />

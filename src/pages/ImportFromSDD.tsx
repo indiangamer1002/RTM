@@ -34,10 +34,10 @@ export function ImportFromSDD() {
     {
       id: '1',
       name: 'Requirements',
-      type: 'folder',
+      type: 'scope',
       children: [
-        { id: '2', name: 'Functional', type: 'folder', children: [] },
-        { id: '3', name: 'Non-Functional', type: 'folder', children: [] }
+        { id: '2', name: 'Functional', type: 'scope', children: [] },
+        { id: '3', name: 'Non-Functional', type: 'scope', children: [] }
       ]
     }
   ];

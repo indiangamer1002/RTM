@@ -10,7 +10,7 @@ import {
   createColumnHelper,
   Row,
 } from '@tanstack/react-table';
-import { ChevronRight, ChevronDown, Folder, FileText, Search, ArrowUpDown, ArrowUp, ArrowDown, Filter, X, ExternalLink, ArrowLeft, Minimize2, Plus } from 'lucide-react';
+import { ChevronRight, ChevronDown, Folder, FileText, Search, ArrowUpDown, ArrowUp, ArrowDown, Filter, X, ExternalLink, ArrowLeft, Minimize2, Plus, List, Grid3X3 } from 'lucide-react';
 import { NavigationNode } from '@/types/rtm';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -1036,18 +1036,42 @@ export function RTMTreeTable({ data, onRequirementSelect, tableView = 'explorer'
           
           <div className="flex items-center gap-4">
             {onTableViewChange && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-8 gap-2 border border-muted-foreground/20">
-                    {tableView === 'explorer' ? 'Explorer View' : 'Trace View'}
-                    <ChevronDown className="h-3 w-3" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => onTableViewChange('trace')}>Trace View</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onTableViewChange('explorer')}>Explorer View</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="flex items-center border border-muted-foreground/20 rounded-md">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={tableView === 'trace' ? 'default' : 'ghost'}
+                        size="sm"
+                        className="h-8 px-3 rounded-r-none border-r border-muted-foreground/20"
+                        onClick={() => onTableViewChange('trace')}
+                      >
+                        <List className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Trace View</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={tableView === 'explorer' ? 'default' : 'ghost'}
+                        size="sm"
+                        className="h-8 px-3 rounded-l-none"
+                        onClick={() => onTableViewChange('explorer')}
+                      >
+                        <Grid3X3 className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Matrix View</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
             )}
           </div>
         </div>
