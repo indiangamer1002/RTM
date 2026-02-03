@@ -97,7 +97,7 @@ export function StatusBar({ segments, total, title, emptyText = '-', onViewDetai
               </div>
               <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">{title}</span>
             </div>
-            {onViewDetails && (
+            {/* {onViewDetails && (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -109,7 +109,7 @@ export function StatusBar({ segments, total, title, emptyText = '-', onViewDetai
               >
                 <Maximize2 className="h-4 w-4" />
               </button>
-            )}
+            )} */}
           </div>
         </div>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

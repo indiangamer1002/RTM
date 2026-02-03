@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { ArrowLeft, Settings, HelpCircle, Bell, Copy, MoreVertical, ChevronDown, X, Plus } from 'lucide-react';
+import { ArrowLeft, Settings, HelpCircle, Bell, Copy, MoreVertical, ChevronDown, X, Plus, Folder, Search } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { OverviewTab } from '@/components/rtm/OverviewTab';
@@ -11,15 +11,15 @@ import { LinksTab } from '@/components/rtm/LinksTab';
 import { FilesTab } from '@/components/rtm/FilesTab';
 import { DiscussionsPanel } from '@/components/rtm/DiscussionsPanel';
 import { StakeholdersTab } from '@/components/views/detail/StakeholdersTab';
-import { requirementsData } from '@/data/mockData';
+import { requirementsData, navigationData } from '@/data/mockData';
 
 const RequirementDetail = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState('Calendar and Events - Outlook calendar is not getting blocked when events are created from application');
   const [selectedStakeholder, setSelectedStakeholder] = useState('John Smith');
   const [selectedState, setSelectedState] = useState('Preparation - Approve...');
-  const [selectedProcess, setSelectedProcess] = useState('Development Process');
-  const [selectedGroup, setSelectedGroup] = useState('Backend Team');
+  const [selectedParent, setSelectedParent] = useState('System Requirements');
+  const [parentSearchTerm, setParentSearchTerm] = useState('');
   const [selectedArea, setSelectedArea] = useState('K4 - Product Development');
   const [activeTab, setActiveTab] = useState('Overview');
   const tabs = ['Overview', 'Stakeholders', 'Links', 'Files'];
@@ -49,6 +49,24 @@ const RequirementDetail = () => {
     }
   };
   const breadcrumb = ['MDLP FY25', 'RTM', 'Requirements', 'REQ-001'];
+
+  // Flatten hierarchy for dropdown
+  const flattenHierarchy = (nodes, level = 0, parentPath = '') => {
+    let result = [];
+    nodes.forEach(node => {
+      const currentPath = parentPath ? `${parentPath} / ${node.name}` : node.name;
+      result.push({ ...node, level, path: currentPath });
+      if (node.children) {
+        result = result.concat(flattenHierarchy(node.children, level + 1, currentPath));
+      }
+    });
+    return result;
+  };
+
+  const flatHierarchy = flattenHierarchy(navigationData[0]?.children || []);
+  const filteredHierarchy = flatHierarchy.filter(node => 
+    node.name.toLowerCase().includes(parentSearchTerm.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -239,32 +257,41 @@ const RequirementDetail = () => {
                       </Select>
                     </div>
 
-                    {/* Process */}
+                    {/* Parent */}
                     <div className="flex items-center gap-2">
-                      <label className="text-xs font-medium text-muted-foreground min-w-fit">Process</label>
-                      <Select value={selectedProcess} onValueChange={setSelectedProcess}>
-                        <SelectTrigger className="min-w-28 h-7 px-2 py-1 text-sm border-transparent bg-transparent hover:border-border hover:bg-white [&>svg]:hidden focus:border-border focus:bg-white">
-                          <SelectValue className="text-sm" />
+                      <label className="text-xs font-medium text-muted-foreground min-w-fit">Parent</label>
+                      <Select value={selectedParent} onValueChange={setSelectedParent}>
+                        <SelectTrigger className="min-w-40 h-7 px-2 py-1 text-sm border-transparent bg-transparent hover:border-border hover:bg-white [&>svg]:hidden focus:border-border focus:bg-white">
+                          <SelectValue asChild>
+                            <div className="flex items-center gap-2">
+                              {/* <Folder className="h-3 w-3 text-blue-600" /> */}
+                              <span className="text-sm">{selectedParent}</span>
+                              <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                            </div>
+                          </SelectValue>
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Development Process">Development Process</SelectItem>
-                          <SelectItem value="Testing Process">Testing Process</SelectItem>
-                          <SelectItem value="Review Process">Review Process</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Group */}
-                    <div className="flex items-center gap-2">
-                      <label className="text-xs font-medium text-muted-foreground min-w-fit">Group</label>
-                      <Select value={selectedGroup} onValueChange={setSelectedGroup}>
-                        <SelectTrigger className="min-w-28 h-7 px-2 py-1 text-sm border-transparent bg-transparent hover:border-border hover:bg-white [&>svg]:hidden focus:border-border focus:bg-white">
-                          <SelectValue className="text-sm" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Backend Team">Backend Team</SelectItem>
-                          <SelectItem value="Frontend Team">Frontend Team</SelectItem>
-                          <SelectItem value="QA Team">QA Team</SelectItem>
+                        <SelectContent className="w-80">
+                          <div className="p-2">
+                            <div className="relative">
+                              <Search className="absolute left-2 top-2.5 h-3 w-3 text-muted-foreground" />
+                              <Input
+                                placeholder="Search folders..."
+                                value={parentSearchTerm}
+                                onChange={(e) => setParentSearchTerm(e.target.value)}
+                                className="pl-7 h-8 text-xs"
+                              />
+                            </div>
+                          </div>
+                          <div className="max-h-48 overflow-y-auto">
+                            {filteredHierarchy.map((node) => (
+                              <SelectItem key={node.id} value={node.name}>
+                                <div className="flex items-center gap-2" style={{ paddingLeft: `${node.level * 12}px` }}>
+                                  <Folder className="h-3 w-3 text-blue-600 flex-shrink-0" />
+                                  <span className="text-sm truncate">{node.name}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </div>
                         </SelectContent>
                       </Select>
                     </div>

@@ -73,7 +73,7 @@ function MainLayout() {
   };
 
   const handleRequirementSelect = (node: any) => {
-    console.log('Selected requirement:', node);
+    navigate(`/requirement/${node.reqId || node.id}`);
   };
 
   const handleFolderFocus = (node: any) => {
