@@ -20,6 +20,8 @@ import {
 import { AddFolderDialog } from '@/components/dialogs/AddFolderDialog';
 import { AddRequirementDialog } from '@/components/dialogs/AddRequirementDialog';
 import { ImportFromSDDDialog } from '@/components/dialogs/ImportFromSDDDialog';
+import { AIGapAnalysisDialog } from '@/components/dialogs/AIGapAnalysisDialog';
+import { Sparkles } from 'lucide-react';
 
 interface FocusDrillSidebarProps {
   data: NavigationNode[];
@@ -55,6 +57,7 @@ export function FocusDrillSidebar({
   const [activeTab, setActiveTab] = useState('process');
   const [showAddFolder, setShowAddFolder] = useState(false);
   const [showImportSDD, setShowImportSDD] = useState(false);
+  const [showAIGapAnalysis, setShowAIGapAnalysis] = useState(false);
 
   // Sync internal history with external path changes (e.g. from Finder)
   useEffect(() => {
@@ -209,6 +212,16 @@ export function FocusDrillSidebar({
               Requirements Explorer
             </h2>
             <div className="flex items-center gap-1">
+              <Button 
+                size="sm" 
+                variant="secondary" 
+                className="h-7 px-2 text-xs gap-1.5 text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 mr-2"
+                onClick={() => setShowAIGapAnalysis(true)}
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                Gap Analysis
+              </Button>
+              <div className="w-px h-4 bg-border mx-1" />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button size="sm" variant="outline" className="h-7 w-7 p-0">
@@ -352,6 +365,10 @@ export function FocusDrillSidebar({
           onOpenChange={setShowImportSDD}
           data={data}
           onSubmit={handleImportFromSDD}
+        />
+        <AIGapAnalysisDialog 
+          open={showAIGapAnalysis}
+          onOpenChange={setShowAIGapAnalysis}
         />
       </div>
     </TooltipProvider>

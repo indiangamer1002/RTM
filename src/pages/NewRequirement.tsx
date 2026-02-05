@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { ArrowLeft, Settings, HelpCircle, Bell, Copy, ChevronDown, X, Plus, User, Folder, Search } from 'lucide-react';
+import { ArrowLeft, Settings, HelpCircle, Bell, Copy, ChevronDown, X, Plus, User, Folder, Search, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { OverviewTab } from '@/components/rtm/OverviewTabNew';
@@ -18,12 +18,24 @@ import { navigationData } from '@/data/mockData';
 
 const NewRequirement = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState('');
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  
+  // Check for AI prefill data from URL params or navigation state
+  const aiPrefillData = location.state?.aiPrefill || null;
+  const isAIPrefilled = !!aiPrefillData || searchParams.get('aiPrefill') === 'true';
+  const sourceItemId = aiPrefillData?.sourceItemId || searchParams.get('sourceItemId') || '';
+  const sourceItemTitle = aiPrefillData?.sourceItemTitle || searchParams.get('sourceItemTitle') || '';
+  
+  const [title, setTitle] = useState(aiPrefillData?.title || searchParams.get('title') || '');
+  const [description, setDescription] = useState(aiPrefillData?.description || searchParams.get('description') || '');
+  const [reqType, setReqType] = useState(aiPrefillData?.type || searchParams.get('type') || 'Functional');
+  const [priority, setPriority] = useState(aiPrefillData?.priority || searchParams.get('priority') || 'Medium');
   const [selectedStakeholder, setSelectedStakeholder] = useState('KTern Admin');
   const [selectedState, setSelectedState] = useState('Identification');
   const [selectedParent, setSelectedParent] = useState(null);
   const [parentSearchTerm, setParentSearchTerm] = useState('');
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState(isAIPrefilled ? ['AI-Generated'] : []);
   const [isDiscussionFullscreen, setIsDiscussionFullscreen] = useState(false);
   
   const removeTag = (tagToRemove) => {
@@ -144,6 +156,34 @@ const NewRequirement = () => {
           {/* Form Content */}
           <div className="flex flex-col bg-background">
             <div className="px-4 pt-3 pb-0 flex-shrink-0">
+              {/* AI Prefill Indicator */}
+              {isAIPrefilled && (
+                <div className="mb-3 p-3 bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200 rounded-lg flex items-center gap-3">
+                  <div className="p-2 bg-indigo-100 rounded-lg">
+                    <Sparkles className="h-5 w-5 text-indigo-600" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-indigo-600 text-white hover:bg-indigo-700 gap-1">
+                        <Sparkles className="h-3 w-3" />
+                        AI Generated
+                      </Badge>
+                      <span className="text-sm font-medium text-indigo-900">
+                        Form pre-filled from AI Gap Analysis
+                      </span>
+                    </div>
+                    {sourceItemTitle && (
+                      <p className="text-xs text-indigo-700 mt-1">
+                        Based on unlinked item: <span className="font-medium">"{sourceItemTitle}"</span>
+                      </p>
+                    )}
+                  </div>
+                  <p className="text-xs text-indigo-600 max-w-[200px] text-right">
+                    Review and adjust the AI suggestions before saving
+                  </p>
+                </div>
+              )}
+
               {/* ID and Title Row */}
               <div className="flex items-center gap-2 mb-2">
                 <Input

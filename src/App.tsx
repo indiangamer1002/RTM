@@ -9,7 +9,7 @@ import { GlobalHeader } from '@/components/rtm/GlobalHeader';
 import { FilterBar } from '@/components/rtm/FilterBar';
 import { RTMTreeTable } from '@/components/rtm/RTMTreeTable';
 import { navigationData, requirementsData } from '@/data/mockData';
-import { Eye, ChevronDown, RefreshCw, Filter as FilterIcon, Download, Maximize, Search, Plus, Save, ArrowLeft, FolderPlus, Upload, FileText, HelpCircle } from 'lucide-react';
+import { Eye, ChevronDown, RefreshCw, Filter as FilterIcon, Download, Maximize, Search, Plus, Save, ArrowLeft, FolderPlus, Upload, FileText, HelpCircle, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -20,9 +20,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import RequirementDetail from "./pages/RequirementDetail";
 import NewRequirement from "./pages/NewRequirement";
+import GapAnalysisPage from "./pages/GapAnalysisPage";
 import NotFound from "./pages/NotFound";
 import { ImportFromSDDDrawer } from '@/components/drawers/ImportFromSDDDrawer';
 import { AddFolderDialog } from '@/components/dialogs/AddFolderDialog';
+import { AIGapAnalysisDialog } from '@/components/dialogs/AIGapAnalysisDialog';
 import kternLogo from '@/assets/kternlogo.png';
 import { cn } from '@/lib/utils';
 
@@ -33,6 +35,7 @@ function MainLayout() {
   const navigate = useNavigate();
   const [showImportDrawer, setShowImportDrawer] = useState(false);
   const [showAddFolderDialog, setShowAddFolderDialog] = useState(false);
+  const [showAIGapAnalysis, setShowAIGapAnalysis] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [expanded, setExpanded] = useState({});
   const [tableView, setTableView] = useState<'explorer' | 'trace'>('trace');
@@ -253,6 +256,15 @@ function MainLayout() {
             <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20" title="Fullscreen" onClick={() => setIsFullscreen(!isFullscreen)}>
               <Maximize className="h-4 w-4" />
             </Button>
+            <Button 
+              size="sm" 
+              className="h-8 px-3 text-xs gap-1.5 text-white bg-indigo-600 hover:bg-indigo-700 border-0"
+              onClick={() => navigate('/gap-analysis')}
+              title="AI Gap Analysis"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              AI Gap Analysis
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8 border border-muted-foreground/20" title="Add">
@@ -316,6 +328,11 @@ function MainLayout() {
         }}
       />
 
+      <AIGapAnalysisDialog
+        open={showAIGapAnalysis}
+        onOpenChange={setShowAIGapAnalysis}
+      />
+
     </div>
   );
 }
@@ -331,6 +348,7 @@ const App = () => {
             <Route path="/" element={<MainLayout />} />
             <Route path="/requirement/:id" element={<RequirementDetail />} />
             <Route path="/requirements/new" element={<NewRequirement />} />
+            <Route path="/gap-analysis" element={<GapAnalysisPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

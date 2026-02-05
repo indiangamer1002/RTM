@@ -1,0 +1,58 @@
+/* Custom styles for React Quill */
+.quill {
+  display: flex;
+  flex-direction: column;
+}
+
+.ql-toolbar {
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 1px solid var(--border) !important;
+  background-color: transparent;
+  font-family: inherit;
+}
+
+.ql-container {
+  border: none !important;
+  font-family: inherit;
+  font-size: 0.875rem; /* text-sm */
+}
+
+.ql-editor {
+  min-height: 100%;
+  font-family: inherit;
+  padding: 1rem;
+}
+
+.ql-editor.ql-blank::before {
+  font-style: italic;
+  color: var(--muted-foreground);
+}
+
+/* Dark mode adjustments if needed, assuming tailwind defines css vars */
+:root {
+  --quill-border: #e2e8f0;
+}
+
+.dark .ql-toolbar .ql-stroke {
+  stroke: hsl(var(--foreground));
+}
+
+.dark .ql-toolbar .ql-fill {
+  fill: hsl(var(--foreground));
+}
+
+.dark .ql-toolbar .ql-picker {
+  color: hsl(var(--foreground));
+}
+
+/* Fullscreen overrides */
+.quill-editor-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.quill-readonly-wrapper .ql-container {
+   background-color: transparent;
+}
