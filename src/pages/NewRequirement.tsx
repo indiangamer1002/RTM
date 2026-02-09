@@ -318,14 +318,16 @@ const NewRequirement = () => {
                   </div>
                 </div>
 
-                {/* Lifecycle Tracker */}
-                <div className="px-4 mt-2">
-                  <LifecycleTracker 
-                    currentStatus={selectedState}
-                    lifecycleStages={requirementLifecycleStages}
-                    statuses={requirementStatuses}
-                  />
-                </div>
+                {/* Lifecycle Tracker - Only show on Overview tab */}
+                {activeTab === 'Overview' && (
+                  <div className="px-4 mt-2">
+                    <LifecycleTracker 
+                      currentStatus={selectedState}
+                      lifecycleStages={requirementLifecycleStages}
+                      statuses={requirementStatuses}
+                    />
+                  </div>
+                )}
 
                 {/* Overview Tab Content */}
                 <div className="flex-1 overflow-y-auto">
