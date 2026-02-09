@@ -11,9 +11,10 @@ import { ChevronDown, ChevronUp, Maximize2, FileText, Users, CheckCircle, Code, 
 
 interface OverviewTabProps {
   requirementId: string;
+  currentStatus?: string;
 }
 
-export const OverviewTab = ({ requirementId }: OverviewTabProps) => {
+export const OverviewTab = ({ requirementId, currentStatus = 'New' }: OverviewTabProps) => {
   // For new requirements, start with empty content
   const isNewRequirement = requirementId === 'new';
   
@@ -157,7 +158,7 @@ When users create calendar events from within SAP applications (such as scheduli
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto p-4 pb-20">
-        {/* RTM Lifecycle Tracker */}
+        {/* RTM Lifecycle Tracker
         <div className="mb-6 p-3 bg-gray-50 rounded-lg">
           <Label className="text-sm font-medium text-foreground mb-3 block">Requirement Lifecycle (RTM)</Label>
           <div className="flex items-center gap-2 overflow-x-auto pb-2">
@@ -178,7 +179,7 @@ When users create calendar events from within SAP applications (such as scheduli
               );
             })}
           </div>
-        </div>
+        </div> */}
 
         <div className="flex gap-8">
           {/* Column 1 - 65% */}
@@ -246,7 +247,7 @@ When users create calendar events from within SAP applications (such as scheduli
                 <div className={`mb-6 ${expandedSections.description ? 'fixed inset-0 z-50 bg-white p-4' : ''}`}>
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <Label className="text-base font-medium text-foreground">Descriion</Label>
+                      <Label className="text-base font-medium text-foreground">Description</Label>
                       {hasAnalystData && (
                         <TooltipProvider>
                           <Tooltip>
@@ -469,61 +470,6 @@ When users create calendar events from within SAP applications (such as scheduli
               </Button>
               <Button onClick={handleCancelAnalysis} variant="ghost" size="sm">
                 Cancel
-              </Button>
-            </div>
-          )}
-
-          {/* Document Generation Button */}
-          {hasAnalystData && !documentGenerated && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                  <FileText className="h-4 w-4 mr-2" />
-                  Generate Documentation
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Generate Requirement Documentation</DialogTitle>
-                  <DialogDescription>
-                    This will create a formal Business Requirements Document (BRD) based on the analyzed requirement data.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="py-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                      <span className="text-sm font-medium">Document Type</span>
-                      <span className="text-sm text-muted-foreground">Business Requirements Document</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                      <span className="text-sm font-medium">Template</span>
-                      <span className="text-sm text-muted-foreground">Standard BRD Template v2.1</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                      <span className="text-sm font-medium">Analyst</span>
-                      <span className="text-sm text-muted-foreground">{analystInfo.name}</span>
-                    </div>
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button onClick={handleGenerateDocument} disabled={isGeneratingDoc}>
-                    {isGeneratingDoc ? 'Generating...' : 'Generate Document'}
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          )}
-
-          {/* Document Ready Actions */}
-          {documentGenerated && (
-            <div className="flex items-center gap-3">
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                <FileText className="h-3 w-3 mr-1" />
-                Document Generated
-              </Badge>
-              <Button variant="outline" size="sm">
-                <Download className="h-3 w-3 mr-1" />
-                Download BRD
               </Button>
             </div>
           )}

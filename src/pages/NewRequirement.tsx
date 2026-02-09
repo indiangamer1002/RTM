@@ -7,6 +7,8 @@ import { ArrowLeft, Settings, HelpCircle, Bell, Copy, ChevronDown, X, Plus, User
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { OverviewTab } from '@/components/rtm/OverviewTabNew';
+import { LifecycleTracker } from '@/components/rtm/LifecycleTracker';
+import { requirementLifecycleStages, requirementStatuses } from '@/data/lifecycleData';
 import { DiscussionsPanel } from '@/components/rtm/DiscussionsPanel';
 import {
   DropdownMenu,
@@ -20,7 +22,7 @@ const NewRequirement = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [selectedStakeholder, setSelectedStakeholder] = useState('KTern Admin');
-  const [selectedState, setSelectedState] = useState('Identification');
+  const [selectedState, setSelectedState] = useState('New');
   const [selectedParent, setSelectedParent] = useState(null);
   const [parentSearchTerm, setParentSearchTerm] = useState('');
   const [tags, setTags] = useState([]);
@@ -39,16 +41,8 @@ const NewRequirement = () => {
   ];
 
   const getStateColor = (state) => {
-    switch (state) {
-      case 'Identification':
-        return 'bg-blue-400';
-      case 'In Progress':
-        return 'bg-yellow-500';
-      case 'Completed':
-        return 'bg-green-500';
-      default:
-        return 'bg-gray-400';
-    }
+    const statusObj = requirementStatuses.find(s => s.status === state);
+    return statusObj ? `bg-[${statusObj.color}]` : 'bg-gray-400';
   };
 
   const breadcrumb = ['MDLP FY25', 'RTM', 'Requirements', 'New Requirement'];
@@ -245,24 +239,20 @@ const NewRequirement = () => {
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Identification">
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                              <span>Identification</span>
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="In Progress">
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                              <span>In Progress</span>
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="Completed">
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                              <span>Completed</span>
-                            </div>
-                          </SelectItem>
+                          {requirementStatuses
+                            .filter(s => s.active)
+                            .sort((a, b) => a.order - b.order)
+                            .map(status => (
+                              <SelectItem key={status._id} value={status.status}>
+                                <div className="flex items-center gap-2">
+                                  <div 
+                                    className="w-2 h-2 rounded-full" 
+                                    style={{ backgroundColor: status.color }}
+                                  ></div>
+                                  <span>{status.status}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -328,9 +318,18 @@ const NewRequirement = () => {
                   </div>
                 </div>
 
+                {/* Lifecycle Tracker */}
+                <div className="px-4 mt-2">
+                  <LifecycleTracker 
+                    currentStatus={selectedState}
+                    lifecycleStages={requirementLifecycleStages}
+                    statuses={requirementStatuses}
+                  />
+                </div>
+
                 {/* Overview Tab Content */}
                 <div className="flex-1 overflow-y-auto">
-                  <OverviewTab requirementId="new" />
+                  <OverviewTab requirementId="new" currentStatus={selectedState} />
                 </div>
               </div>
               

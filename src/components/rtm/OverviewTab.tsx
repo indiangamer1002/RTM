@@ -162,9 +162,9 @@ When users create calendar events from within SAP applications (such as scheduli
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto p-4 pb-20">
-        {/* RTM Lifecycle Tracker */}
+        {/* RTM Lifecycle Tracker
         <div className="mb-6 p-3 bg-gray-50 rounded-lg">
-          <Label className="text-sm font-medium text-foreground mb-3 block">Requirement Lifecycle (RTM)</Label>
+          <Label className="text-sm font-medium text-foreground mb-3 block">Requirement Lifecycle (R)</Label>
           <div className="flex items-center gap-2 overflow-x-auto pb-2">
             {lifecycleStages.map((stage, index) => {
               const Icon = stage.icon;
@@ -183,7 +183,7 @@ When users create calendar events from within SAP applications (such as scheduli
               );
             })}
           </div>
-        </div>
+        </div> */}
 
         <div className="flex gap-8">
           {/* Column 1 - 65% */}
@@ -521,10 +521,10 @@ When users create calendar events from within SAP applications (such as scheduli
           {hasAnalystData && !documentGenerated && (
             <Dialog>
               <DialogTrigger asChild>
-                <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                {/* <Button size="sm" className="bg-green-600 hover:bg-green-700">
                   <FileText className="h-4 w-4 mr-2" />
                   Generate Documentation
-                </Button>
+                </Button> */}
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
