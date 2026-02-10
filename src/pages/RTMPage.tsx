@@ -29,7 +29,38 @@ const mockNavigationData: NavigationNode[] = [
             createdBy: 'John Smith',
             createdOn: '2024-01-15',
             phase: 'build',
-            coverage: 'full'
+            coverage: 'full',
+            tasks: [
+              { id: 't1', title: 'Design order form UI', status: 'Completed', dueDate: '2024-02-01' },
+              { id: 't2', title: 'Implement validation logic', status: 'Active', dueDate: '2024-02-15' },
+              { id: 't3', title: 'Setup approval workflow', status: 'New', dueDate: '2024-02-20' },
+              { id: 't4', title: 'Integrate with ERP', status: 'Active', dueDate: '2024-03-01' }
+            ],
+            testCases: [
+              { id: 'tc1', title: 'Verify order creation with valid data', status: 'performed', dueDate: '2024-02-10' },
+              { id: 'tc2', title: 'Test validation error handling', status: 'approved', dueDate: '2024-02-12' },
+              { id: 'tc3', title: 'Verify approval notification', status: 'Active', dueDate: '2024-02-18' },
+              { id: 'tc4', title: 'Check ERP sync', status: 'New', dueDate: '2024-02-25' },
+              { id: 'tc5', title: 'Load testing for peak volume', status: 'New', dueDate: '2024-03-05' }
+            ],
+            issues: [
+              { id: 'i1', title: 'Date picker not showing correct format', status: 'Active', dueDate: '2024-02-05' },
+              { id: 'i2', title: 'Form validation message unclear', status: 'Resolved', dueDate: '2024-02-08' },
+              { id: 'i3', title: 'API timeout on large datasets', status: 'New', dueDate: '2024-02-22' },
+              { id: 'i4', title: 'Mobile view alignment', status: 'Approved', dueDate: '2024-02-02' }
+            ],
+            signOffs: [
+              { id: 'so1', role: 'Business Blueprint Sign-off', stakeholder: 'Emily Davis', status: 'Approved', dueDate: '2024-01-30' },
+              { id: 'so2', role: 'Technical Design Sign-off', stakeholder: 'Alex Kumar', status: 'Active', dueDate: '2024-02-20' },
+              { id: 'so3', role: 'Integration Scenario Approval', stakeholder: 'Mike Chen', status: 'New', dueDate: '2024-02-25' },
+              { id: 'so4', role: 'Phase Gate Approval', stakeholder: 'Sarah Jones', status: 'New', dueDate: '2024-02-28' },
+              { id: 'so5', role: 'UAT Sign-off', stakeholder: 'David Wilson', status: 'New', dueDate: '2024-03-01' }
+            ],
+            meetings: [
+              { id: 'm1', title: 'Design Review', status: 'Completed', dueDate: '2024-01-25' },
+              { id: 'm2', title: 'Sprint Planning', status: 'Scheduled', dueDate: '2024-02-05' },
+              { id: 'm3', title: 'UAT Kickoff', status: 'Pending', dueDate: '2024-02-28' }
+            ]
           },
           {
             id: 'req-002',
@@ -41,7 +72,21 @@ const mockNavigationData: NavigationNode[] = [
             createdBy: 'Sarah Johnson',
             createdOn: '2024-01-20',
             phase: 'analyze',
-            coverage: 'partial'
+            coverage: 'partial',
+            tasks: [
+              { id: 't5', title: 'Define credit check rules', status: 'Completed', dueDate: '2024-01-28' },
+              { id: 't6', title: 'API Specification', status: 'Active', dueDate: '2024-02-10' }
+            ],
+            testCases: [
+              { id: 'tc6', title: 'Test credit limit exceeded', status: 'New', dueDate: '2024-02-15' }
+            ],
+            issues: [],
+            signOffs: [
+              { id: 'so6', role: 'G/L Account Mapping Approval', stakeholder: 'Robert Brown', status: 'Approved', dueDate: '2024-02-01' }
+            ],
+            meetings: [
+              { id: 'm4', title: 'Requirement Gathering', status: 'Completed', dueDate: '2024-01-18' }
+            ]
           }
         ]
       },
@@ -61,7 +106,24 @@ const mockNavigationData: NavigationNode[] = [
             createdBy: 'Mike Davis',
             createdOn: '2024-01-10',
             phase: 'test',
-            coverage: 'full'
+            coverage: 'full',
+            tasks: [
+              { id: 't7', title: 'Dashboard layout design', status: 'Completed', dueDate: '2024-01-15' },
+              { id: 't8', title: 'Implement charts', status: 'Completed', dueDate: '2024-01-25' },
+              { id: 't9', title: 'Data binding', status: 'Completed', dueDate: '2024-01-30' }
+            ],
+            testCases: [
+              { id: 'tc7', title: 'Verify chart data accuracy', status: 'performed', dueDate: '2024-02-02' },
+              { id: 'tc8', title: 'Check filter functionality', status: 'approved', dueDate: '2024-02-03' }
+            ],
+            issues: [
+              { id: 'i5', title: 'Performance lag on load', status: 'Resolved', dueDate: '2024-02-01' }
+            ],
+            signOffs: [
+              { id: 'so7', role: 'Functional Spec Sign-off', stakeholder: 'Lisa Wang', status: 'Completed', dueDate: '2024-02-05' },
+              { id: 'so8', role: 'Fiori/UI Guidelines Approval', stakeholder: 'Tom Harris', status: 'Completed', dueDate: '2024-02-04' }
+            ],
+            meetings: []
           }
         ]
       }
@@ -159,7 +221,7 @@ export default function RTMPage() {
   // Handle sidebar selection (both folders and files)
   const handleSidebarSelect = (node: NavigationNode) => {
     setSelectedNode(node);
-    
+
     // If it's a folder, update table to show its children
     if (node.children) {
       // Build path to this node
@@ -223,8 +285,8 @@ export default function RTMPage() {
   };
 
   const handleColumnToggle = (column: string) => {
-    setVisibleColumns(prev => 
-      prev.includes(column) 
+    setVisibleColumns(prev =>
+      prev.includes(column)
         ? prev.filter(col => col !== column)
         : [...prev, column]
     );

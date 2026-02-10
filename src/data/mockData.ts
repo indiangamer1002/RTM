@@ -67,11 +67,11 @@ export const navigationData: NavigationNode[] = [
                           { id: 'i4', title: 'UI alignment issue fixed', severity: 'Low', status: 'Approved', assignee: 'Sarah Johnson', dueDate: '2025-01-30', priority: 'Low' },
                         ],
                         signOffs: [
-                          { id: 'so1', role: 'Business Owner', stakeholder: 'Emily Davis', status: 'Approved', date: '2025-01-08', priority: 'High', dueDate: '2025-01-10' },
-                          { id: 'so2', role: 'Technical Lead', stakeholder: 'Alex Kumar', status: 'Active', priority: 'High', dueDate: '2025-01-15' },
-                          { id: 'so3', role: 'QA Lead', stakeholder: 'Mike Chen', status: 'New', priority: 'Medium', dueDate: '2025-01-18' },
-                          { id: 'so4', role: 'Security Team', stakeholder: 'Lisa Wilson', status: 'Rejected', date: '2025-01-09', priority: 'High', dueDate: '2025-01-20' },
-                          { id: 'so5', role: 'Product Manager', stakeholder: 'John Smith', status: 'Completed', date: '2025-01-10', priority: 'Medium', dueDate: '2025-01-22' },
+                          { id: 'so1', role: 'Business Blueprint Sign-off', stakeholder: 'Emily Davis', status: 'Approved', date: '2025-01-08', priority: 'High', dueDate: '2025-01-10' },
+                          { id: 'so2', role: 'Technical Design Sign-off', stakeholder: 'Alex Kumar', status: 'Active', priority: 'High', dueDate: '2025-01-15' },
+                          { id: 'so3', role: 'Integration Scenario Approval', stakeholder: 'Mike Chen', status: 'New', priority: 'Medium', dueDate: '2025-01-18' },
+                          { id: 'so4', role: 'Phase Gate Approval', stakeholder: 'Lisa Wilson', status: 'Rejected', date: '2025-01-09', priority: 'High', dueDate: '2025-01-20' },
+                          { id: 'so5', role: 'UAT Sign-off', stakeholder: 'John Smith', status: 'Completed', date: '2025-01-10', priority: 'Medium', dueDate: '2025-01-22' },
                         ],
                         ctas: [
                           { id: 'cta1', title: 'Review validation rules', status: 'Active', assignee: 'John Smith', dueDate: '2025-01-20', priority: 'High' },
@@ -107,7 +107,7 @@ export const navigationData: NavigationNode[] = [
                         ],
                         issues: [],
                         signOffs: [
-                          { id: 'so3', role: 'Technical Lead', stakeholder: 'Alex Kumar', status: 'New', priority: 'High', dueDate: '2025-01-10' },
+                          { id: 'so3', role: 'API Security Sign-off', stakeholder: 'Alex Kumar', status: 'New', priority: 'High', dueDate: '2025-01-10' },
                         ],
                         ctas: [],
                         meetings: [
@@ -211,8 +211,8 @@ export const navigationData: NavigationNode[] = [
                         ],
                         issues: [],
                         signOffs: [
-                          { id: 'so4', role: 'Business Owner', stakeholder: 'Emily Davis', status: 'Approved', date: '2025-01-11', priority: 'High', dueDate: '2025-01-12' },
-                          { id: 'so5', role: 'Technical Lead', stakeholder: 'Alex Kumar', status: 'Approved', date: '2025-01-11', priority: 'High', dueDate: '2025-01-12' },
+                          { id: 'so4', role: 'Billing Rules Approval', stakeholder: 'Emily Davis', status: 'Approved', date: '2025-01-11', priority: 'High', dueDate: '2025-01-12' },
+                          { id: 'so5', role: 'Invoice Template Sign-off', stakeholder: 'Alex Kumar', status: 'Approved', date: '2025-01-11', priority: 'High', dueDate: '2025-01-12' },
                         ],
                         ctas: [],
                         meetings: [
@@ -297,7 +297,7 @@ export const navigationData: NavigationNode[] = [
                           { id: 'i3', title: 'Currency conversion rounding errors', severity: 'Low', status: 'New', assignee: 'Sarah Johnson', dueDate: '2025-01-26', priority: 'Low' },
                         ],
                         signOffs: [
-                          { id: 'so6', role: 'Business Owner', stakeholder: 'Emily Davis', status: 'New', priority: 'High', dueDate: '2025-01-20' },
+                          { id: 'so6', role: 'G/L Account Mapping Approval', stakeholder: 'Emily Davis', status: 'New', priority: 'High', dueDate: '2025-01-20' },
                         ],
                         ctas: [],
                         meetings: [
@@ -373,11 +373,11 @@ export const requirementsData: Requirement[] = [
       { id: 'i4', title: 'UI alignment issue fixed', severity: 'Low', status: 'Approved', assignee: 'Sarah Johnson', dueDate: '2025-01-30', priority: 'Low' },
     ],
     signOffs: [
-      { id: 'so1', role: 'Business Owner', stakeholder: 'Emily Davis', status: 'Approved', date: '2025-01-08', priority: 'High', dueDate: '2025-01-10' },
-      { id: 'so2', role: 'Technical Lead', stakeholder: 'Alex Kumar', status: 'Active', priority: 'High', dueDate: '2025-01-15' },
-      { id: 'so3', role: 'QA Lead', stakeholder: 'Mike Chen', status: 'New', priority: 'Medium', dueDate: '2025-01-18' },
-      { id: 'so4', role: 'Security Team', stakeholder: 'Lisa Wilson', status: 'Rejected', date: '2025-01-09', priority: 'High', dueDate: '2025-01-20' },
-      { id: 'so5', role: 'Product Manager', stakeholder: 'John Smith', status: 'Completed', date: '2025-01-10', priority: 'Medium', dueDate: '2025-01-22' },
+      { id: 'so1', role: 'Business Blueprint Sign-off', stakeholder: 'Emily Davis', status: 'Approved', date: '2025-01-08', priority: 'High', dueDate: '2025-01-10' },
+      { id: 'so2', role: 'Technical Design Sign-off', stakeholder: 'Alex Kumar', status: 'Active', priority: 'High', dueDate: '2025-01-15' },
+      { id: 'so3', role: 'Integration Scenario Approval', stakeholder: 'Mike Chen', status: 'New', priority: 'Medium', dueDate: '2025-01-18' },
+      { id: 'so4', role: 'Phase Gate Approval', stakeholder: 'Lisa Wilson', status: 'Rejected', date: '2025-01-09', priority: 'High', dueDate: '2025-01-20' },
+      { id: 'so5', role: 'UAT Sign-off', stakeholder: 'John Smith', status: 'Completed', date: '2025-01-10', priority: 'Medium', dueDate: '2025-01-22' },
     ],
     ctas: [
       { id: 'cta1', title: 'Review validation rules', status: 'Active', assignee: 'John Smith', dueDate: '2025-01-20', priority: 'High' },
@@ -759,7 +759,7 @@ export const requirementsData: Requirement[] = [
     ],
     issues: [],
     signOffs: [
-      { id: 'so7', role: 'Business Owner', stakeholder: 'John Smith', status: 'Approved', date: '2025-01-07', priority: 'High', dueDate: '2025-01-05' },
+      { id: 'so7', role: 'System Setup for Fit to Standard Workshops', stakeholder: 'John Smith', status: 'Approved', date: '2025-01-07', priority: 'High', dueDate: '2025-01-05' },
       { id: 'so8', role: 'Technical Lead', stakeholder: 'Alex Kumar', status: 'Approved', date: '2025-01-07', priority: 'Medium', dueDate: '2025-01-05' },
       { id: 'so9', role: 'QA Lead', stakeholder: 'Mike Chen', status: 'Approved', date: '2025-01-07', priority: 'Medium', dueDate: '2025-01-06' },
     ],

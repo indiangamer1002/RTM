@@ -18,7 +18,7 @@ export interface NavigationNode {
   status?: 'in-scope' | 'out-of-scope';
   tags?: string[];
   source?: string;
-  
+
   // Additional fields for requirements
   priority?: Priority;
   createdBy?: string;
@@ -26,15 +26,23 @@ export interface NavigationNode {
   phase?: 'identify' | 'analyze' | 'document' | 'approve' | 'design' | 'build' | 'test' | 'release' | 'support';
   coverage?: 'full' | 'partial' | 'none';
   requirementStatus?: RequirementStatus;
+
+  // Work items
+  tasks?: Task[];
+  testCases?: TestCase[];
+  issues?: Issue[];
+  signOffs?: SignOff[];
+  meetings?: Meeting[];
+  ctas?: CTA[];
 }
 
 export interface Task {
   id: string;
   title: string;
   status: 'New' | 'Active' | 'Completed' | 'Approved';
-  assignee: string;
+  assignee?: string;
   dueDate: string;
-  priority: Priority;
+  priority?: Priority;
 }
 
 export interface TestCase {
@@ -44,19 +52,19 @@ export interface TestCase {
   executionResult?: ExecutionResult;
   lastRun?: string;
   tester?: string;
-  assignee: string;
+  assignee?: string;
   dueDate: string;
-  priority: Priority;
+  priority?: Priority;
 }
 
 export interface Issue {
   id: string;
   title: string;
-  severity: IssueSeverity;
+  severity?: IssueSeverity;
   status: 'New' | 'Active' | 'Resolved' | 'Approved';
-  assignee: string;
+  assignee?: string;
   dueDate: string;
-  priority: Priority;
+  priority?: Priority;
 }
 
 export interface SignOff {
@@ -66,27 +74,27 @@ export interface SignOff {
   status: SignOffStatus;
   date?: string;
   dueDate: string;
-  priority: Priority;
+  priority?: Priority;
 }
 
 export interface CTA {
   id: string;
   title: string;
   status: CTAStatus;
-  assignee: string;
+  assignee?: string;
   dueDate: string;
-  priority: Priority;
+  priority?: Priority;
 }
 
 export interface Meeting {
   id: string;
   title: string;
   status: MeetingStatus;
-  organizer: string;
-  attendees: string[];
-  date: string;
+  organizer?: string;
+  attendees?: string[];
+  date?: string;
   dueDate: string; // Used for "Planned to" consistency
-  priority: Priority;
+  priority?: Priority;
 }
 
 export interface AuditEntry {
