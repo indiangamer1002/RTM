@@ -27,6 +27,7 @@ const NewRequirement = () => {
   const [parentSearchTerm, setParentSearchTerm] = useState('');
   const [tags, setTags] = useState([]);
   const [isDiscussionFullscreen, setIsDiscussionFullscreen] = useState(false);
+  const [activeTab, setActiveTab] = useState('Overview');
   
   const removeTag = (tagToRemove) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
