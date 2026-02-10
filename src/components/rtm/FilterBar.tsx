@@ -77,19 +77,19 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
       isPinned: true,
       width: '190px'
     },
-    {
-      id: 'approval-status',
-      label: 'Approval Status',
-      options: [
-        { value: 'pending', label: 'Pending Approval', count: 34 },
-        { value: 'approved', label: 'Approved', count: 234 },
-        { value: 'rejected', label: 'Rejected', count: 12 },
-        { value: 'deferred', label: 'Deferred', count: 8 },
-        { value: 'baseline', label: 'Baseline Created', count: 156 }
-      ],
-      isPinned: true,
-      width: '170px'
-    },
+    // {
+    //   id: 'approval-status',
+    //   label: 'Approval Status',
+    //   options: [
+    //     { value: 'pending', label: 'Pending Approval', count: 34 },
+    //     { value: 'approved', label: 'Approved', count: 234 },
+    //     { value: 'rejected', label: 'Rejected', count: 12 },
+    //     { value: 'deferred', label: 'Deferred', count: 8 },
+    //     { value: 'baseline', label: 'Baseline Created', count: 156 }
+    //   ],
+    //   isPinned: true,
+    //   width: '170px'
+    // },
     {
       id: 'requirement-type',
       label: 'Requirement Type',
@@ -104,46 +104,46 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
       isPinned: true,
       width: '190px'
     },
-    {
-      id: 'implementation-type',
-      label: 'Solution Type',
-      options: [
-        { value: 'configuration', label: 'Configuration', count: 67 },
-        { value: 'custom-dev', label: 'Custom Development', count: 123 },
-        { value: 'enhancement', label: 'Enhancement', count: 45 },
-        { value: 'integration', label: 'Integration', count: 34 },
-        { value: 'workflow', label: 'Workflow', count: 23 }
-      ],
-      isPinned: true,
-      width: '180px'
-    },
-    {
-      id: 'traceability-status',
-      label: 'Traceability Status',
-      options: [
-        { value: 'fully-traced', label: 'Fully Traced', count: 145 },
-        { value: 'partially-traced', label: 'Partially Traced', count: 78 },
-        { value: 'missing-design', label: 'Missing Design Mapping', count: 21 },
-        { value: 'missing-build', label: 'Missing Development Mapping', count: 34 },
-        { value: 'missing-test', label: 'Missing Test Cases', count: 29 },
-        { value: 'missing-release', label: 'Missing Release Mapping', count: 17 }
-      ],
-      isPinned: true,
-      width: '200px'
-    },
-    {
-      id: 'release-version',
-      label: 'Release Version',
-      options: [
-        { value: 'rel-1.0', label: 'Release 1.0', count: 56 },
-        { value: 'rel-1.1', label: 'Release 1.1', count: 78 },
-        { value: 'hotfix', label: 'Hotfix', count: 14 },
-        { value: 'future', label: 'Future Release', count: 92 },
-        { value: 'not-released', label: 'Not Released', count: 121 }
-      ],
-      isPinned: false,
-      width: '170px'
-    },
+    // {
+    //   id: 'implementation-type',
+    //   label: 'Solution Type',
+    //   options: [
+    //     { value: 'configuration', label: 'Configuration', count: 67 },
+    //     { value: 'custom-dev', label: 'Custom Development', count: 123 },
+    //     { value: 'enhancement', label: 'Enhancement', count: 45 },
+    //     { value: 'integration', label: 'Integration', count: 34 },
+    //     { value: 'workflow', label: 'Workflow', count: 23 }
+    //   ],
+    //   isPinned: true,
+    //   width: '180px'
+    // },
+    // {
+    //   id: 'traceability-status',
+    //   label: 'Traceability Status',
+    //   options: [
+    //     { value: 'fully-traced', label: 'Fully Traced', count: 145 },
+    //     { value: 'partially-traced', label: 'Partially Traced', count: 78 },
+    //     { value: 'missing-design', label: 'Missing Design Mapping', count: 21 },
+    //     { value: 'missing-build', label: 'Missing Development Mapping', count: 34 },
+    //     { value: 'missing-test', label: 'Missing Test Cases', count: 29 },
+    //     { value: 'missing-release', label: 'Missing Release Mapping', count: 17 }
+    //   ],
+    //   isPinned: true,
+    //   width: '200px'
+    // },
+    // {
+    //   id: 'release-version',
+    //   label: 'Release Version',
+    //   options: [
+    //     { value: 'rel-1.0', label: 'Release 1.0', count: 56 },
+    //     { value: 'rel-1.1', label: 'Release 1.1', count: 78 },
+    //     { value: 'hotfix', label: 'Hotfix', count: 14 },
+    //     { value: 'future', label: 'Future Release', count: 92 },
+    //     { value: 'not-released', label: 'Not Released', count: 121 }
+    //   ],
+    //   isPinned: false,
+    //   width: '170px'
+    // },
     {
       id: 'owner',
       label: 'Owner / Responsible',
@@ -157,71 +157,71 @@ export function FilterBar({ onViewChange, onFullscreenToggle, visibleColumns, on
       isPinned: false,
       width: '190px'
     },
-    {
-      id: 'compliance-category',
-      label: 'Compliance Category',
-      options: [
-        { value: 'sox', label: 'SOX', count: 18 },
-        { value: 'gdpr', label: 'GDPR', count: 26 },
-        { value: 'iso', label: 'ISO', count: 14 },
-        { value: 'internal-policy', label: 'Internal Policy', count: 33 },
-        { value: 'customer-contract', label: 'Customer Contract', count: 21 },
-        { value: 'not-applicable', label: 'Not Applicable', count: 176 }
-      ],
-      isPinned: false,
-      width: '190px'
-    },
-    {
-      id: 'risk-level',
-      label: 'Risk Level',
-      options: [
-        { value: 'high', label: 'High Risk', count: 19 },
-        { value: 'medium', label: 'Medium Risk', count: 48 },
-        { value: 'low', label: 'Low Risk', count: 112 },
-        { value: 'none', label: 'No Risk Identified', count: 137 }
-      ],
-      isPinned: false,
-      width: '150px'
-    },
-    {
-      id: 'change-impact',
-      label: 'Change Impact',
-      options: [
-        { value: 'changed-after-approval', label: 'Changed After Approval', count: 23 },
-        { value: 'has-open-cr', label: 'Has Open Change Request', count: 41 },
-        { value: 'versioned', label: 'Version > 1.0', count: 67 },
-        { value: 'retired', label: 'Retired Requirement', count: 12 }
-      ],
-      isPinned: false,
-      width: '180px'
-    },
-    {
-      id: 'lifecycle-status',
-      label: 'Stage Status',
-      options: [
-        { value: 'not-started', label: 'Not Started', count: 45 },
-        { value: 'in-progress', label: 'In Progress', count: 123 },
-        { value: 'blocked', label: 'Blocked', count: 18 },
-        { value: 'completed', label: 'Completed', count: 167 },
-        { value: 'failed', label: 'Failed', count: 8 },
-        { value: 'deferred', label: 'Deferred', count: 23 }
-      ],
-      isPinned: false,
-      width: '160px'
-    },
-    {
-      id: 'iteration',
-      label: 'Sprint / Release Cycle',
-      options: [
-        { value: 'sprint-1', label: 'Sprint 1', count: 45 },
-        { value: 'sprint-2', label: 'Sprint 2', count: 67 },
-        { value: 'sprint-3', label: 'Sprint 3', count: 34 },
-        { value: 'backlog', label: 'Backlog', count: 123 },
-        { value: 'unassigned', label: 'Unassigned', count: 78 }
-      ],
-      isPinned: false,
-      width: '160px'
-    },
+    // {
+    //   id: 'compliance-category',
+    //   label: 'Compliance Category',
+    //   options: [
+    //     { value: 'sox', label: 'SOX', count: 18 },
+    //     { value: 'gdpr', label: 'GDPR', count: 26 },
+    //     { value: 'iso', label: 'ISO', count: 14 },
+    //     { value: 'internal-policy', label: 'Internal Policy', count: 33 },
+    //     { value: 'customer-contract', label: 'Customer Contract', count: 21 },
+    //     { value: 'not-applicable', label: 'Not Applicable', count: 176 }
+    //   ],
+    //   isPinned: false,
+    //   width: '190px'
+    // },
+    // {
+    //   id: 'risk-level',
+    //   label: 'Risk Level',
+    //   options: [
+    //     { value: 'high', label: 'High Risk', count: 19 },
+    //     { value: 'medium', label: 'Medium Risk', count: 48 },
+    //     { value: 'low', label: 'Low Risk', count: 112 },
+    //     { value: 'none', label: 'No Risk Identified', count: 137 }
+    //   ],
+    //   isPinned: false,
+    //   width: '150px'
+    // },
+    // {
+    //   id: 'change-impact',
+    //   label: 'Change Impact',
+    //   options: [
+    //     { value: 'changed-after-approval', label: 'Changed After Approval', count: 23 },
+    //     { value: 'has-open-cr', label: 'Has Open Change Request', count: 41 },
+    //     { value: 'versioned', label: 'Version > 1.0', count: 67 },
+    //     { value: 'retired', label: 'Retired Requirement', count: 12 }
+    //   ],
+    //   isPinned: false,
+    //   width: '180px'
+    // },
+    // {
+    //   id: 'lifecycle-status',
+    //   label: 'Stage Status',
+    //   options: [
+    //     { value: 'not-started', label: 'Not Started', count: 45 },
+    //     { value: 'in-progress', label: 'In Progress', count: 123 },
+    //     { value: 'blocked', label: 'Blocked', count: 18 },
+    //     { value: 'completed', label: 'Completed', count: 167 },
+    //     { value: 'failed', label: 'Failed', count: 8 },
+    //     { value: 'deferred', label: 'Deferred', count: 23 }
+    //   ],
+    //   isPinned: false,
+    //   width: '160px'
+    // },
+    // {
+    //   id: 'iteration',
+    //   label: 'Sprint / Release Cycle',
+    //   options: [
+    //     { value: 'sprint-1', label: 'Sprint 1', count: 45 },
+    //     { value: 'sprint-2', label: 'Sprint 2', count: 67 },
+    //     { value: 'sprint-3', label: 'Sprint 3', count: 34 },
+    //     { value: 'backlog', label: 'Backlog', count: 123 },
+    //     { value: 'unassigned', label: 'Unassigned', count: 78 }
+    //   ],
+    //   isPinned: false,
+    //   width: '160px'
+    // },
     {
       id: 'priority',
       label: 'Priority',

@@ -79,26 +79,47 @@ export function ImportFromSDDDrawer({ open, onOpenChange, data, onSubmit }: Impo
           clearInterval(interval);
           setExtractedRequirements([
             {
-              id: '1',
-              title: 'User Authentication System',
-              description: 'The system shall provide secure user authentication with multi-factor authentication support.',
-              confidence: 0.95,
+              id: '4',
+              title: 'Role-Based Access Control (RBAC)',
+              description: 'The system shall implement SAP-compliant role-based authorization using predefined business roles and authorization objects to restrict access to transactions and data.',
+              confidence: 0.94,
               selected: true
             },
             {
-              id: '2', 
-              title: 'Data Encryption Requirements',
-              description: 'All sensitive data must be encrypted at rest and in transit using AES-256 encryption.',
-              confidence: 0.88,
+              id: '5',
+              title: 'Audit Logging and Traceability',
+              description: 'All critical system actions including configuration changes, data updates, and user access events shall be logged with timestamps and retained for audit and compliance purposes.',
+              confidence: 0.91,
               selected: true
             },
             {
-              id: '3',
-              title: 'Performance Requirements',
-              description: 'The system shall respond to user requests within 2 seconds under normal load conditions.',
-              confidence: 0.92,
+              id: '6',
+              title: 'API Integration Framework',
+              description: 'The system shall expose RESTful APIs compatible with SAP integration standards to enable communication with external services and enterprise middleware.',
+              confidence: 0.87,
               selected: true
-            }
+            },
+            {
+              id: '7',
+              title: 'Error Handling and Exception Management',
+              description: 'The application shall implement centralized error handling mechanisms with standardized error codes, retry logic, and monitoring alerts aligned with SDD specifications.',
+              confidence: 0.90,
+              selected: true
+            },
+            {
+              id: '8',
+              title: 'Data Validation Rules',
+              description: 'Input data shall be validated according to business rules defined in the SDD to ensure data integrity, including field-level validation and cross-object consistency checks.',
+              confidence: 0.93,
+              selected: true
+            },
+            {
+              id: '9',
+              title: 'Scalability and Load Handling',
+              description: 'The system architecture shall support horizontal scaling and maintain performance benchmarks during peak usage scenarios as defined in capacity planning guidelines.',
+              confidence: 0.89,
+              selected: true
+            },
           ]);
           setStep('review');
           return 100;

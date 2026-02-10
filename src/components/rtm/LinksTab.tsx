@@ -36,9 +36,10 @@ interface LinkItem {
   owner: string;
   lastModified: string;
   riskLevel?: 'high' | 'medium' | 'low';
+  direction: 'upstream' | 'downstream';
 }
 
-const mockUpstreamLinks: LinkItem[] = [
+const allLinks: LinkItem[] = [
   {
     id: 'BR-001',
     title: 'Calendar Integration Business Requirement',
@@ -48,7 +49,8 @@ const mockUpstreamLinks: LinkItem[] = [
     priority: 'critical',
     owner: 'John Smith',
     lastModified: '2025-01-10',
-    riskLevel: 'low'
+    riskLevel: 'low',
+    direction: 'upstream'
   },
   {
     id: 'TASK-123',
@@ -58,7 +60,8 @@ const mockUpstreamLinks: LinkItem[] = [
     status: 'active',
     priority: 'high',
     owner: 'Mike Davis',
-    lastModified: '2025-01-08'
+    lastModified: '2025-01-08',
+    direction: 'upstream'
   },
   {
     id: 'MEET-456',
@@ -68,11 +71,9 @@ const mockUpstreamLinks: LinkItem[] = [
     status: 'active',
     priority: 'medium',
     owner: 'Lisa Wilson',
-    lastModified: '2025-01-07'
-  }
-];
-
-const mockDownstreamLinks: LinkItem[] = [
+    lastModified: '2025-01-07',
+    direction: 'upstream'
+  },
   {
     id: 'FS-089',
     title: 'Calendar Event Creation Functional Spec',
@@ -81,7 +82,8 @@ const mockDownstreamLinks: LinkItem[] = [
     status: 'active',
     priority: 'high',
     owner: 'Alice Brown',
-    lastModified: '2025-01-11'
+    lastModified: '2025-01-11',
+    direction: 'downstream'
   },
   {
     id: 'TASK-234',
@@ -91,7 +93,8 @@ const mockDownstreamLinks: LinkItem[] = [
     status: 'in-progress',
     priority: 'high',
     owner: 'Bob Wilson',
-    lastModified: '2025-01-10'
+    lastModified: '2025-01-10',
+    direction: 'downstream'
   },
   {
     id: 'TC-234',
@@ -102,7 +105,8 @@ const mockDownstreamLinks: LinkItem[] = [
     priority: 'medium',
     owner: 'Lisa Chen',
     lastModified: '2025-01-05',
-    riskLevel: 'medium'
+    riskLevel: 'medium',
+    direction: 'downstream'
   },
   {
     id: 'BUG-078',
@@ -113,7 +117,8 @@ const mockDownstreamLinks: LinkItem[] = [
     priority: 'critical',
     owner: 'Tom Anderson',
     lastModified: '2025-01-12',
-    riskLevel: 'high'
+    riskLevel: 'high',
+    direction: 'downstream'
   },
   {
     id: 'SIGN-045',
@@ -123,7 +128,8 @@ const mockDownstreamLinks: LinkItem[] = [
     status: 'in-progress',
     priority: 'high',
     owner: 'David Gray',
-    lastModified: '2025-01-09'
+    lastModified: '2025-01-09',
+    direction: 'downstream'
   },
   {
     id: 'MEET-789',
@@ -133,11 +139,13 @@ const mockDownstreamLinks: LinkItem[] = [
     status: 'active',
     priority: 'medium',
     owner: 'Emma White',
-    lastModified: '2025-01-08'
+    lastModified: '2025-01-08',
+    direction: 'downstream'
   }
 ];
 
 export const LinksTab = ({ requirementId }: LinksTabProps) => {
+
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'active': return <CheckCircle className="h-3 w-3 text-green-500" />;
@@ -188,7 +196,7 @@ export const LinksTab = ({ requirementId }: LinksTabProps) => {
     <div key={link.id} className="flex items-center justify-between py-2 px-3 hover:bg-muted/50 rounded border-b border-border/50 last:border-b-0">
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <div className="flex items-center gap-1 text-muted-foreground">
-          {getTypeIcon(link.type)}
+          {link.direction === 'upstream' ? <ArrowUp className="h-3 w-3 text-blue-600" /> : <ArrowDown className="h-3 w-3 text-green-600" />}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
@@ -216,7 +224,7 @@ export const LinksTab = ({ requirementId }: LinksTabProps) => {
     </div>
   );
 
-  const renderWorkitemTypeSection = (workitemType: string, links: LinkItem[], parentTitle: string) => {
+  const renderWorkitemTypeSection = (workitemType: string, links: LinkItem[]) => {
     if (links.length === 0) return null;
     
     return (
@@ -235,70 +243,45 @@ export const LinksTab = ({ requirementId }: LinksTabProps) => {
     );
   };
 
-  const renderSection = (title: string, links: LinkItem[], icon: React.ReactNode, description: string) => {
-    const groupedLinks = links.reduce((acc, link) => {
-      if (!acc[link.workitemType]) {
-        acc[link.workitemType] = [];
-      }
-      acc[link.workitemType].push(link);
-      return acc;
-    }, {} as Record<string, LinkItem[]>);
+  const groupedLinks = allLinks.reduce((acc, link) => {
+    if (!acc[link.workitemType]) {
+      acc[link.workitemType] = [];
+    }
+    acc[link.workitemType].push(link);
+    return acc;
+  }, {} as Record<string, LinkItem[]>);
 
-    const workitemTypes = ['Requirements', 'Tasks', 'Test cases', 'Issues', 'Signoffs', 'Meetings'];
-
-    return (
-      <div className="space-y-3 pt-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {icon}
-            <h3 className="text-base font-medium text-foreground">{title}</h3>
-            <Badge variant="secondary" className="text-xs h-5">
-              {links.length}
-            </Badge>
-          </div>
-          <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">
-            <Plus className="h-3 w-3 mr-1" />
-            Add
-          </Button>
-        </div>
-        
-        <p className="text-xs text-muted-foreground">{description}</p>
-        
-        <div className="space-y-4">
-          {links.length > 0 ? (
-            workitemTypes.map(workitemType => 
-              renderWorkitemTypeSection(workitemType, groupedLinks[workitemType] || [], title)
-            )
-          ) : (
-            <div className="bg-white border border-border rounded-lg">
-              <div className="text-center py-6 text-muted-foreground">
-                <FileText className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                <p className="text-xs">No {title.toLowerCase()} found</p>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
+  const workitemTypes = ['Requirements', 'Tasks', 'Test cases', 'Issues', 'Signoffs', 'Meetings'];
 
   return (
-    <div className="px-6 pt-0 pb-6 space-y-6">
-      {/* Upstream Links Section */}
-      {renderSection(
-        "Upstream Links",
-        mockUpstreamLinks,
-        <ArrowUp className="h-4 w-4 text-blue-600" />,
-        "Source artifacts and predecessor requirements that drive this requirement"
-      )}
+    <div className="px-6 pt-4 pb-6">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <h3 className="text-base font-medium">Linked Items</h3>
+          <Badge variant="secondary" className="text-xs h-5">
+            {allLinks.length}
+          </Badge>
+        </div>
+        <Button variant="ghost" size="sm" className="h-7">
+          <Plus className="h-3 w-3 mr-1" />
+          Add
+        </Button>
+      </div>
 
-      {/* Downstream Links Section */}
-      {renderSection(
-        "Downstream Links", 
-        mockDownstreamLinks,
-        <ArrowDown className="h-4 w-4 text-green-600" />,
-        "Dependent artifacts and successor items derived from this requirement"
-      )}
+      <div className="space-y-4">
+        {allLinks.length > 0 ? (
+          workitemTypes.map(workitemType => 
+            renderWorkitemTypeSection(workitemType, groupedLinks[workitemType] || [])
+          )
+        ) : (
+          <div className="bg-white border border-border rounded-lg">
+            <div className="text-center py-6 text-muted-foreground">
+              <FileText className="h-8 w-8 mx-auto mb-2 opacity-50" />
+              <p className="text-xs">No links found</p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

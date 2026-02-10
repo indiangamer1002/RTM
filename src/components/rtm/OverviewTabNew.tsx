@@ -270,7 +270,7 @@ When users create calendar events from within SAP applications (such as scheduli
                 <div className={`mb-6 ${expandedSections.expectedOutcome ? 'fixed inset-0 z-50 bg-white p-4' : ''}`}>
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <Label className="text-base font-medium text-foreground">{hasAnalystData ? 'Acceptance Criteria' : 'Expected Outcome'}</Label>
+                      <Label className="text-base font-medium text-foreground">{hasAnalystData ? 'Acceptance Criteria' : 'Acceptance Criteria'}</Label>
                       {hasAnalystData && (
                         <TooltipProvider>
                           <Tooltip>

@@ -24,7 +24,7 @@ const RequirementDetail = () => {
   const [parentSearchTerm, setParentSearchTerm] = useState('');
   const [selectedArea, setSelectedArea] = useState('K4 - Product Development');
   const [activeTab, setActiveTab] = useState('Overview');
-  const tabs = ['Overview', 'Stakeholders', 'Links', 'Files'];
+  const tabs = ['Overview','Traces', 'Stakeholders', 'Files'];
   const [tags, setTags] = useState(['High Priority', 'Calendar', 'Integration']);
   
   // Get requirement data for REQ-001
@@ -311,7 +311,7 @@ const RequirementDetail = () => {
                 </div>
 
                 {/* Lifecycle Tracker - Only show on Overview tab */}
-                {activeTab === 'Overview' && (
+                {/* {activeTab === 'Overview' && (
                   <div className="px-4 mt-2">
                     <LifecycleTracker 
                       currentStatus={selectedState}
@@ -319,7 +319,7 @@ const RequirementDetail = () => {
                       statuses={requirementStatuses}
                     />
                   </div>
-                )}
+                )} */}
 
                 {/* Tab Content */}
                 <div className="flex-1 overflow-y-auto">
@@ -327,7 +327,7 @@ const RequirementDetail = () => {
                     <OverviewTab requirementId="13061" currentStatus={selectedState} />
                   ) : activeTab === 'Stakeholders' ? (
                     <StakeholdersTab requirementId="13061" />
-                  ) : activeTab === 'Links' ? (
+                  ) : activeTab === 'Traces' ? (
                     <LinksTab requirementId="13061" />
                   ) : activeTab === 'Files' ? (
                     <FilesTab requirementId="13061" />
