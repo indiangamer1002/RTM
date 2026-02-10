@@ -164,8 +164,14 @@ const allLinks: LinkItem[] = [
   }
 ];
 
-export const LinksTab = ({ requirementId }: LinksTabProps) => {
 
+interface LinksTabProps {
+  requirementId: string;
+  isSheetOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export const LinksTab = ({ requirementId, isSheetOpen: externalIsSheetOpen, onOpenChange }: LinksTabProps) => {
   const groupedLinks = allLinks.reduce((acc, link) => {
     if (!acc[link.workitemType]) {
       acc[link.workitemType] = [];
@@ -178,12 +184,12 @@ export const LinksTab = ({ requirementId }: LinksTabProps) => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return '#22c55e'; // green-500
-      case 'in-progress': return '#3b82f6'; // blue-500
-      case 'missing': return '#eab308'; // yellow-500
-      case 'broken': return '#ef4444'; // red-500
-      case 'changed': return '#f97316'; // orange-500
-      default: return '#9ca3af'; // gray-400
+      case 'active': return '#22c55e';
+      case 'in-progress': return '#3b82f6';
+      case 'missing': return '#eab308';
+      case 'broken': return '#ef4444';
+      case 'changed': return '#f97316';
+      default: return '#9ca3af';
     }
   };
 
@@ -197,6 +203,7 @@ export const LinksTab = ({ requirementId }: LinksTabProps) => {
     }
   };
 
+  // ... helper functions ...
   const getWorkitemTypeIcon = (workitemType: string) => {
     switch (workitemType) {
       case 'Tasks': return <CheckSquare className="h-4 w-4" />;
@@ -209,7 +216,10 @@ export const LinksTab = ({ requirementId }: LinksTabProps) => {
     }
   };
 
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [internalIsSheetOpen, setInternalIsSheetOpen] = useState(false);
+  const isSheetOpen = externalIsSheetOpen !== undefined ? externalIsSheetOpen : internalIsSheetOpen;
+  const setIsSheetOpen = onOpenChange || setInternalIsSheetOpen;
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLinkType, setSelectedLinkType] = useState('Requirement');
   const [currentPage, setCurrentPage] = useState(1);
@@ -279,11 +289,7 @@ export const LinksTab = ({ requirementId }: LinksTabProps) => {
               setIsSheetOpen(open);
               if (!open) setSelectedItems([]);
             }}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" title="Add Link Item">
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </SheetTrigger>
+              {/* Trigger removed as it's controlled externally */}
               <SheetContent
                 onInteractOutside={(e) => e.preventDefault()}
                 className="flex flex-col h-full sm:max-w-[600px] w-[600px] p-0"
@@ -486,7 +492,7 @@ export const LinksTab = ({ requirementId }: LinksTabProps) => {
             </div>
           </TabsContent>
         ))}
-      </Tabs  >
+      </Tabs>
     </div>
   );
 };
