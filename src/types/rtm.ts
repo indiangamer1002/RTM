@@ -13,11 +13,13 @@ export type MeetingStatus = 'Scheduled' | 'Completed' | 'Cancelled' | 'Pending';
 export interface NavigationNode {
   id: string;
   name: string;
-  type: 'project' | 'scope' | 'process' | 'requirement';
+  type: 'project' | 'scope' | 'process' | 'requirement' | 'folder' | 'Business' | 'Technical' | 'Functional';
   children?: NavigationNode[];
   status?: 'in-scope' | 'out-of-scope';
   tags?: string[];
   source?: string;
+  reqId?: string;
+  sourceOwner?: string;
 
   // Additional fields for requirements
   priority?: Priority;
